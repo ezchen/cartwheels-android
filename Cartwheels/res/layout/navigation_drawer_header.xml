@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
+    
+    <ImageView
+        android:id="@+id/profilePicture"
+        android:src="@drawable/profile"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingRight="10dp"/>
+    
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toRightOf="@id/profilePicture"
+        android:layout_alignParentTop="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif"
+        android:layout_centerHorizontal="true"
+        android:text="Ben Attal" />
+    
+    <TextView 
+        android:id="@+id/cartOwner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:layout_toRightOf="@id/profilePicture"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:fontFamily="sans-serif"
+        android:layout_centerHorizontal="true"
+        android:text="@string/cart_owner"/>
+</RelativeLayout>
