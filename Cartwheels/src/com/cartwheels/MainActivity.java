@@ -42,6 +42,17 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
+    
+    @Override
+    public void onResume() {
+    	// make a super class with this method maybe?
+    	super.onResume();
+    	if (true) {
+    		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+    		startActivityForResult(intent, 0);
+    	}
+    	
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

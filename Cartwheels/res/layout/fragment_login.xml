@@ -1,0 +1,77 @@
+	<RelativeLayout 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:tools="http://schemas.android.com/tools"
+	    android:id="@+id/login_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:paddingTop="20dp"
+	    android:orientation="vertical"
+	    android:gravity="right"
+	    tools:context="com.cartwheels.LoginActivity$PlaceHolderFragment" >
+	    
+	    <EditText
+	        android:id="@+id/userEmail"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_margin="5dp"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignParentLeft="true"
+	        android:ems="10"
+	        android:hint="@string/user_email"
+	        android:inputType="textEmailAddress" >
+	        <requestFocus />
+	    </EditText>
+	    
+	    <EditText
+	        android:id="@+id/userPassword"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_margin="5dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/userEmail"
+	        android:ems="10"
+	        android:hint="@string/user_password"
+	        android:inputType="textPassword" />
+	    
+	    <Button
+            android:id="@+id/loginButton"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/userPassword"
+            android:onClick="login"
+            android:text="@string/login" />
+	    
+	    <LinearLayout 
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_alignParentBottom="true"
+	        android:orientation="horizontal"
+	        android:weightSum="2"
+	        style="@android:style/ButtonBar">
+		    <Button
+		        android:id="@+id/switchRegisterButtonUser"
+		        android:layout_height="wrap_content"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:onClick="switchRegister"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:text="@string/registerUser"/>
+		    
+		   <View 
+		        android:layout_height="fill_parent"
+   			    android:layout_width="2px"
+    		 	android:background="@android:color/white"/>
+		    
+		    <Button
+		        android:id="@+id/switchRegisterButtonOwner"
+		        android:layout_height="wrap_content"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:onClick="switchRegisterOwner"
+		        style="?android:attr/buttonBarButtonStyle"
+		        android:text="@string/registerOwner" />
+	    </LinearLayout>
+	        
+	        
+	</RelativeLayout>

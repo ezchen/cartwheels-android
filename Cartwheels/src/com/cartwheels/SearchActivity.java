@@ -48,7 +48,7 @@ public class SearchActivity extends Activity {
 	    textView.setHintTextColor(Color.WHITE);
 	    
 	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    searchView.setIconifiedByDefault(false);
+	    searchView.setIconifiedByDefault(true);
 	    
 
 		return true;

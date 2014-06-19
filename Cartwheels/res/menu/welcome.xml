@@ -1,13 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.cartwheels.SearchActivity" >
+    tools:context="com.cartwheels.WelcomeActivity" >
 
-    <item android:id="@+id/search"
-        android:showAsAction="always"
-        android:title="test"
-        android:icon="@drawable/ic_action_search_white"
-        android:actionViewClass="android.widget.SearchView" />
-    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

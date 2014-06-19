@@ -3,6 +3,19 @@
 
     <string name="app_name">Cartwheels</string>
 
+    <!-- Login/Register -->
+    <string name="user_email">Email Address</string>
+    <string name="user_password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="registerUser">Register as User</string>
+    <string name="registerOwner">Register as Owner</string>
+    <string name="permit_number">Permit Number</string>
+
     <!-- Navigation Drawer values -->
     <string name="title_section1">Home</string>
     <string name="title_section2">Search</string>
@@ -20,6 +33,7 @@
 
     <!-- Search -->
     <string name="search_hint">e.g Halal</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Search</string>
+
 
 </resources>
