@@ -1,6 +1,5 @@
 package com.cartwheels;
 
-import com.cartwheels.R;
 
 import android.app.Activity;
 import android.content.Context;

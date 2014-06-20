@@ -25,6 +25,7 @@ public class RegisterActivity extends Activity {
 	private final static String REGISTER_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/registrations";
 	
 	private SharedPreferences preferences;
+	private String pictureName;
 	private String userEmail;
 	private String userName;
 	private String userPassword;
@@ -107,6 +108,9 @@ public class RegisterActivity extends Activity {
 	    // Create an image file name
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 	    String imageFileName = "com_cartwheels_" + timeStamp + "_" + username;
+	    
+	    pictureName = imageFileName;
+	    
 	    File storageDir = Environment.getExternalStoragePublicDirectory(
 	            Environment.DIRECTORY_PICTURES);
 	    File image = File.createTempFile(

@@ -15,7 +15,14 @@
     <string name="registerUser">Register as User</string>
     <string name="registerOwner">Register as Owner</string>
     <string name="permit_number">Permit Number</string>
+    
+    <string name="action_logout">Logout</string>
 
+    <!-- Search Values -->
+    <string name="cart_image_description">Cart Picture</string>
+    <string name="cart_name">Cart Name</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="upload_id">Upload Id</string>"
     <!-- Navigation Drawer values -->
     <string name="title_section1">Home</string>
     <string name="title_section2">Search</string>

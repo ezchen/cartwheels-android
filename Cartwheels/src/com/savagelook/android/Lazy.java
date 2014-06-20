@@ -14,7 +14,7 @@ public class Lazy {
 	
 	public static class Str {
 		public static String urlEncode(String value, boolean trim) {
-			return java.net.URLEncoder.encode(value.trim());	
+			return "";
 		}
 		
 		public static String urlEncode(String value) {
