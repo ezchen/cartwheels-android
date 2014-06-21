@@ -29,9 +29,18 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 		inflater.inflate(layoutResourceID, parent, false);
 		
+		ObjectCartListItem item = items[position];
+		
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
 		
-		TextView cartName = (TextView) listItem.findViewById(R.id.cart);
+		TextView cartName = (TextView) listItem.findViewById(R.id.cartName);
+		cartName.setText(item.cartName);
+		
+		TextView cartZipcode = (TextView) listItem.findViewById(R.id.cartZipcode);
+		cartZipcode.setText(item.zipcode);
+		
+		TextView cartPermit = (TextView) listItem.findViewById(R.id.cartPermit);
+		cartPermit.setText(item.permit);
 		
 		return listItem;
 	}

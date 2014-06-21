@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="90dp"
+    android:padding="10dp" >
+ 
+    <!-- Cart Picture -->
+    <ImageView
+        android:id="@+id/cartPicture"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:src="@drawable/profile"
+        android:contentDescription="@string/cart_image_description" />
+ 
+    <!-- Cart Name -->
+    <TextView
+        android:id="@+id/cartName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/cartPicture"
+        android:paddingLeft="10dp"
+        android:text="@string/cart_name"
+        android:textColor="#000000" />
+    
+    <!-- Cart Zipcode -->
+    <TextView
+        android:id="@+id/cartZipcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_below="@id/cartName"
+        android:layout_toRightOf="@id/cartPicture"
+        android:paddingLeft="10dp"
+        android:text="@string/zipcode" />
+    
+    <!-- Cart Permit -->
+
+    <TextView
+        android:id="@+id/cartPermit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cartZipcode"
+        android:layout_toRightOf="@id/cartPicture"
+        android:paddingLeft="10dp"
+        android:text="@string/permit_number"
+        android:textSize="12sp" />
+ 
+</RelativeLayout>

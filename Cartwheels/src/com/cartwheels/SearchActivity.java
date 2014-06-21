@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -143,6 +144,8 @@ public class SearchActivity extends Activity {
 			
 			super.onPostExecute(json);
 		}
+		
+		
 	}
 
 	/**
@@ -150,21 +153,39 @@ public class SearchActivity extends Activity {
 	 */
 	public static class DisplayCartsFragment extends Fragment {
 
+		private ListView displayCarts;
+		
 		public DisplayCartsFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_search,
+			displayCarts = (ListView) inflater.inflate(R.layout.fragment_search,
 					container, false);
-			return rootView;
+			
+			
+			return displayCarts;
 		}
 		
 		public void buildList(JSONArray jsonArray) {
 			String test;
 			try {
-				test = jsonArray.getJSONObject(0).getString(TAGS_CITY).toString();
+				test = jsonArray.getJSONObject(0).getString(TAGS_CITY);
+				
+				ObjectCartListItem[] items = new ObjectCartListItem[10];
+				for (int i = 0; i < 10; i++) {
+					JSONObject json = jsonArray.getJSONObject(i);
+					
+					String cartName = json.getString(TAGS_NAME);
+					String cartZipcode = json.getString(TAGS_ZIP_CODE);
+					String cartPermit = json.getString(TAGS_PERMIT_NUMBER);
+					
+					items[i] = new ObjectCartListItem(R.drawable.profile, cartName, cartZipcode, cartPermit);
+				}
+				
+				displayCarts.setAdapter(new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items));
+				
 			} catch (Exception e) {
 				test = "nope";
 				e.printStackTrace();
