@@ -50,6 +50,18 @@
         android:ems="10"
         android:hint="@string/user_email"
         android:inputType="textEmailAddress" />
+    
+    <EditText
+        android:id="@+id/userZipcode"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/userEmail"
+        android:ems="10"
+        android:hint="@string/zipcode"
+        android:inputType="textEmailAddress"
+        />
 
      <EditText
 	        android:id="@id/userPassword"
@@ -57,17 +69,29 @@
 	        android:layout_height="50dp"
 	        android:layout_margin="5dp"
 	        android:layout_alignParentLeft="true"
-	        android:layout_below="@id/userEmail"
+	        android:layout_below="@id/userZipcode"
 	        android:ems="10"
 	        android:hint="@string/user_password"
 	        android:inputType="textPassword" />
+     
+     <EditText
+         android:id="@+id/userPasswordConfirmation"
+         android:layout_width="match_parent"
+	     android:layout_height="50dp"
+	     android:layout_margin="5dp"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@id/userPassword"
+         android:ems="10"
+         android:hint="@string/user_password"
+         android:inputType="textPassword" />
+    
      
      <Button
 	        android:id="@+id/registerButton"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/userPassword"
+            android:layout_below="@id/userPasswordConfirmation"
             android:onClick="register"
             android:text="@string/register" />
 </RelativeLayout>

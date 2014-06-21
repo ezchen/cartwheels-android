@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -26,11 +27,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import android.net.Uri.Builder;
+
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class LoginActivity extends Activity {
 
-	private final static String LOGIN_API_ENDPOINT_URL = "http://cartwheels.us/mobile/sessions.json";
+	private final static String LOGIN_API_ENDPOINT_URL = "http://cartwheels.us/mobile/sessions";
 	
 	private SharedPreferences preferences;
 	private String userEmail;
@@ -49,6 +52,15 @@ public class LoginActivity extends Activity {
 		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Intent intent = getIntent();
+		if (intent.getBooleanExtra("logout", false)) {
+			logout();
+		}
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -97,6 +109,12 @@ public class LoginActivity extends Activity {
 	        loginTask.execute(LOGIN_API_ENDPOINT_URL);
 	    }
 	}
+	
+	public void logout() {
+		LogoutTask logoutTask = new LogoutTask(LoginActivity.this);
+		logoutTask.setMessageLoading("Logging out...");
+		logoutTask.execute(LOGIN_API_ENDPOINT_URL);
+	}
 
 	public void switchRegister(View view) {
 		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -110,6 +128,71 @@ public class LoginActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	private class LogoutTask extends UrlJsonAsyncTask {
+		public LogoutTask(Context context) {
+			super(context);
+		}
+		
+		@Override
+		protected JSONObject doInBackground(String... urls) {
+			DefaultHttpClient client = new DefaultHttpClient();
+			
+			String response = null;
+			JSONObject json = new JSONObject();
+			
+			try {
+				Builder uri = new Builder();
+				uri.scheme("http").authority("cartwheels.us").appendPath("mobile")
+					.appendPath("sessions");
+				
+				uri.appendQueryParameter("auth_token", preferences.getString("AuthToken", ""));
+				uri.appendQueryParameter("email", preferences.getString("email", ""));
+				
+				HttpDelete delete = new HttpDelete(uri.build().toString());
+				
+				// default return values
+				json.put("success", false);
+				json.put("info", "Logout Failed");
+				Log.d("email", preferences.getString("email", ""));
+				Log.d("AuthToken", preferences.getString("AuthToken",""));
+				
+				// request headers
+				delete.setHeader("Accept", "application/json");
+				delete.setHeader("Content-Type", "application/json");
+				
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				response = client.execute(delete, responseHandler);
+				json = new JSONObject(response);
+			} catch (HttpResponseException e) {
+				
+			} catch (JSONException e) {
+				
+			} catch (IOException e) {
+				
+			}
+			
+			return json;
+		}
+		
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			
+			// delete the auth token on android
+			// set need to log out to false
+			try {
+				if (json.getBoolean("success")) {
+					Log.d("onPostExecute logout", "successfully logged out on server");
+				} else{
+					// keep the auth token, but set need to log out to true
+					
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			super.onPostExecute(json);
+		}
+	}
 	private class LoginTask extends UrlJsonAsyncTask {
 		 public LoginTask(Context context) {
 		        super(context);
@@ -137,6 +220,10 @@ public class LoginActivity extends Activity {
 	                holder.put("user", userObj);
 	                StringEntity se = new StringEntity(holder.toString());
 	                post.setEntity(se);
+	                
+	                SharedPreferences.Editor editor = preferences.edit();
+	                editor.putString("email", userEmail);
+	                editor.commit();
 
 	                // setup the request headers
 	                post.setHeader("Accept", "application/json");
@@ -172,6 +259,8 @@ public class LoginActivity extends Activity {
 	                // the SharedPreferences
 	                editor.putString("AuthToken", json.getJSONObject("data").getString("auth_token"));
 	                editor.commit();
+	                
+	                Log.d("onPostExecute authToken", json.getJSONObject("data").getString("auth_token"));
 
 	                // launch the HomeActivity and close this one
 	                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -188,6 +277,8 @@ public class LoginActivity extends Activity {
 	        }
 	    }
 	}
+
+	
 	/*
 	 * Login fragment
 	 */
