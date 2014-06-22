@@ -19,4 +19,14 @@ public class ObjectCartListItem {
 		this.zipcode = zipcode;
 		this.permit = permit;
 	}
+	
+	public String toString() {
+		String s = "";
+		s += "icon: " + icon + "\n";
+		s += "cartName: " + cartName + "\n";
+		s += "zipcode: " + zipcode + "\n";
+		s += "permit: " + permit;
+		
+		return s;
+	}
 }

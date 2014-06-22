@@ -176,6 +176,7 @@ public class MainActivity extends ActionBarActivity
     	
     	preferences.edit().remove("AuthToken");
     	preferences.edit().remove("email");
+    	preferences.edit().commit();
     	Intent intent = new Intent(MainActivity.this, LoginActivity.class);
     	intent.putExtra("logout", true);
     	startActivityForResult(intent, 0);

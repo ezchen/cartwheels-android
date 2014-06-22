@@ -37,7 +37,7 @@ import com.savagelook.android.UrlJsonAsyncTask;
 
 public class RegisterActivity extends Activity {
 
-	private final static String REGISTER_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/registrations";
+	private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/registrations";
 	
 	private SharedPreferences preferences;
 	private String pictureName;
@@ -185,7 +185,7 @@ public class RegisterActivity extends Activity {
 	        
 	        try {
 	        	try {
-	        		// default returned values incase something goes wrong
+	        		// default returned values in case something goes wrong
 	        		json.put("success", false);
 	        		json.put("info", "Something went wrong. Retry!");
 	        		
@@ -194,14 +194,19 @@ public class RegisterActivity extends Activity {
 	        		userObj.put("email", userEmail);
 	        		userObj.put("zip_code", userZipcode);
 	        		userObj.put("password", userPassword);
-	        		userObj.put("password", userPasswordConfirmation);
+	        		userObj.put("password_confirmation", userPasswordConfirmation);
 	        		
 	        		holder.put("user", userObj);
+	        		Log.d("holder", holder.toString());
 	        		StringEntity se = new StringEntity(holder.toString());
 	        		post.setEntity(se);
 	        		
+	        		post.setHeader("Accept", "application/json");
+	        		post.setHeader("Content-Type", "application/json");
+	        		
 	        		ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	        		response = client.execute(post, responseHandler);
+	        		
 	        		json = new JSONObject(response);
 	        	} catch (HttpResponseException e) {
 	        		e.printStackTrace();
@@ -217,6 +222,32 @@ public class RegisterActivity extends Activity {
 	        
 	        return json;
 		}
+		
+		@Override
+		protected void onPostExecute(JSONObject json) {
+	        try {
+	            if (json.getBoolean("success")) {
+	                // everything is ok
+	                SharedPreferences.Editor editor = preferences.edit();
+	                // save the returned auth_token into
+	                // the SharedPreferences
+	                editor.putString("AuthToken", json.getJSONObject("data").getString("auth_token"));
+	                editor.commit();
+
+	                // launch the HomeActivity and close this one
+	                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+	                startActivity(intent);
+	                finish();
+	            }
+	            Toast.makeText(context, json.getString("info"), Toast.LENGTH_LONG).show();
+	        } catch (Exception e) {
+	            // something went wrong: show a Toast
+	            // with the exception message
+	            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+	        } finally {
+	            super.onPostExecute(json);
+	        }
+	    }
 	}
 
 	/*

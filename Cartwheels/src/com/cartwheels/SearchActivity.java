@@ -1,5 +1,11 @@
 package com.cartwheels;
 
+import java.util.Arrays;
+
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,7 +15,9 @@ import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,16 +25,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.savagelook.android.JsonHelper;
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class SearchActivity extends Activity {
-
-	private static final String TASKS_URL = "http://cartwheels.us/mobile/sessions.json";
+	
+	SharedPreferences preferences;
 	
 	private static final String TAGS_DATA = "data";
 	private static final String TAGS_ID = "id";
@@ -57,6 +65,8 @@ public class SearchActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, fragment).commit();
 		}
+		
+		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 		
 		SearchTask searchTask = new SearchTask(SearchActivity.this);
 		searchTask.execute("http://cartwheels.us/carts/data");
@@ -118,9 +128,35 @@ public class SearchActivity extends Activity {
 		}
 		
 		protected JSONObject doInBackground(String... urls) {
-			JSONObject json = null;
+	        DefaultHttpClient client = new DefaultHttpClient();
+	        
+	        String response = null;
+	        JSONObject json = new JSONObject();
 			try {
-				json = JsonHelper.getJsonObjectFromUrl(urls[0]);
+				Builder uri = new Builder();
+				uri.scheme("http").authority("cartwheels.us").appendPath("carts")
+					.appendPath("search");
+				
+				// add parameters email, auth_token, offset, limit, tq, lq
+				uri.appendQueryParameter("auth_token", preferences.getString("AuthToken", ""));
+				uri.appendQueryParameter("email", preferences.getString("email", ""));
+				
+				// hard coded values for testing
+				uri.appendQueryParameter("offset", "0");
+				uri.appendQueryParameter("limit", "100");
+				uri.appendQueryParameter("tq", "halal");
+				
+				HttpGet get = new HttpGet(uri.toString());
+				// default return values
+				json.put("success", false);
+				json.put("info", "Logout Failed");
+				
+				get.setHeader("Accept", "application/json");
+				get.setHeader("Content-Type", "application/json");
+				
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				response = client.execute(get, responseHandler);
+				json = new JSONObject(response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -133,6 +169,7 @@ public class SearchActivity extends Activity {
 			// Build List View
 			try {
 				JSONArray carts = json.getJSONArray(TAGS_DATA);
+				Log.d("jsonarray", carts.toString());
 				
 				// test if json array is working
 				fragment.buildList(carts);
@@ -173,7 +210,9 @@ public class SearchActivity extends Activity {
 			try {
 				test = jsonArray.getJSONObject(0).getString(TAGS_CITY);
 				
+				Log.d("length", jsonArray.length() + "");
 				ObjectCartListItem[] items = new ObjectCartListItem[10];
+				
 				for (int i = 0; i < 10; i++) {
 					JSONObject json = jsonArray.getJSONObject(i);
 					
@@ -181,10 +220,22 @@ public class SearchActivity extends Activity {
 					String cartZipcode = json.getString(TAGS_ZIP_CODE);
 					String cartPermit = json.getString(TAGS_PERMIT_NUMBER);
 					
-					items[i] = new ObjectCartListItem(R.drawable.profile, cartName, cartZipcode, cartPermit);
+					ObjectCartListItem cartListItem = new ObjectCartListItem(R.drawable.profile, cartName,
+															cartZipcode, cartPermit);
+					
+					Log.d("cart list item", cartListItem.toString());
+					items[i] = cartListItem;
 				}
 				
-				displayCarts.setAdapter(new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items));
+
+				Log.d("All cart list items", Arrays.toString(items));
+				Log.d("BuildList", "objects added");
+				ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items);
+				
+				Log.d("Adapter", "objects added " + adapter.toString());
+				
+				displayCarts.setAdapter(adapter);
+				
 				
 			} catch (Exception e) {
 				test = "nope";
