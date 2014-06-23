@@ -12,11 +12,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,14 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cartwheels.custom_views.SearchView;
+import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.savagelook.android.UrlJsonAsyncTask;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity
+								implements SearchListener{
 	
-	SharedPreferences preferences;
+	private SharedPreferences preferences;
 	
 	private static final String TAGS_DATA = "data";
 	private static final String TAGS_ID = "id";
@@ -49,7 +49,9 @@ public class SearchActivity extends Activity {
 	private static final String TAGS_CREATED_AT="created_at";
 	private static final String TAGS_UPDATED_AT="updated_at";
 	
-	DisplayCartsFragment fragment;
+	private DisplayCartsFragment fragment;
+	
+	private SearchView searchView;
 	
 	
 	@Override
@@ -60,6 +62,7 @@ public class SearchActivity extends Activity {
 		/* perform the search if the intent has a query */
 		Intent intent = getIntent();
 		handleIntent(intent);
+		
 		fragment = new DisplayCartsFragment();
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -68,8 +71,13 @@ public class SearchActivity extends Activity {
 		
 		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 		
+		// access the view to set this as the searchListener
+		searchView = (SearchView) findViewById(R.id.searchView);
+		searchView.setSearchListener(this);
+		
+		/*
 		SearchTask searchTask = new SearchTask(SearchActivity.this);
-		searchTask.execute("http://cartwheels.us/carts/data");
+		searchTask.execute("http://cartwheels.us/carts/data"); */
 	}
 
 	@Override
@@ -77,19 +85,6 @@ public class SearchActivity extends Activity {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.search, menu);
-		
-		/* get the SearchView and set the searchable configuration */
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-	    SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-	    
-	    int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-	    TextView textView = (TextView) searchView.findViewById(id);
-	    textView.setTextColor(Color.WHITE);
-	    textView.setHintTextColor(Color.WHITE);
-	    
-	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    searchView.setIconifiedByDefault(true);
-	    
 
 		return true;
 	}
@@ -105,26 +100,46 @@ public class SearchActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		handleIntent(intent);
-	}
-	
-	private void handleIntent(Intent intent) {
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			search(query);
+
+	public void handleIntent(Intent intent) {
+		if (intent.hasExtra("tq")) {
+			String tq = intent.getStringExtra("tq");
+			String lq = intent.getStringExtra("lq");
+
+			search(tq, lq);
 		}
 	}
 	
-	public boolean search(String query) {
-		return true;
+	@Override
+	public void search(String textQueryData, String locationQueryData) {
+		SearchTask searchTask = new SearchTask(this);
+		searchTask.setTextQuery(textQueryData);
+		searchTask.setLocationQuery(locationQueryData);
+		
+		Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
+		
+		if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
+			Toast.makeText(this, "Please complete one of the search fields", Toast.LENGTH_SHORT);
+		} else {
+			searchTask.execute();
+		}
 	}
 	
 	private class SearchTask extends UrlJsonAsyncTask {
+		
+		private String textQuery;
+		private String locationQuery;
+		
 		public SearchTask(Context context) {
 			super(context);
+		}
+		
+		public void setTextQuery(String textQuery) {
+			this.textQuery = textQuery;
+		}
+		
+		public void setLocationQuery(String locationQuery) {
+			this.locationQuery = locationQuery;
 		}
 		
 		protected JSONObject doInBackground(String... urls) {
@@ -132,6 +147,7 @@ public class SearchActivity extends Activity {
 	        
 	        String response = null;
 	        JSONObject json = new JSONObject();
+	        
 			try {
 				Builder uri = new Builder();
 				uri.scheme("http").authority("cartwheels.us").appendPath("carts")
@@ -144,7 +160,11 @@ public class SearchActivity extends Activity {
 				// hard coded values for testing
 				uri.appendQueryParameter("offset", "0");
 				uri.appendQueryParameter("limit", "100");
-				uri.appendQueryParameter("tq", "halal");
+				
+				if (!(textQuery.length() == 0))
+					uri.appendQueryParameter("tq", textQuery);
+				if (!(locationQuery.length() == 0))
+					uri.appendQueryParameter("lq", locationQuery);
 				
 				HttpGet get = new HttpGet(uri.toString());
 				// default return values
@@ -198,22 +218,22 @@ public class SearchActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			super.onCreateView(inflater, container, savedInstanceState);
 			displayCarts = (ListView) inflater.inflate(R.layout.fragment_search,
 					container, false);
+			
+			Log.d("DisplayCartsFragment onCreateView", "fragment created");
 			
 			
 			return displayCarts;
 		}
 		
 		public void buildList(JSONArray jsonArray) {
-			String test;
 			try {
-				test = jsonArray.getJSONObject(0).getString(TAGS_CITY);
-				
 				Log.d("length", jsonArray.length() + "");
-				ObjectCartListItem[] items = new ObjectCartListItem[10];
+				ObjectCartListItem[] items = new ObjectCartListItem[jsonArray.length()];
 				
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject json = jsonArray.getJSONObject(i);
 					
 					String cartName = json.getString(TAGS_NAME);
@@ -230,19 +250,27 @@ public class SearchActivity extends Activity {
 
 				Log.d("All cart list items", Arrays.toString(items));
 				Log.d("BuildList", "objects added");
-				ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items);
 				
-				Log.d("Adapter", "objects added " + adapter.toString());
+				if (getActivity() == null) {
+					Log.d("getActivity", "null");
+				}
+				ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items);
 				
 				displayCarts.setAdapter(adapter);
 				
 				
-			} catch (Exception e) {
-				test = "nope";
+			} catch (NullPointerException e) {
 				e.printStackTrace();
+				Log.e("NullPointerException", e.toString());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("JSONException", e.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.e("Exception", e.toString());
 			}
-			Log.d("carts", test);
 		}
 	}
+
 
 }

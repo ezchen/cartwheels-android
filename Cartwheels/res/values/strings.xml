@@ -24,6 +24,8 @@
     <string name="zipcode">Zipcode</string>
     <string name="upload_id">Upload Id</string>
     
+    <string name="text_query">e.g halal</string>
+    
     <!-- Navigation Drawer values -->
     <string name="title_section1">Home</string>
     <string name="title_section2">Search</string>
