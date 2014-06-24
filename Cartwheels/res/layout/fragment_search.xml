@@ -6,4 +6,4 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="0dp"
-    tools:context="com.cartwheels.SearchActivity$DisplayCartsFragment" />
+    tools:context="com.cartwheels.DisplayCartsFragment" />

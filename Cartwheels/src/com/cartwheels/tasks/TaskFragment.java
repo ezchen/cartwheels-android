@@ -18,10 +18,10 @@ import com.google.android.gms.internal.as;
  * Fragment used to store AsyncTask to support orientation change in
  * the activitie's lifecycle.
  */
-public class TaskFragment<Params, Progress, Result> extends DialogFragment {
+public class TaskFragment extends DialogFragment {
 	
 	private Fragment fragment;
-	private myAsyncTask<Params, Progress, Result> asyncTask;
+	private myAsyncTask asyncTask;
 	ProgressBar progressBar;
 	
 	
@@ -29,7 +29,7 @@ public class TaskFragment<Params, Progress, Result> extends DialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// do not include this in the activitie's life cycle
+		//do not include this in the activitie's life cycle
 		setRetainInstance(true);
 	}
 	
@@ -95,7 +95,7 @@ public class TaskFragment<Params, Progress, Result> extends DialogFragment {
 		this.fragment = fragment;
 	}
 	
-	public void setAsyncTask(myAsyncTask<Params, Progress, Result> asyncTask) {
+	public void setAsyncTask(myAsyncTask asyncTask) {
 		this.asyncTask = asyncTask;
 		
 		asyncTask.setFragment(this);
@@ -121,8 +121,8 @@ public class TaskFragment<Params, Progress, Result> extends DialogFragment {
 	
 	public static interface TaskCallbacks {
 		public void onTaskFinished();
-		//void onProgressUpdate(int percent);
-		//void onCancelled();
-		//void onPostExecute();
+		void onProgressUpdate(int percent);
+		void onCancelled();
+		void onPostExecute();
 	}
 }

@@ -2,11 +2,9 @@ package com.cartwheels.tasks;
 
 import android.os.AsyncTask;
 
-public abstract class myAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+public interface myAsyncTask {
 
-	private TaskFragment fragment;
+	public void setFragment(TaskFragment fragment);
 	
-	public void setFragment(TaskFragment fragment) {
-		this.fragment = fragment;
-	}
+	public void put(String key, String value);
 }

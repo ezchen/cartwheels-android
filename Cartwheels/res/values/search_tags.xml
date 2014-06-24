@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Whenever you change any of these values, make sure you update the async tasks because they cannot
+				recieve references to strings in xml files... -->
+<resources>
+	<string name="TAGS_DATA">data</string>
+	<string name="TAGS_ID">id</string>
+	<string name="TAGS_NAME">name</string>
+	<string name="TAGS_CITY">city</string>
+	<string name="TAGS_UPLOAD_ID">upload_id</string>
+	<string name="TAGS_OWNER_SECRET">null</string>
+	<string name="TAGS_PERMIT_NUMBER">permit_number</string>
+	<string name="TAGS_ZIP_CODE">zip_code</string>
+	<string name="TAGS_LAT">lat</string>
+	<string name="TAGS_LON">lon</string>
+	<string name="TAGS_CREATED_AT">created_at</string>
+	<string name="TAGS_UPDATED_AT">updated_at</string>
+	<string name="TAGS_PHOTOS">photos</string>
+	
+	<string name="TAGS_URL_THUMB">image_url_thumb</string>
+</resources>
