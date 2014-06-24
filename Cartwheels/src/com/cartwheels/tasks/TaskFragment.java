@@ -37,7 +37,7 @@ public class TaskFragment<Params, Progress, Result> extends DialogFragment {
 								Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
-		progressBar = (ProgressBar) view.findViewById("progressTaskFragment");
+		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
 		getDialog().setTitle("Progress Dialog");
 		
 		getDialog().setCanceledOnTouchOutside(false);
