@@ -1,7 +1,10 @@
 package com.cartwheels;
 
+import com.cartwheels.tasks.ImageDownloaderTask;
+
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +36,10 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		ObjectCartListItem item = items[position];
 
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
-		cartPicture.setImageResource(item.icon);
+		if (item.bitmapUrl != null)
+			new ImageDownloaderTask(cartPicture).execute(item.bitmapUrl);
+		else
+			Log.d("bitmapUrl", "is null");
 		
 		TextView cartName = (TextView) listItem.findViewById(R.id.cartName);
 		cartName.setText(item.cartName);

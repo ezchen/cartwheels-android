@@ -15,7 +15,6 @@
     <string name="registerUser">Register as User</string>
     <string name="registerOwner">Register as Owner</string>
     <string name="permit_number">Permit Number</string>
-    
     <string name="action_logout">Logout</string>
 
     <!-- Search Values -->
@@ -23,9 +22,8 @@
     <string name="cart_name">Cart Name</string>
     <string name="zipcode">Zipcode</string>
     <string name="upload_id">Upload Id</string>
-    
     <string name="text_query">e.g halal</string>
-    
+
     <!-- Navigation Drawer values -->
     <string name="title_section1">Home</string>
     <string name="title_section2">Search</string>
@@ -44,6 +42,10 @@
     <!-- Search -->
     <string name="search_hint">e.g Halal</string>
     <string name="title_activity_search">Search</string>
+    <string name="title_activity_view_cart">ViewCartActivity</string>
 
-
+    <!-- ViewCart -->
+    <string name="tab_section1">Cart</string>
+    <string name="tab_section2">Reviews</string>
+    <string name="tab_section3">Photos</string>
 </resources>

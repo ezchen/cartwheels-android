@@ -23,6 +23,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,6 +50,7 @@ public class SearchActivity extends Activity
 	private static final String TAGS_LON="lon";
 	private static final String TAGS_CREATED_AT="created_at";
 	private static final String TAGS_UPDATED_AT="updated_at";
+	private static final String TAGS_PHOTOS="photos";
 	
 	private DisplayCartsFragment fragment;
 	
@@ -208,9 +211,12 @@ public class SearchActivity extends Activity
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class DisplayCartsFragment extends Fragment {
+	public static class DisplayCartsFragment extends Fragment
+												implements OnItemClickListener {
 
 		private ListView displayCarts;
+		private ObjectCartListItem[] items;
+		//ObjectCartListItem items[];
 		
 		public DisplayCartsFragment() {
 		}
@@ -222,6 +228,8 @@ public class SearchActivity extends Activity
 			displayCarts = (ListView) inflater.inflate(R.layout.fragment_search,
 					container, false);
 			
+			displayCarts.setOnItemClickListener(this);
+			
 			Log.d("DisplayCartsFragment onCreateView", "fragment created");
 			
 			
@@ -231,7 +239,7 @@ public class SearchActivity extends Activity
 		public void buildList(JSONArray jsonArray) {
 			try {
 				Log.d("length", jsonArray.length() + "");
-				ObjectCartListItem[] items = new ObjectCartListItem[jsonArray.length()];
+				items = new ObjectCartListItem[jsonArray.length()];
 				
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject json = jsonArray.getJSONObject(i);
@@ -240,14 +248,21 @@ public class SearchActivity extends Activity
 					String cartZipcode = json.getString(TAGS_ZIP_CODE);
 					String cartPermit = json.getString(TAGS_PERMIT_NUMBER);
 					
-					ObjectCartListItem cartListItem = new ObjectCartListItem(R.drawable.profile, cartName,
+					JSONArray arrayBitmapUrl = json.getJSONArray(TAGS_PHOTOS);
+					
+					String bitmapUrl = null;
+					if (arrayBitmapUrl.length() > 0) {
+						JSONObject jsonBitmapUrl = arrayBitmapUrl.getJSONObject(0);
+						bitmapUrl = jsonBitmapUrl.getString("image_url_thumb");
+					}
+					
+					ObjectCartListItem cartListItem = new ObjectCartListItem(bitmapUrl, cartName,
 															cartZipcode, cartPermit);
 					
 					Log.d("cart list item", cartListItem.toString());
 					items[i] = cartListItem;
 				}
 				
-
 				Log.d("All cart list items", Arrays.toString(items));
 				Log.d("BuildList", "objects added");
 				
@@ -269,6 +284,14 @@ public class SearchActivity extends Activity
 				e.printStackTrace();
 				Log.e("Exception", e.toString());
 			}
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Intent intent = new Intent(getActivity(), ViewCartActivity.class);
+			intent.putExtra("ObjectCartListItem", items[position]);
+			startActivity(intent);
 		}
 	}
 

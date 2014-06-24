@@ -7,12 +7,16 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
     
-    <uses-permission android:name="android.permission.INTERNET"
-        ></uses-permission>
-    
-    <uses-feature android:name="android.hardware.camera"
-        		  android:required="false" />
+    <meta-data android:name="com.google.android.gms.version"
+           android:value="@integer/google_play_services_version" />
 
     <application
         android:allowBackup="true"
@@ -59,6 +63,14 @@
         <activity
             android:name="com.cartwheels.RegisterActivity"
             android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name="com.cartwheels.ViewCartActivity"
+            android:label="@string/title_activity_view_cart"
+            android:parentActivityName="com.cartwheels.SearchActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cartwheels.SearchActivity" />
         </activity>
     </application>
 

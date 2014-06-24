@@ -11,8 +11,8 @@
         android:layout_height="75dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:scaleType="centerInside"
         android:padding="10dp"
-        android:src="@drawable/profile"
         android:contentDescription="@string/cart_image_description" />
  
     <!-- Cart Name -->
