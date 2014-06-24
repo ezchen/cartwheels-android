@@ -46,14 +46,6 @@ public class SearchTask extends UrlJsonAsyncTask implements myAsyncTask {
 		objectValues = new HashMap<String, String>();
 	}
 	
-	public void setTextQuery(String textQuery) {
-		this.textQuery = textQuery;
-	}
-	
-	public void setLocationQuery(String locationQuery) {
-		this.locationQuery = locationQuery;
-	}
-	
 	@Override
 	protected JSONObject doInBackground(String... urls) {
         DefaultHttpClient client = new DefaultHttpClient();
@@ -103,8 +95,10 @@ public class SearchTask extends UrlJsonAsyncTask implements myAsyncTask {
 			Log.d("jsonarray", carts.toString());
 			
 			// test if json array is working
-			searchActivity.getFragment().buildList(carts);
-			
+			// searchActivity.getFragment().buildList(carts);
+			if 	(fragment == null)
+				return;
+			fragment.taskFinished();
 			
 		} catch (JSONException e) {
 			e.printStackTrace();

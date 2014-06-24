@@ -6,7 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,23 +16,60 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+import com.cartwheels.tasks.TaskFragment;
+
+
 public class DisplayCartsFragment extends Fragment
 											implements OnItemClickListener {
 
 	private ListView displayCarts;
 	private ObjectCartListItem[] items;
-	//ObjectCartListItem items[];
+	
+	private FragmentManager fragmentManager;
+	public static final int TASK_FRAGMENT = 0;
+	public static final String TASK_FRAGMENT_TAG = "displayCarts";
+	
+	// code up to onDetach() used to maintain callbacks to the activity
+	private TaskCallbacks taskCallbacks = dummyCallBacks;
 	
 	public DisplayCartsFragment() {
 	}
 
+
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof TaskCallbacks)) {
+			throw new IllegalStateException("Activity must implement TaskCallbacks");
+		}
+		taskCallbacks = (TaskCallbacks) activity;
+	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		taskCallbacks = dummyCallBacks;
+	}
+	
+	/* Other stuff not related to callbacks really */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		// target fragment may have been redestroyed and recreated. Find it!
+		fragmentManager = getFragmentManager();
+		TaskFragment fragment = (TaskFragment) fragmentManager.findFragmentByTag(TASK_FRAGMENT_TAG);
+		
+		if (fragment != null) {
+			fragment.setTargetFragment(this, TASK_FRAGMENT);
+		}
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -44,6 +83,18 @@ public class DisplayCartsFragment extends Fragment
 		
 		
 		return displayCarts;
+	}
+	
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == TASK_FRAGMENT && resultCode == Activity.RESULT_OK) {
+			taskCallbacks.onTaskFinished();
+		}
 	}
 	
 	public void buildList(JSONArray jsonArray) {
@@ -79,7 +130,7 @@ public class DisplayCartsFragment extends Fragment
 			if (getActivity() == null) {
 				Log.d("getActivity", "null");
 			}
-			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(), R.layout.listview_cart_row, items);
+			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter((Activity) taskCallbacks, R.layout.listview_cart_row, items);
 			
 			displayCarts.setAdapter(adapter);
 			
@@ -103,4 +154,30 @@ public class DisplayCartsFragment extends Fragment
 		intent.putExtra("ObjectCartListItem", items[position]);
 		startActivity(intent);
 	}
+	
+	
+	public static interface TaskCallbacks {
+		public void onTaskFinished();
+		public void onProgressUpdate(int percent);
+		public void onCancelled();
+		public void onPostExecute();
+	}
+	
+	private static TaskCallbacks dummyCallBacks = new TaskCallbacks() {
+		public void onTaskFinished() {
+			
+		}
+		
+		public void onProgressUpdate(int percent) {
+			
+		}
+		
+		public void onCancelled() {
+			
+		}
+		
+		public void onPostExecute() {
+			
+		}
+	};
 }

@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.os.AsyncTask;
 
 import com.cartwheels.R;
-import com.google.android.gms.internal.as;
 
 /*
  * Fragment used to store AsyncTask to support orientation change in
@@ -23,8 +22,6 @@ public class TaskFragment extends DialogFragment {
 	private Fragment fragment;
 	private myAsyncTask asyncTask;
 	ProgressBar progressBar;
-	
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,11 +56,11 @@ public class TaskFragment extends DialogFragment {
 		super.onDismiss(dialog);
 		
 		if (asyncTask != null) {
-			asyncTask.cancel(false);
+			((AsyncTask) asyncTask).cancel(false);
 		}
 		
 		if (getTargetFragment() != null) {
-			getTargetFragment().onActivityResult(TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
+			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_CANCELED, null);
 		}
 	}
 	
@@ -87,7 +84,7 @@ public class TaskFragment extends DialogFragment {
 		asyncTask = null;
 		
 		if (getTargetFragment() != null)
-			getTargetFragment().onActivityResult(TASK_FRAGMENT, Activity.RESULT_OK, null);
+			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
 	}
 	
 	
@@ -95,14 +92,14 @@ public class TaskFragment extends DialogFragment {
 		this.fragment = fragment;
 	}
 	
-	public void setAsyncTask(myAsyncTask asyncTask) {
+	public void setTask(myAsyncTask asyncTask) {
 		this.asyncTask = asyncTask;
 		
 		asyncTask.setFragment(this);
 	}
 	
 	public void execute() {
-		asyncTask.execute();
+		((AsyncTask)asyncTask).execute();
 	}
 	
 	public void update() {
@@ -113,16 +110,10 @@ public class TaskFragment extends DialogFragment {
 		return fragment;
 	}
 	
-	public AsyncTask getAsyncTask() {
+	public myAsyncTask getAsyncTask() {
 		return asyncTask;
 	}
 	
 	
-	
-	public static interface TaskCallbacks {
-		public void onTaskFinished();
-		void onProgressUpdate(int percent);
-		void onCancelled();
-		void onPostExecute();
-	}
+
 }

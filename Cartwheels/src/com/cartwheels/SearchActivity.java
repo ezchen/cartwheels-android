@@ -9,12 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
 import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.cartwheels.tasks.SearchTask;
+import com.cartwheels.tasks.TaskFragment;
 
 public class SearchActivity extends Activity
-								implements SearchListener{
+								implements SearchListener, TaskCallbacks {
 	
 	SharedPreferences preferences;
 	
@@ -93,16 +95,45 @@ public class SearchActivity extends Activity
 		searchTask.put("auth_token", auth_token);
 		
 		Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
+		Log.d("searchActivity search", "searchTask created");
 		
+		TaskFragment taskFragment = new TaskFragment();
+		taskFragment.setTask(searchTask);
+		taskFragment.show(getFragmentManager(), "displayCarts");
+		
+		Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
 		if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
 			Toast.makeText(this, "Please complete one of the search fields", Toast.LENGTH_SHORT).show();
 		} else {
-			searchTask.execute();
+			
 		}
 	}
 	
 	public DisplayCartsFragment getFragment() {
 		return this.fragment;
+	}
+
+	@Override
+	public void onTaskFinished() {
+		Toast.makeText(this, "FUCKING HOORAY", Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onProgressUpdate(int percent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCancelled() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPostExecute() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
