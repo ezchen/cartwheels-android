@@ -111,9 +111,13 @@ public class DisplayCartsFragment extends Fragment
 		if (savedInstanceState != null) {
 			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
 			
+			
+						
 			RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
 			bitmapCache = storage.retainedCache;
 			
+			if (items == null || bitmapCache == null)
+				return;
 			// recreate the list
 			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
 																R.layout.listview_cart_row, items, bitmapCache);
