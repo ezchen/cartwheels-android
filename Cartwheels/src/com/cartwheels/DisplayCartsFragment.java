@@ -1,7 +1,5 @@
 package com.cartwheels;
 
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;

@@ -19,7 +19,7 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 	private LruCache<String, Bitmap> cache;
 	
 	
-	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items, LruCache cache) {
+	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items, LruCache<String, Bitmap> cache) {
 		super(context, layoutResourceID, items);
 		
 		this.context = context;

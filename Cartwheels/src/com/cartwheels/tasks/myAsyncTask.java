@@ -1,6 +1,5 @@
 package com.cartwheels.tasks;
 
-import android.os.AsyncTask;
 
 public interface myAsyncTask {
 

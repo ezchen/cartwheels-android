@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
 import com.cartwheels.custom_views.SearchView;
-import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.TaskFragment;
 
