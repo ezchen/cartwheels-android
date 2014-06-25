@@ -72,7 +72,7 @@ public class DisplayCartsFragment extends Fragment
 		
 		// target fragment may have been redestroyed and recreated. Find it!
 		fragmentManager = getFragmentManager();
-		TaskFragment fragment = (TaskFragment) fragmentManager.findFragmentByTag(TASK_FRAGMENT_TAG);
+		TaskFragment fragment = (TaskFragment) fragmentManager.findFragmentByTag("display");
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, TASK_FRAGMENT);
@@ -109,12 +109,16 @@ public class DisplayCartsFragment extends Fragment
 		
 		// Restore the list
 		if (savedInstanceState != null) {
-			ObjectCartListItem[] myItems = (ObjectCartListItem[])
-					savedInstanceState.getParcelableArray("ObjectCartListItems");
+			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
 			
-			Log.d("onViewCreated", "bitmap Cache " + bitmapCache);
+			RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
+			bitmapCache = storage.retainedCache;
 			
-			Log.d("my items", Arrays.toString(myItems));
+			// recreate the list
+			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
+																R.layout.listview_cart_row, items, bitmapCache);
+			displayCarts.setAdapter(adapter);
+			Log.d("onActivityCreated", "bitmapCache: " + bitmapCache);
 		}
 	}
 	@Override
@@ -195,7 +199,7 @@ public class DisplayCartsFragment extends Fragment
 			taskFragment.setTask(searchTask);
 			
 			taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
-			taskFragment.show(getFragmentManager(), "displayCarts");
+			taskFragment.show(getFragmentManager(), "display");
 			taskFragment.execute();
 			
 			Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
@@ -204,8 +208,6 @@ public class DisplayCartsFragment extends Fragment
 			} else {
 				
 			}
-		} else {
-			Log.d("search", "activity is still null");
 		}
 	}
 }

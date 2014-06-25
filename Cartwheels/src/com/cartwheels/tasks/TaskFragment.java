@@ -2,6 +2,7 @@ package com.cartwheels.tasks;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import com.cartwheels.DisplayCartsFragment;
 import com.cartwheels.ObjectCartListItem;
 import com.cartwheels.R;
+import com.cartwheels.RetainFragment;
 
 /*
  * Fragment used to store AsyncTask to support orientation change in
@@ -86,12 +88,16 @@ public class TaskFragment extends DialogFragment {
 			dismiss();
 		}
 		asyncTask = null;
-		this.bitmapCache = cache;
+		
+		FragmentManager manager = getFragmentManager();
+		Log.d("manager", "" + manager);
+		RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
+		storage.retainedCache = cache;
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
 			DisplayCartsFragment fragment = (DisplayCartsFragment) getTargetFragment();
-			fragment.buildList(bitmapCache, items);
+			fragment.buildList(cache, items);
 			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
 		}
 	}
