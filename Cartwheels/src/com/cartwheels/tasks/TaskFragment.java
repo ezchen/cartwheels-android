@@ -4,23 +4,26 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.os.AsyncTask;
 
+import com.cartwheels.DisplayCartsFragment;
+import com.cartwheels.ObjectCartListItem;
 import com.cartwheels.R;
 
 /*
  * Fragment used to store AsyncTask to support orientation change in
- * the activitie's lifecycle.
+ * the activity's lifecycle.
  */
 public class TaskFragment extends DialogFragment {
 	
-	private Fragment fragment;
-	private myAsyncTask asyncTask;
+	private SearchTask asyncTask;
 	ProgressBar progressBar;
 	
 	@Override
@@ -56,7 +59,7 @@ public class TaskFragment extends DialogFragment {
 		super.onDismiss(dialog);
 		
 		if (asyncTask != null) {
-			((AsyncTask) asyncTask).cancel(false);
+			asyncTask.cancel(false);
 		}
 		
 		if (getTargetFragment() != null) {
@@ -77,40 +80,36 @@ public class TaskFragment extends DialogFragment {
 		progressBar.setProgress(percent);
 	}
 	
-	public void taskFinished() {
-		if (isResumed())
+	public void taskFinished(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
+		if (isResumed()) {
+			Log.d("taskFinished", "dismissed");
 			dismiss();
-		
+		}
 		asyncTask = null;
 		
-		if (getTargetFragment() != null)
+		if (getTargetFragment() != null) {
+			Log.d("taskFinished", "fragment is not null");
+			DisplayCartsFragment fragment = (DisplayCartsFragment) getTargetFragment();
+			fragment.buildList(cache, items);
 			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
+		}
 	}
 	
-	
-	public void setTargetFragment(Fragment fragment) {
-		this.fragment = fragment;
-	}
-	
-	public void setTask(myAsyncTask asyncTask) {
+	public void setTask(SearchTask asyncTask) {
 		this.asyncTask = asyncTask;
 		
 		asyncTask.setFragment(this);
 	}
 	
 	public void execute() {
-		((AsyncTask)asyncTask).execute();
+		asyncTask.execute();
 	}
 	
 	public void update() {
 		
 	}
 	
-	public Fragment getTargetFrag() {
-		return fragment;
-	}
-	
-	public myAsyncTask getAsyncTask() {
+	public SearchTask getAsyncTask() {
 		return asyncTask;
 	}
 	

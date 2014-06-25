@@ -16,14 +16,11 @@ import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.TaskFragment;
 
 public class SearchActivity extends Activity
-								implements SearchListener, TaskCallbacks {
+								implements TaskCallbacks {
 	
 	SharedPreferences preferences;
 	
-	private DisplayCartsFragment fragment;
-	
 	private SearchView searchView;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +31,13 @@ public class SearchActivity extends Activity
 		Intent intent = getIntent();
 		handleIntent(intent);
 		
-		fragment = new DisplayCartsFragment();
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, fragment).commit();
-		}
+		DisplayCartsFragment fragment = (DisplayCartsFragment) getFragmentManager().findFragmentById(R.id.display_carts_fragment);
 		
 		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 		
 		// access the view to set this as the searchListener
 		searchView = (SearchView) findViewById(R.id.searchView);
-		searchView.setSearchListener(this);
+		searchView.setSearchListener(fragment);
 		
 		/*
 		SearchTask searchTask = new SearchTask(SearchActivity.this);
@@ -81,9 +74,9 @@ public class SearchActivity extends Activity
 		}
 	}
 	
-	@Override
+	//@Override
 	public void search(String textQueryData, String locationQueryData) {
-		SearchTask searchTask = new SearchTask(this, this);
+		SearchTask searchTask = new SearchTask();
 		
 		// put in tq, lq, email, auth_token,
 		searchTask.put("tq", textQueryData);
@@ -99,7 +92,14 @@ public class SearchActivity extends Activity
 		
 		TaskFragment taskFragment = new TaskFragment();
 		taskFragment.setTask(searchTask);
+		
+		//if (fragment == null) {
+		//	Log.d("search", "fragment is null");
+		//}
+		
+		//taskFragment.setTargetFragment(fragment, R.integer.search_task_fragment);
 		taskFragment.show(getFragmentManager(), "displayCarts");
+		taskFragment.execute();
 		
 		Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
 		if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
@@ -107,10 +107,6 @@ public class SearchActivity extends Activity
 		} else {
 			
 		}
-	}
-	
-	public DisplayCartsFragment getFragment() {
-		return this.fragment;
 	}
 
 	@Override

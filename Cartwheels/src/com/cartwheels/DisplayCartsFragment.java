@@ -10,8 +10,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +21,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.cartwheels.custom_views.SearchView.SearchListener;
+import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.TaskFragment;
 
 
 public class DisplayCartsFragment extends Fragment
-											implements OnItemClickListener {
+											implements OnItemClickListener,
+														SearchListener {
 
 	private ListView displayCarts;
 	private ObjectCartListItem[] items;
@@ -35,6 +41,7 @@ public class DisplayCartsFragment extends Fragment
 	
 	// code up to onDetach() used to maintain callbacks to the activity
 	private TaskCallbacks taskCallbacks = dummyCallBacks;
+	private Activity activity;
 	
 	public DisplayCartsFragment() {
 	}
@@ -44,9 +51,11 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		Log.d("onAttach DisplayCartsFragment", "fragment is attached");
 		if (!(activity instanceof TaskCallbacks)) {
 			throw new IllegalStateException("Activity must implement TaskCallbacks");
 		}
+		this.activity = activity;
 		taskCallbacks = (TaskCallbacks) activity;
 	}
 	
@@ -54,6 +63,7 @@ public class DisplayCartsFragment extends Fragment
 	public void onDetach() {
 		super.onDetach();
 		taskCallbacks = dummyCallBacks;
+		activity = null;
 	}
 	
 	/* Other stuff not related to callbacks really */
@@ -67,6 +77,9 @@ public class DisplayCartsFragment extends Fragment
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, TASK_FRAGMENT);
+			Log.d("fragment", "is not null");
+		} else {
+			Log.d("fragment", "null");
 		}
 	}
 	
@@ -79,8 +92,6 @@ public class DisplayCartsFragment extends Fragment
 		
 		displayCarts.setOnItemClickListener(this);
 		
-		Log.d("DisplayCartsFragment onCreateView", "fragment created");
-		
 		
 		return displayCarts;
 	}
@@ -92,65 +103,22 @@ public class DisplayCartsFragment extends Fragment
 	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == TASK_FRAGMENT && resultCode == Activity.RESULT_OK) {
 			taskCallbacks.onTaskFinished();
 		}
 	}
 	
-	public void buildList(JSONArray jsonArray) {
-		try {
-			Log.d("length", jsonArray.length() + "");
-			items = new ObjectCartListItem[jsonArray.length()];
-			
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject json = jsonArray.getJSONObject(i);
-				
-				String cartName = json.getString(getResources().getString(R.string.TAGS_NAME));
-				String cartZipcode = json.getString(getResources().getString(R.string.TAGS_ZIP_CODE));
-				String cartPermit = json.getString(getResources().getString(R.string.TAGS_PERMIT_NUMBER));
-				
-				JSONArray arrayBitmapUrl = json.getJSONArray(getResources().getString(R.string.TAGS_PHOTOS));
-				
-				String bitmapUrl = null;
-				if (arrayBitmapUrl.length() > 0) {
-					JSONObject jsonBitmapUrl = arrayBitmapUrl.getJSONObject(0);
-					bitmapUrl = jsonBitmapUrl.getString(getResources().getString(R.string.TAGS_URL_THUMB));
-				}
-				
-				ObjectCartListItem cartListItem = new ObjectCartListItem(bitmapUrl, cartName,
-														cartZipcode, cartPermit);
-				
-				Log.d("cart list item", cartListItem.toString());
-				items[i] = cartListItem;
-			}
-			
-			Log.d("All cart list items", Arrays.toString(items));
-			Log.d("BuildList", "objects added");
-			
-			if (getActivity() == null) {
-				Log.d("getActivity", "null");
-			}
-			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter((Activity) taskCallbacks, R.layout.listview_cart_row, items);
-			
-			displayCarts.setAdapter(adapter);
-			
-			
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			Log.e("NullPointerException", e.toString());
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Log.e("JSONException", e.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e("Exception", e.toString());
-		}
+	public void buildList(LruCache cache, ObjectCartListItem[] items) {
+		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
+															R.layout.listview_cart_row, items);
+		displayCarts.setAdapter(adapter);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent(getActivity(), ViewCartActivity.class);
+		Intent intent = new Intent(activity, ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
 		startActivity(intent);
 	}
@@ -180,4 +148,41 @@ public class DisplayCartsFragment extends Fragment
 			
 		}
 	};
+
+	@Override
+	public void search(String textQueryData, String locationQueryData) {
+		if (activity != null) {
+			SharedPreferences preferences = activity.getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+			
+			SearchTask searchTask = new SearchTask();
+			
+			// put in tq, lq, email, auth_token,
+			searchTask.put("tq", textQueryData);
+			searchTask.put("lq", locationQueryData);
+			
+			String email = preferences.getString("email", "");
+			String auth_token = preferences.getString("AuthToken", "");
+			searchTask.put("email", email);
+			searchTask.put("auth_token", auth_token);
+			
+			Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
+			Log.d("searchActivity search", "searchTask created");
+			
+			TaskFragment taskFragment = new TaskFragment();
+			taskFragment.setTask(searchTask);
+			
+			taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
+			taskFragment.show(getFragmentManager(), "displayCarts");
+			taskFragment.execute();
+			
+			Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
+			if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
+				Toast.makeText(getActivity(), "Please complete one of the search fields", Toast.LENGTH_SHORT).show();
+			} else {
+				
+			}
+		} else {
+			Log.d("search", "activity is still null");
+		}
+	}
 }
