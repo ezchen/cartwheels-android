@@ -146,12 +146,12 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 			// below).
 			Log.d("getItem", position + "");
 			switch (position) {
-				case 1:
+				case 0:
 					return ViewCartFragment.newInstance(bundle);
+				case 1:
+					return PlaceholderFragment.newInstance(position+1);
 				case 2:
-					break;
-				case 3:
-					break;					
+					return PlaceholderFragment.newInstance(position+1);				
 			}
 			return ViewCartFragment.newInstance(bundle);
 		}
@@ -207,12 +207,8 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 				Bundle savedInstanceState) {
 			Log.d("ViewCartFragment onCreateView", "created");
 			Bundle bundle = this.getArguments();
-			View rootView = inflater.inflate(R.layout.fragment_view_cart,
+			View rootView = inflater.inflate(R.layout.fragment_place_holder,
 					container, false);
-			TextView textView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
 			return rootView;
 		}
 	}

@@ -2,15 +2,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:padding="5dp"
     tools:context="com.cartwheels.ViewCartActivity$PlaceholderFragment" >
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/viewCart_Name"
+        android:textSize="15sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:padding="3dp"
+        android:text="CartName"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    
+    <ImageView 
+        android:id="@+id/viewCart_Rating"
+        android:padding="3dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/viewCart_Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/rating"/>
+    
+    <TextView 
+        android:id="@+id/viewCart_NumberOfReviews"
+        android:textSize="12sp"
+        android:padding="3dp"
+        android:layout_toRightOf="@id/viewCart_Rating"
+        android:layout_below="@id/viewCart_Name"
+        android:text="0 Reviews"
+        android:textColor="#5f5f5f"
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"/>
+    
+    <TextView 
+        android:id="@+id/viewCart_Zipcode"
+        android:textSize="12sp"
+        android:padding="3dp"
+        android:layout_below="@id/viewCart_Rating"
+        android:text="Zipcode: 10026"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
+    
+    <TextView
+        android:id="@+id/viewCart_Permit"
+        android:textSize="12sp"
+        android:padding="3dp"
+        android:layout_below="@id/viewCart_Zipcode"
+        android:text="Permit: c0102"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/viewCart_CartPicture"
+        android:padding="2dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="175dp"
+        android:layout_height="115dp"
+       	android:scaleType="fitCenter" />
+    
+    <View
+        android:id="@+id/viewCart_Divider1"
+        android:layout_below="@id/viewCart_CartPicture"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray"/>
+    
+    <ImageView 
+        android:id="@+id/viewCart_Map"
+        android:padding="3dp"
+        android:layout_alignParentLeft="true"
+        android:layout_width="350dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/viewCart_Divider1"/>
 </RelativeLayout>

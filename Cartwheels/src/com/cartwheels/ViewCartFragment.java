@@ -22,9 +22,24 @@ public class ViewCartFragment extends Fragment {
 			Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
 			return rootView;
 		} else {
+			if (getActivity() != null)
+			Toast.makeText(getActivity(), savedInstanceState.getString("test", "nope"), Toast.LENGTH_SHORT).show();
+			Log.d("onCreateView", "" + savedInstanceState.getString("test"));
 		}
 		
 		return rootView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState == null) {
+			
+		} else {
+			if (getActivity() != null)
+			Toast.makeText(getActivity(), savedInstanceState.getString("test", "nope"), Toast.LENGTH_SHORT).show();
+			Log.d("OnCreateView", "" + savedInstanceState.getString("test"));
+		}
 	}
 	
 	public static ViewCartFragment newInstance(Bundle bundle) {
