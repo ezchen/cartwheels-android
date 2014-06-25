@@ -1,10 +1,10 @@
 package com.cartwheels;
 
-import com.cartwheels.tasks.ImageDownloaderTask;
-
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
-	Context context;
+	private Context context;
 	int layoutResourceID;
-	ObjectCartListItem[] items;
+	private ObjectCartListItem[] items;
+	private LruCache<String, Bitmap> cache;
 	
 	
-	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items) {
+	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items, LruCache cache) {
 		super(context, layoutResourceID, items);
 		
 		this.context = context;
 		this.layoutResourceID = layoutResourceID;
 		this.items = items;
+		this.cache = cache;
 	}
 	
 	@Override
@@ -36,10 +38,12 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		ObjectCartListItem item = items[position];
 
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
-		if (item.bitmapUrl != null)
-			new ImageDownloaderTask(cartPicture).execute(item.bitmapUrl);
-		else
-			Log.d("bitmapUrl", "is null");
+		Bitmap bitmap = cache.get(item.bitmapUrl);
+		if (bitmap != null) {
+			cartPicture.setImageBitmap(bitmap);
+		} else {
+			Log.d("getView CartListItemAdapter", "bitmap is null");
+		}
 		
 		TextView cartName = (TextView) listItem.findViewById(R.id.cartName);
 		cartName.setText(item.cartName);

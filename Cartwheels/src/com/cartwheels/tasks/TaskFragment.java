@@ -2,7 +2,6 @@ package com.cartwheels.tasks;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,6 +23,7 @@ import com.cartwheels.R;
 public class TaskFragment extends DialogFragment {
 	
 	private SearchTask asyncTask;
+	private LruCache<String, Bitmap> bitmapCache;
 	ProgressBar progressBar;
 	
 	@Override
@@ -86,13 +86,18 @@ public class TaskFragment extends DialogFragment {
 			dismiss();
 		}
 		asyncTask = null;
+		this.bitmapCache = cache;
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
 			DisplayCartsFragment fragment = (DisplayCartsFragment) getTargetFragment();
-			fragment.buildList(cache, items);
+			fragment.buildList(bitmapCache, items);
 			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
 		}
+	}
+	
+	public LruCache<String, Bitmap> getBitmapCache() {
+		return bitmapCache;
 	}
 	
 	public void setTask(SearchTask asyncTask) {

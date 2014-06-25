@@ -28,7 +28,7 @@ public class ObjectCartListItem implements Parcelable {
 		
 		this.bitmapUrl = null;
 		if (bitmapUrl != null)
-			this.bitmapUrl = "cartwheels.us" + bitmapUrl;
+			this.bitmapUrl = bitmapUrl;
 		this.cartName = cartName;
 		this.zipcode = zipcode;
 		this.permit = permit;

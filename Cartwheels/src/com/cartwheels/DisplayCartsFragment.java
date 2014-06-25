@@ -2,16 +2,14 @@ package com.cartwheels;
 
 import java.util.Arrays;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
@@ -40,6 +38,7 @@ public class DisplayCartsFragment extends Fragment
 	public static final String TASK_FRAGMENT_TAG = "displayCarts";
 	
 	// code up to onDetach() used to maintain callbacks to the activity
+	private LruCache<String, Bitmap> bitmapCache;
 	private TaskCallbacks taskCallbacks = dummyCallBacks;
 	private Activity activity;
 	
@@ -77,6 +76,7 @@ public class DisplayCartsFragment extends Fragment
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, TASK_FRAGMENT);
+			this.bitmapCache = fragment.getBitmapCache();
 			Log.d("fragment", "is not null");
 		} else {
 			Log.d("fragment", "null");
@@ -101,6 +101,28 @@ public class DisplayCartsFragment extends Fragment
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		
+		// Restore the list
+		if (savedInstanceState != null) {
+			ObjectCartListItem[] myItems = (ObjectCartListItem[])
+					savedInstanceState.getParcelableArray("ObjectCartListItems");
+			
+			Log.d("onViewCreated", "bitmap Cache " + bitmapCache);
+			
+			Log.d("my items", Arrays.toString(myItems));
+		}
+	}
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putParcelableArray("ObjectCartListItems", (Parcelable[]) items);
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -109,9 +131,10 @@ public class DisplayCartsFragment extends Fragment
 		}
 	}
 	
-	public void buildList(LruCache cache, ObjectCartListItem[] items) {
+	public void buildList(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
+		this.items = items;
 		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
-															R.layout.listview_cart_row, items);
+															R.layout.listview_cart_row, items, cache);
 		displayCarts.setAdapter(adapter);
 	}
 

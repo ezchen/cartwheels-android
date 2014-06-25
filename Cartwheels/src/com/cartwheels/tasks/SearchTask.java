@@ -159,7 +159,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				
 				if (bitmapUrl != null)
 					cacheBitmap("http://png-1.findicons.com/files/icons/1579/devine/256/cart.png");
-				ObjectCartListItem cartListItem = new ObjectCartListItem(bitmapUrl, cartName,
+				ObjectCartListItem cartListItem = new ObjectCartListItem("http://png-1.findicons.com/files/icons/1579/devine/256/cart.png", cartName,
 														cartZipcode, cartPermit);
 				
 				Log.d("cart list item", cartListItem.toString());
@@ -190,6 +190,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 												String key, Bitmap bitmap) {
 		cache.put(key, bitmap);
 	}
+	
 	private static Bitmap downloadBitmap(String url) {
         final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         final HttpGet getRequest = new HttpGet(url);

@@ -22,6 +22,8 @@ public class SearchActivity extends Activity
 	
 	private SearchView searchView;
 	
+	DisplayCartsFragment fragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +33,11 @@ public class SearchActivity extends Activity
 		Intent intent = getIntent();
 		handleIntent(intent);
 		
-		DisplayCartsFragment fragment = (DisplayCartsFragment) getFragmentManager().findFragmentById(R.id.display_carts_fragment);
+		if (savedInstanceState != null) {
+			fragment = (DisplayCartsFragment) getFragmentManager().getFragment(savedInstanceState, "displayCarts");
+		} else {
+			fragment = (DisplayCartsFragment) getFragmentManager().findFragmentById(R.id.display_carts_fragment);
+		}
 		
 		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 		
@@ -74,6 +80,12 @@ public class SearchActivity extends Activity
 		}
 	}
 	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		getFragmentManager().putFragment(outState, "displayCarts", fragment);
+	}
+	
 	//@Override
 	public void search(String textQueryData, String locationQueryData) {
 		SearchTask searchTask = new SearchTask();
@@ -108,6 +120,8 @@ public class SearchActivity extends Activity
 			
 		}
 	}
+	
+
 
 	@Override
 	public void onTaskFinished() {
