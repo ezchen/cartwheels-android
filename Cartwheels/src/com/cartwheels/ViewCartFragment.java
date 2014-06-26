@@ -1,15 +1,25 @@
 package com.cartwheels;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ViewCartFragment extends Fragment {
 
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -19,6 +29,18 @@ public class ViewCartFragment extends Fragment {
 		if (savedInstanceState == null) {
 			Log.d("onCreateView", "savedInstanceState is null");
 			ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
+			
+			TextView cartName = (TextView) rootView.findViewById(R.id.viewCart_Name);
+			TextView reviews = (TextView) rootView.findViewById(R.id.viewCart_NumberOfReviews);
+			ImageView rating = (ImageView) rootView.findViewById(R.id.viewCart_Rating);
+			TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
+			TextView permit = (TextView) rootView.findViewById(R.id.viewCart_Permit);
+			
+			Bitmap bitmap = (Bitmap) getArguments().getParcelable("bitmap");
+			//cartName.setText(item.cartName);
+			//zipcode.setText("Zipcode: " + item.zipcode);
+			//permit.setText("Permit: c" + item.permit);
+			
 			Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
 			return rootView;
 		} else {
@@ -55,4 +77,5 @@ public class ViewCartFragment extends Fragment {
 		outState.putString("test", "test");
 		Log.d("onSaveInstanceState", "called");
 	}
+	
 }

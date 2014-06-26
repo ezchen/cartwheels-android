@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="search_task_fragment">0</integer>
+    
+    <string name="fragment_retain_ViewCart">RETAINVIEWCART</string>
 </resources>

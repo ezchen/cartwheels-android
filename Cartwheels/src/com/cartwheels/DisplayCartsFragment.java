@@ -139,6 +139,7 @@ public class DisplayCartsFragment extends Fragment
 	
 	public void buildList(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
 		this.items = items;
+		this.bitmapCache = cache;
 		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
 															R.layout.listview_cart_row, items, cache);
 		displayCarts.setAdapter(adapter);
@@ -147,8 +148,19 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		Log.d("onItemClick", activity + "");
 		Intent intent = new Intent(activity, ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
+		
+		ObjectCartListItem item = items[position];
+		
+		Bitmap bitmap = null;
+		if (item != null) {
+			if (item.bitmapUrl != null)
+				bitmap = bitmapCache.get(item.bitmapUrl);
+		}
+		
+		intent.putExtra("bitmap", bitmap);
 		startActivity(intent);
 	}
 	

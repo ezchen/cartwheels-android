@@ -13,6 +13,17 @@ public class RetainFragment extends Fragment {
 	
 	public RetainFragment() {}
 	
+	public static final RetainFragment findOrCreateRetainFragment(FragmentManager fragmentManager,
+												String tag) {
+		RetainFragment fragment = (RetainFragment) fragmentManager.findFragmentByTag(tag);
+		
+		if (fragment == null) {
+			fragment = new RetainFragment();
+			fragmentManager.beginTransaction().add(fragment, tag).commit();
+		}
+		
+		return fragment;
+	}
 	public static final RetainFragment findOrCreateRetainFragment(FragmentManager fragmentManager) {
 		RetainFragment fragment = (RetainFragment) fragmentManager.findFragmentByTag(TAG);
 		

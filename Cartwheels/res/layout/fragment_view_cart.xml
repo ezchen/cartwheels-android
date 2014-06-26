@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context="com.cartwheels.ViewCartActivity$PlaceholderFragment" >
+    tools:context="com.cartwheels.ViewCartFragment" >
 
     <TextView
         android:id="@+id/viewCart_Name"

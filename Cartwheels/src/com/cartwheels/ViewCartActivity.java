@@ -7,16 +7,18 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class ViewCartActivity extends Activity implements ActionBar.TabListener {
 
@@ -45,7 +47,8 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		Bundle data = getIntent().getExtras();
+		Intent intent = getIntent();
+		Bundle data = intent.getExtras();
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager(), data);
 
 		// Set up the ViewPager with the sections adapter.
@@ -75,6 +78,22 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 					.setTabListener(this));
 		}
 
+		Bitmap bitmap = (Bitmap) intent.getParcelableExtra("bitmap");
+		
+		String storageTag = getResources().getString(R.string.fragment_retain_ViewCart);
+		RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager(), storageTag);
+		
+		if (storage.retainedCache == null) {
+			int size = (int)Runtime.getRuntime().freeMemory() / 1024;
+			storage.retainedCache = new LruCache<String, Bitmap>(size / 8);
+			
+			Log.d("storage.retainedCache", "" + storage.retainedCache);
+			storage.retainedCache.put("ViewCartBitmap", bitmap);
+			
+			Log.d("bitmap", "" + bitmap);
+		} else {
+			storage.retainedCache.put("ViewCartBitmap", bitmap);
+		}
 	}
 
 	@Override
