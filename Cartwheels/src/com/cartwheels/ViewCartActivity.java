@@ -95,6 +95,10 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 			storage.retainedCache.put("ViewCartBitmap", bitmap);
 		}
 	}
+	
+	public void viewMap() {
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

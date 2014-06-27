@@ -78,4 +78,10 @@
         android:layout_width="350dp"
         android:layout_height="100dp"
         android:layout_below="@id/viewCart_Divider1"/>
+    
+    <Button 
+        android:id="@+id/viewCart_MapButton"
+        android:layout_below="@id/viewCart_Map"
+        android:onClick="viewMap"
+        android:text="It's A Fucking Map"/>
 </RelativeLayout>
