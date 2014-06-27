@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
 import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.tasks.SearchTask;
-import com.cartwheels.tasks.TaskFragment;
+import com.cartwheels.tasks.SearchTaskFragment;
 
 public class SearchActivity extends Activity
 								implements TaskCallbacks {
@@ -101,7 +101,7 @@ public class SearchActivity extends Activity
 		Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
 		Log.d("searchActivity search", "searchTask created");
 		
-		TaskFragment taskFragment = new TaskFragment();
+		SearchTaskFragment taskFragment = new SearchTaskFragment();
 		taskFragment.setTask(searchTask);
 		
 		//if (fragment == null) {

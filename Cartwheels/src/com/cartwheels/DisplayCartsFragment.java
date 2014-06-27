@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.cartwheels.tasks.SearchTask;
-import com.cartwheels.tasks.TaskFragment;
+import com.cartwheels.tasks.SearchTaskFragment;
 
 
 public class DisplayCartsFragment extends Fragment
@@ -70,7 +70,7 @@ public class DisplayCartsFragment extends Fragment
 		
 		// target fragment may have been redestroyed and recreated. Find it!
 		fragmentManager = getFragmentManager();
-		TaskFragment fragment = (TaskFragment) fragmentManager.findFragmentByTag("display");
+		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag("display");
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, TASK_FRAGMENT);
@@ -140,6 +140,12 @@ public class DisplayCartsFragment extends Fragment
 	public void buildList(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
 		this.items = items;
 		this.bitmapCache = cache;
+		
+		if (items == null) {
+			Toast.makeText(getActivity(), "no results", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
 															R.layout.listview_cart_row, items, cache);
 		displayCarts.setAdapter(adapter);
@@ -209,7 +215,7 @@ public class DisplayCartsFragment extends Fragment
 			Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
 			Log.d("searchActivity search", "searchTask created");
 			
-			TaskFragment taskFragment = new TaskFragment();
+			SearchTaskFragment taskFragment = new SearchTaskFragment();
 			taskFragment.setTask(searchTask);
 			
 			taskFragment.setTargetFragment(this, R.integer.search_task_fragment);

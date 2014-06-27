@@ -1,4 +1,4 @@
-package com.cartwheels.custom_views;
+package com.cartwheels;
 
 public class ObjectDrawerItem {
     public int icon;

@@ -22,7 +22,7 @@ import com.cartwheels.RetainFragment;
  * Fragment used to store AsyncTask to support orientation change in
  * the activity's lifecycle.
  */
-public class TaskFragment extends DialogFragment {
+public class SearchTaskFragment extends DialogFragment {
 	
 	private SearchTask asyncTask;
 	private LruCache<String, Bitmap> bitmapCache;

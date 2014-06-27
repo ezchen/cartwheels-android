@@ -1,7 +1,5 @@
 package com.cartwheels;
 
-import com.cartwheels.custom_views.ObjectDrawerItem;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;

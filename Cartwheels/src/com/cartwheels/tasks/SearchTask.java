@@ -46,7 +46,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	
 	private LruCache<String, Bitmap> bitmapCache;
 	
-	TaskFragment fragment;
+	SearchTaskFragment fragment;
 
 	private HashMap<String, String> objectValues;
 	
@@ -124,7 +124,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 			fragment.updateProgress(progress);
 	}
 	@Override
-	public void setFragment(TaskFragment fragment) {
+	public void setFragment(SearchTaskFragment fragment) {
 		this.fragment = fragment;
 	}
 
