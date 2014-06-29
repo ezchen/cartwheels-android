@@ -1,39 +1,45 @@
 package com.cartwheels.tasks;
 
-import android.app.DialogFragment;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.util.Log;
 
-import com.cartwheels.R;
+import com.cartwheels.ViewCartFragment;
 
-public class StaticMapsTaskFragment extends DialogFragment {
-	
-	private AsyncTask asyncTask;
-	private Bitmap bitmap;
-	ProgressBar progressBar;
+public class StaticMapsTaskFragment extends TaskFragment {
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onDismiss(DialogInterface dialog) {
+		super.onDismiss(dialog);
 		
-		setRetainInstance(true);
+		if (getTargetFragment() != null) {
+			getTargetFragment().onActivityResult(1, Activity.RESULT_CANCELED, null);
+		}
 	}
 	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-								Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_task, container);
+	public void onTaskFinished(Bitmap mapBitmap) {
+		taskFinished();
 		
-		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		getDialog().setTitle("Progress Dialog");
+		// send data to the target fragment
+		FragmentManager manager = getFragmentManager();
+		Log.d("manager", "" + manager);
 		
-		getDialog().setCanceledOnTouchOutside(false);
-		
-		return view;
+		if (getTargetFragment() != null) {
+			Log.d("taskFinished", "fragment is not null");
+			ViewCartFragment fragment = (ViewCartFragment) getTargetFragment();
+			
+			Intent intent = new Intent();
+			intent.putExtra("mapBitmap", mapBitmap);
+			fragment.onActivityResult(1, Activity.RESULT_OK, intent);
+		}
 	}
+	
+	public void execute(String url) {
+		((ImageDownloaderTask)asyncTask).execute(url);
+	}
+	
 }

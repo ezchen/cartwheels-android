@@ -77,7 +77,6 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 			
 			for (String key : objectValues.keySet()) {
 				// if value is 0, do not append to query parameter
-				
 				if (objectValues.get(key).length() > 0)
 					uri.appendQueryParameter(key, objectValues.get(key));
 			}
@@ -148,6 +147,8 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				String cartName = innerJson.getString(TAGS_NAME);
 				String cartZipcode = innerJson.getString(TAGS_ZIP_CODE);
 				String cartPermit = innerJson.getString(TAGS_PERMIT_NUMBER);
+				String lat = innerJson.getString(TAGS_LAT);
+				String lon = innerJson.getString(TAGS_LON);
 				
 				JSONArray arrayBitmapUrl = innerJson.getJSONArray(TAGS_PHOTOS);
 				
@@ -156,11 +157,12 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 					JSONObject jsonBitmapUrl = arrayBitmapUrl.getJSONObject(0);
 					bitmapUrl = jsonBitmapUrl.getString(TAGS_URL_THUMB);
 				}
-				
 				if (bitmapUrl != null)
-					cacheBitmap("http://png-1.findicons.com/files/icons/1579/devine/256/cart.png");
-				ObjectCartListItem cartListItem = new ObjectCartListItem("http://png-1.findicons.com/files/icons/1579/devine/256/cart.png", cartName,
+					cacheBitmap("http://cartwheels.us" + bitmapUrl);
+				ObjectCartListItem cartListItem = new ObjectCartListItem("http://cartwheels.us" + bitmapUrl, cartName,
 														cartZipcode, cartPermit);
+				cartListItem.lat = lat;
+				cartListItem.lon = lon;
 				
 				Log.d("cart list item", cartListItem.toString());
 				items[i] = cartListItem;

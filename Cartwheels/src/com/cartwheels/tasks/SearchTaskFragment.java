@@ -35,6 +35,7 @@ public class SearchTaskFragment extends DialogFragment {
 		setRetainInstance(true);
 	}
 	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 								Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_task, container);

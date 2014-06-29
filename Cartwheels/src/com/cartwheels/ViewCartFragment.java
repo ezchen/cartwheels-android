@@ -1,6 +1,9 @@
 package com.cartwheels;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,18 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cartwheels.tasks.ImageDownloaderTask;
+import com.cartwheels.tasks.StaticMapsTaskFragment;
+
 public class ViewCartFragment extends Fragment {
 
-	ObjectCartListItem item;
-	Bitmap bitmap;
+	private ObjectCartListItem item;
+	private Bitmap bitmap;
+	private Bitmap mapBitmap;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		FragmentManager manager = getFragmentManager();
+		
+		manager.findFragmentById(1);
 	}
 	
 	@Override
@@ -33,6 +44,7 @@ public class ViewCartFragment extends Fragment {
 		TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
 		TextView permit = (TextView) rootView.findViewById(R.id.viewCart_Permit);
 		ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
+		ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
 		
 		if (savedInstanceState == null) {
 			item = getArguments().getParcelable("ObjectCartListItem");
@@ -40,6 +52,9 @@ public class ViewCartFragment extends Fragment {
 			
 			if (bitmap != null)
 				cartPicture.setImageBitmap(bitmap);
+			if (mapBitmap != null)
+				map.setImageBitmap(mapBitmap);
+			
 			cartName.setText(item.cartName);
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
@@ -60,23 +75,63 @@ public class ViewCartFragment extends Fragment {
 				Log.d("onCreateView", "bitmap does not exist");
 			}
 			
+			if (savedInstanceState.containsKey("mapBitmap")) {
+				mapBitmap = (Bitmap) savedInstanceState.get("mapBitmap");
+			} else {
+				Log.d("onCreateView", "mapBitmap does not exist");
+			}
+			
 			if (bitmap != null)
 				cartPicture.setImageBitmap(bitmap);
+			if (mapBitmap != null)
+				map.setImageBitmap(mapBitmap);
 			cartName.setText(item.cartName);
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
 		}
+		
+		// setup the options
+		setupOptions(rootView);
 		
 		Log.d("ViewCartFragment onCreateView", "view created");
 		return rootView;
 	}
 	
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			View view = getView();
+			
+			ImageView map = null;
+			if (view != null) {
+				map = (ImageView) view.findViewById(R.id.viewCart_Map);
+			}
+			
+			mapBitmap = (Bitmap) data.getParcelableExtra("mapBitmap");
+			Log.d("onActivityResult ViewCartFragment", mapBitmap + "");
+			
+			if (map != null)
+				map.setImageBitmap(mapBitmap);
+		}
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d("onActivityCreated", "called");
+		Log.d("onActivityCreated", "called" + getArguments());
 		if (savedInstanceState == null) {
-			
+			if (getArguments().containsKey("ObjectCartListItem")) {
+				ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
+				String lat = item.lat;
+				String lon = item.lon;
+				
+				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+							+ "center=" + lat + "," 
+							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
+				
+				getMapBitmap(url);
+			}
 		} else {
 			if (getActivity() != null) {
 				//Toast.makeText(getActivity(), savedInstanceState.getString("test", "nope"), Toast.LENGTH_SHORT).show();
@@ -97,7 +152,21 @@ public class ViewCartFragment extends Fragment {
 		outState.putString("test", "test");
 		outState.putParcelable("CartItem", item);
 		outState.putParcelable("bitmap", bitmap);
+		outState.putParcelable("mapBitmap", mapBitmap);
 		Log.d("onSaveInstanceState", "called");
 	}
 	
+	public void getMapBitmap(String url) {
+		ImageDownloaderTask task = new ImageDownloaderTask();
+		StaticMapsTaskFragment fragment = new StaticMapsTaskFragment();
+		
+		task.setFragment(fragment);
+		fragment.setTask(task);
+		fragment.setTargetFragment(this, 1);
+		fragment.execute(url);
+	}
+	
+	private void setupOptions(View rootView) {
+		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
+	}
 }

@@ -1,34 +1,30 @@
 package com.cartwheels.tasks;
 
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
+import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
-
-import com.cartwheels.R;
 
 
 public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
-
-	private final WeakReference imageViewReference;
 	
-	public ImageDownloaderTask(ImageView imageView) {
-		imageViewReference = new WeakReference(imageView);
-	}
+	StaticMapsTaskFragment fragment;
+	
+	@Override
+	protected void onPreExecute(){}
 	
 	@Override
 	protected Bitmap doInBackground(String... params) {
-		return downloadBitmap("http://png-1.findicons.com/files/icons/1579/devine/256/cart.png");
+		return downloadBitmap(params[0]);
 	}
 	
 	@Override
@@ -38,26 +34,15 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
             Log.d("onPostExecute", "cancelled");
         }
         Log.d("onPostExecute", "entered");
- 
-        if (imageViewReference != null) {
-            ImageView imageView = (ImageView) imageViewReference.get();
-            if (imageView != null) {
- 
-                if (bitmap != null) {
-                	Log.d("onPostExecute", "bitmap set");
-                    imageView.setImageBitmap(bitmap);
-                } else {
-                    imageView.setImageDrawable(imageView.getContext().getResources()
-                            .getDrawable(R.drawable.profile));
-                }
-            }
- 
-        }
+        
+        fragment.onTaskFinished(bitmap);
+        super.onPostExecute(bitmap);
 	}
 	
 	public static Bitmap downloadBitmap(String url) {
         final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         final HttpGet getRequest = new HttpGet(url);
+        
         try {
             HttpResponse response = client.execute(getRequest);
             final int statusCode = response.getStatusLine().getStatusCode();
@@ -93,5 +78,10 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         }
         return null;
     }
+	
+	
+	public void setFragment(StaticMapsTaskFragment fragment) {
+		this.fragment = fragment;
+	}
 
 }

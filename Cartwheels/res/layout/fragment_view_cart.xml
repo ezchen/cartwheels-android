@@ -62,28 +62,32 @@
         android:layout_alignParentRight="true"
         android:layout_width="175dp"
         android:layout_height="115dp"
-       	android:scaleType="fitCenter" />
+       	android:scaleType="centerCrop" />
     
     <View
         android:id="@+id/viewCart_Divider1"
         android:layout_below="@id/viewCart_CartPicture"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:padding="3dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray"/>
     
     <ImageView 
         android:id="@+id/viewCart_Map"
-        android:padding="3dp"
-        android:layout_alignParentLeft="true"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
         android:layout_below="@id/viewCart_Divider1"/>
     
-    <Button 
-        android:id="@+id/viewCart_MapButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ListView 
+        android:id="@+id/viewCart_Options"
+        android:padding="5dp"
         android:layout_below="@id/viewCart_Map"
-        android:onClick="viewMap"
-        android:text="It's A Fucking Map"/>
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:minHeight="48dp" />
 </RelativeLayout>
