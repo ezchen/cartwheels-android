@@ -40,7 +40,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	private static final String TAGS_CREATED_AT="created_at";
 	private static final String TAGS_UPDATED_AT="updated_at";
 	private static final String TAGS_PHOTOS="photos";
-	private static final String TAGS_URL_THUMB="image_url_thumb";
+	private static final String TAGS_URL_THUMB="image_url";
 	
 	private int progress;
 	

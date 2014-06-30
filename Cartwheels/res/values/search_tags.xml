@@ -17,5 +17,5 @@
 	<string name="TAGS_UPDATED_AT">updated_at</string>
 	<string name="TAGS_PHOTOS">photos</string>
 	
-	<string name="TAGS_URL_THUMB">image_url_thumb</string>
+	<string name="TAGS_URL_THUMB">image_url</string>
 </resources>
