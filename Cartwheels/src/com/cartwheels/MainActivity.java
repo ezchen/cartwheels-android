@@ -60,8 +60,8 @@ public class MainActivity extends ActionBarActivity
     	if (preferences.contains("AuthToken")) {
     		loadTasksFromAPI(TASKS_URL);
     	} else {
-    		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-    		startActivityForResult(intent, 0);
+    		//Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+    		//startActivityForResult(intent, 0);
     	}
     	
     }

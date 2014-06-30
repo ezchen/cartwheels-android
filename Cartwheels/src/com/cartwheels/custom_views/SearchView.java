@@ -20,14 +20,22 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 	private EditText textQuery;
 	private EditText locationQuery;
 	
+	private boolean open;
+	
 	private SearchListener searchListener;
 	
 	public SearchView(Context context) {
 		super(context);
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_search, this, true);
+		View view = inflater.inflate(R.layout.view_search, this, true);
 		
+		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
+		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
+		
+		// hide until user presses the search button
+		editTextQuery.setVisibility(View.INVISIBLE);
+		editTextLocationQuery.setVisibility(View.INVISIBLE);
 		Log.d("SearchView Constructor", "created");
 		Button button = (Button) findViewById(R.id.search_button);
 		
@@ -38,7 +46,13 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 		super(context, attributes);
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.view_search, this, true);
+		View view = inflater.inflate(R.layout.view_search, this, true);
+		
+		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
+		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
+		
+		open = true;
+		Log.d("SearchView Constructor", "created");
 		
 		Button button = (Button) findViewById(R.id.search_button);
 		
@@ -48,14 +62,35 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 	public void search() {
 		// access the EditText's view
 		Log.d("search", "accessing data");
-		textQuery = (EditText) findViewById(R.id.textQuery);
-		locationQuery = (EditText) findViewById(R.id.locationQuery);
-		Log.d("search", "data access successful");
 		
-		String textQueryData = textQuery.getText().toString();
-		String locationQueryData = locationQuery.getText().toString();
+		// open the view if it isn't open
 		
-		searchListener.search(textQueryData, locationQueryData);
+		View view = findViewById(R.id.view_search);
+		
+		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
+		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
+		
+		if (!open) {
+			// add to view
+			editTextQuery.setVisibility(View.VISIBLE);
+			editTextLocationQuery.setVisibility(View.VISIBLE);
+			
+			open = true;
+		} else {
+			editTextQuery = (EditText) findViewById(R.id.textQuery);
+			editTextLocationQuery = (EditText) findViewById(R.id.locationQuery);
+			Log.d("search", "data access successful");
+			
+			String textQueryData = editTextQuery.getText().toString();
+			String locationQueryData = editTextLocationQuery.getText().toString();
+			
+			searchListener.search(textQueryData, locationQueryData);
+			
+			open = false;
+			
+			editTextQuery.setVisibility(View.GONE);
+			editTextLocationQuery.setVisibility(View.GONE);
+		}
 	}
 	
 	public SearchListener setSearchListener(SearchListener listener) {
