@@ -149,7 +149,7 @@ public class ViewCartFragment extends Fragment {
 			}
 		} else {
 			if (getActivity() != null) {
-				//Toast.makeText(getActivity(), savedInstanceState.getString("test", "nope"), Toast.LENGTH_SHORT).show();
+				
 			}
 		}
 	}

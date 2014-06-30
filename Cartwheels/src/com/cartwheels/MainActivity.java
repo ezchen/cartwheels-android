@@ -1,15 +1,14 @@
 package com.cartwheels;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 
 import com.savagelook.android.UrlJsonAsyncTask;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static final String TASKS_URL = "http://cartwheels.us/mobile/sessions.json";
@@ -37,7 +36,7 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -69,7 +68,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
@@ -125,7 +124,7 @@ public class MainActivity extends ActionBarActivity
     */
 
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Home");

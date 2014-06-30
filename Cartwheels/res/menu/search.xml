@@ -11,6 +11,7 @@
     <item
         android:id="@+id/action_viewMap"
         android:showAsAction="always|withText"
-        android:title="View Map"
+        android:title="Map"
+        android:visible="true"
         android:titleCondensed="Map"/>
 </menu>
