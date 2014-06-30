@@ -66,6 +66,10 @@ public class SearchActivity extends Activity
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		} else if (id == R.id.action_viewMap) {
+			// start the map activity w/ all cart data
+			Intent intent = new Intent(SearchActivity.this, MarkerActivity.class);
+			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
 	}

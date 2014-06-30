@@ -91,7 +91,22 @@ public class ViewCartFragment extends Fragment {
 		}
 		
 		// setup the options
-		setupOptions(rootView);
+		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
+		
+		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
+		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
+												R.drawable.ic_action_next_item);
+		options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
+												R.drawable.ic_action_next_item);
+		options[2] = new ObjectViewCartItem(R.drawable.ic_action_edit, "Write a Review",
+												R.drawable.ic_action_next_item);
+		options[3] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
+												R.drawable.ic_action_next_item);
+		options[4] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
+												R.drawable.ic_action_next_item);
+		
+		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
+		listView.setAdapter(adapter);
 		
 		Log.d("ViewCartFragment onCreateView", "view created");
 		return rootView;
@@ -168,5 +183,21 @@ public class ViewCartFragment extends Fragment {
 	
 	private void setupOptions(View rootView) {
 		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
+		
+		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
+		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
+												R.drawable.ic_action_next_item);
+		options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
+												R.drawable.ic_action_next_item);
+		options[2] = new ObjectViewCartItem(R.drawable.ic_action_edit, "Write a Review",
+												R.drawable.ic_action_next_item);
+		options[3] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
+												R.drawable.ic_action_next_item);
+		options[4] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
+												R.drawable.ic_action_next_item);
+		
+		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
+		listView.setAdapter(adapter);
+		Log.d("setupOptions", "method completed");
 	}
 }
