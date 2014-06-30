@@ -36,15 +36,16 @@ public class DisplayCartsFragment extends Fragment
 	public static final int TASK_FRAGMENT = 0;
 	public static final String TASK_FRAGMENT_TAG = "displayCarts";
 	
+	private String lastTextQuery;
+	private String lastLocationQuery;
+	
+	private int offset;
+	private int limit;
+	
 	// code up to onDetach() used to maintain callbacks to the activity
 	private LruCache<String, Bitmap> bitmapCache;
 	private TaskCallbacks taskCallbacks = dummyCallBacks;
 	private Activity activity;
-	
-	public DisplayCartsFragment() {
-	}
-
-
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -91,6 +92,11 @@ public class DisplayCartsFragment extends Fragment
 		
 		displayCarts.setOnItemClickListener(this);
 		
+		View view = inflater.inflate(R.layout.view_more_carts, container);
+		View previousCarts = inflater.inflate(R.layout.load_previous_carts, container);
+		displayCarts.addFooterView(previousCarts);
+		displayCarts.addFooterView(view);
+		
 		
 		return displayCarts;
 	}
@@ -109,8 +115,6 @@ public class DisplayCartsFragment extends Fragment
 		// Restore the list
 		if (savedInstanceState != null) {
 			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
-			
-			
 						
 			RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
 			bitmapCache = storage.retainedCache;
@@ -122,11 +126,27 @@ public class DisplayCartsFragment extends Fragment
 																R.layout.listview_cart_row, items, bitmapCache);
 			displayCarts.setAdapter(adapter);
 			Log.d("onActivityCreated", "bitmapCache: " + bitmapCache);
+			
+			// set the offset and limit again
+			offset = savedInstanceState.getInt("offset");
+			limit = savedInstanceState.getInt("limit");
+			
+			lastTextQuery = savedInstanceState.getString("lastTextQuery", "");
+			lastLocationQuery = savedInstanceState.getString("lastLocationQuery", "");
+		} else {
+			offset = 0;
+			lastTextQuery = "";
+			lastLocationQuery = "";
+			limit = 20;
 		}
 	}
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putParcelableArray("ObjectCartListItems", (Parcelable[]) items);
+		outState.putInt("offset", offset);
+		outState.putInt("limit", limit);
+		outState.putString("lastTextQuery", lastTextQuery);
+		outState.putString("lastLocationQuery", lastLocationQuery);
 		super.onSaveInstanceState(outState);
 	}
 	
@@ -155,7 +175,21 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Log.d("onItemClick", activity + "");
+		
+		int length = parent.getAdapter().getCount();
+		
+		Log.d("position", "" + position);
+		if (position == length - 1) {
+			offset += 20;
+			getMoreCarts();
+			return;
+		}
+		
+		if (position == length - 2) {
+			offset -= 20;
+			getMoreCarts();
+			return;
+		}
 		Intent intent = new Intent(activity, ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
 		
@@ -197,38 +231,56 @@ public class DisplayCartsFragment extends Fragment
 		}
 	};
 
+	public void getMoreCarts() {
+		SearchTask searchTask = new SearchTask();
+		
+		searchTask.put("tq", lastTextQuery);
+		searchTask.put("lq", lastLocationQuery);
+		
+		searchTask.put("offset", "" + offset);
+		searchTask.put("limit", "" + limit);
+		
+		getData(searchTask);
+	}
+	
 	@Override
 	public void search(String textQueryData, String locationQueryData) {
 		if (activity != null) {
-			SharedPreferences preferences = activity.getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
-			
 			SearchTask searchTask = new SearchTask();
-			
 			// put in tq, lq, email, auth_token,
 			searchTask.put("tq", textQueryData);
 			searchTask.put("lq", locationQueryData);
 			
-			String email = preferences.getString("email", "");
-			String auth_token = preferences.getString("AuthToken", "");
-			searchTask.put("email", email);
-			searchTask.put("auth_token", auth_token);
+			lastTextQuery = textQueryData;
+			lastLocationQuery = locationQueryData;
+
+			offset = 0;
 			
-			Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
-			Log.d("searchActivity search", "searchTask created");
+			// offset always starts at 0
+			searchTask.put("offset", 0 + "");
+			searchTask.put("limit", "" + limit);
 			
-			SearchTaskFragment taskFragment = new SearchTaskFragment();
-			taskFragment.setTask(searchTask);
-			
-			taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
-			taskFragment.show(getFragmentManager(), "display");
-			taskFragment.execute();
-			
-			Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
+			getData(searchTask);
 			if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
 				Toast.makeText(getActivity(), "Please complete one of the search fields", Toast.LENGTH_SHORT).show();
 			} else {
 				
 			}
 		}
+	}
+	
+	public void getData(SearchTask searchTask) {
+		SharedPreferences preferences = activity.getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		searchTask.put("email", email);
+		searchTask.put("auth_token", auth_token);
+		
+		SearchTaskFragment taskFragment = new SearchTaskFragment();
+		taskFragment.setTask(searchTask);
+		
+		taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
+		taskFragment.show(getFragmentManager(), "display");
+		taskFragment.execute();
 	}
 }

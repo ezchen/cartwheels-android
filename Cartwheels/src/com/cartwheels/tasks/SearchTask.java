@@ -77,13 +77,11 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 			
 			for (String key : objectValues.keySet()) {
 				// if value is 0, do not append to query parameter
-				if (objectValues.get(key).length() > 0)
+				if (objectValues.get(key).length() > 0) {
+					Log.d(key, objectValues.get(key));
 					uri.appendQueryParameter(key, objectValues.get(key));
+				}
 			}
-			
-			// hard coded values for testing
-			uri.appendQueryParameter("offset", "0");
-			uri.appendQueryParameter("limit", "100");
 			
 			HttpGet get = new HttpGet(uri.toString());
 			// default return values

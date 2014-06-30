@@ -112,7 +112,7 @@ public class LoginActivity extends Activity {
 	public void logout() {
 		LogoutTask logoutTask = new LogoutTask(LoginActivity.this);
 		logoutTask.setMessageLoading("Logging out...");
-		logoutTask.execute(LOGIN_API_ENDPOINT_URL);
+		logoutTask.execute();
 	}
 
 	public void switchRegister(View view) {
@@ -134,10 +134,15 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected JSONObject doInBackground(String... urls) {
+			Log.d("doInBackground", "method entered");
+			Log.d("hello", "hello");
 			DefaultHttpClient client = new DefaultHttpClient();
-			
+			Log.d("hello2", "hello2");
 			String response = null;
 			JSONObject json = new JSONObject();
+			
+			Log.d("doInBackground LogoutTask", preferences.getString("AuthToken", "no value"));
+			Log.d("doInBackground LogoutTask", preferences.getString("email","no value"));
 			
 			try {
 				Builder uri = new Builder();
@@ -147,6 +152,7 @@ public class LoginActivity extends Activity {
 				uri.appendQueryParameter("auth_token", preferences.getString("AuthToken", ""));
 				uri.appendQueryParameter("email", preferences.getString("email", ""));
 				
+
 				HttpDelete delete = new HttpDelete(uri.build().toString());
 				
 				// default return values
@@ -163,11 +169,14 @@ public class LoginActivity extends Activity {
 				response = client.execute(delete, responseHandler);
 				json = new JSONObject(response);
 			} catch (HttpResponseException e) {
-				
+				e.printStackTrace();
+				Log.e("doInBackground LogoutTask HTTP", e.toString());
 			} catch (JSONException e) {
-				
+				e.printStackTrace();
+				Log.e("doInBackground LogoutTask JSON", e.toString());
 			} catch (IOException e) {
-				
+				e.printStackTrace();
+				Log.e("doInBackground LogoutTask IO", e.toString());
 			}
 			
 			return json;
@@ -180,7 +189,11 @@ public class LoginActivity extends Activity {
 			// set need to log out to false
 			try {
 				if (json.getBoolean("success")) {
-					Log.d("onPostExecute logout", "successfully logged out on server");
+			    	SharedPreferences.Editor editor = preferences.edit();
+			    	editor.remove("AuthToken");
+			    	editor.commit();
+			    	editor.remove("email");
+			    	editor.commit();
 				} else{
 					// keep the auth token, but set need to log out to true
 					

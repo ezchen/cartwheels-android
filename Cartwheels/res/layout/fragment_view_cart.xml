@@ -89,5 +89,5 @@
         android:layout_below="@id/viewCart_Map"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:minHeight="48dp" />
+        android:layout_height="wrap_content" />
 </RelativeLayout>

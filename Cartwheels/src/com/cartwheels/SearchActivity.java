@@ -104,11 +104,7 @@ public class SearchActivity extends Activity
 		SearchTaskFragment taskFragment = new SearchTaskFragment();
 		taskFragment.setTask(searchTask);
 		
-		//if (fragment == null) {
-		//	Log.d("search", "fragment is null");
-		//}
-		
-		//taskFragment.setTargetFragment(fragment, R.integer.search_task_fragment);
+		taskFragment.setTargetFragment(fragment, R.integer.search_task_fragment);
 		taskFragment.show(getFragmentManager(), "displayCarts");
 		taskFragment.execute();
 		
