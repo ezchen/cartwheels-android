@@ -272,11 +272,11 @@ public class DisplayCartsFragment extends Fragment
 			searchTask.put("offset", 0 + "");
 			searchTask.put("limit", "" + limit);
 			
-			getData(searchTask);
+			
 			if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
 				Toast.makeText(getActivity(), "Please complete one of the search fields", Toast.LENGTH_SHORT).show();
 			} else {
-				
+				getData(searchTask);
 			}
 		}
 	}

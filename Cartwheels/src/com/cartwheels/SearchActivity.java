@@ -129,7 +129,7 @@ public class SearchActivity extends Activity
 
 	@Override
 	public void onTaskFinished() {
-		Toast.makeText(this, "FUCKING HOORAY", Toast.LENGTH_LONG).show();
+		
 	}
 
 	@Override
