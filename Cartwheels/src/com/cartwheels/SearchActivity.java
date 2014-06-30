@@ -68,8 +68,13 @@ public class SearchActivity extends Activity
 			return true;
 		} else if (id == R.id.action_viewMap) {
 			// start the map activity w/ all cart data
-			Intent intent = new Intent(SearchActivity.this, MarkerActivity.class);
-			startActivity(intent);
+			
+			if (fragment != null)
+				fragment.onOptionsItemSelected(item);
+			else {
+				Intent intent = new Intent(SearchActivity.this, MarkerActivity.class);
+				startActivity(intent);
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}

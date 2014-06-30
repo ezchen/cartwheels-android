@@ -1,6 +1,7 @@
 package com.cartwheels;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -12,10 +13,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MarkerActivity extends Activity {
 
     private GoogleMap mMap;
+    private ObjectCartListItem[] items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Intent intent = getIntent();
+        items = (ObjectCartListItem[]) intent.getParcelableArrayExtra("ObjectCartListItems");
         setContentView(R.layout.map_marker);
         setUpMapIfNeeded();
     }
@@ -54,13 +59,20 @@ public class MarkerActivity extends Activity {
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        addMarkersToMap(items);
+    }
+    
+    private void addMarkersToMap(ObjectCartListItem[] items) {
+    	
+    	if (items != null && items.length != 0) {
+	    	for (int i = 0; i < items.length; i++) {
+	    		ObjectCartListItem item = items[i];
+	    		
+	    		LatLng position = new LatLng(item.getLat(), item.getLon());
+	    		
+	    		mMap.addMarker(new MarkerOptions().position(position).title(item.cartName));
+	    	}
+    	}
     }
 }

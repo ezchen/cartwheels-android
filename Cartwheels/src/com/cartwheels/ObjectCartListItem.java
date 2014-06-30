@@ -38,6 +38,14 @@ public class ObjectCartListItem implements Parcelable {
 		this.permit = permit;
 	}
 	
+	public double getLat() {
+		return Double.parseDouble(lat);
+	}
+	
+	public double getLon() {
+		return Double.parseDouble(lon);
+	}
+	
 	public String toString() {
 		String s = "";
 		s += "icon: " + bitmapUrl + "\n";

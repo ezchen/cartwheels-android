@@ -11,12 +11,12 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -190,6 +190,7 @@ public class DisplayCartsFragment extends Fragment
 			getMoreCarts();
 			return;
 		}
+		
 		Intent intent = new Intent(activity, ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
 		
@@ -205,6 +206,17 @@ public class DisplayCartsFragment extends Fragment
 		startActivity(intent);
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == R.id.action_viewMap && getActivity() != null) {
+			Intent intent = new Intent(getActivity(), MarkerActivity.class);
+			intent.putExtra("ObjectCartListItems", items);
+			startActivity(intent);
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
 	
 	public static interface TaskCallbacks {
 		public void onTaskFinished();

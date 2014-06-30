@@ -26,7 +26,7 @@ public class ViewCartAdapter extends ArrayAdapter<ObjectViewCartItem> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
-		View listItem = convertView;
+		View listItem = null;
 		
 		LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 		listItem = inflater.inflate(layoutResourceID, parent, false);
