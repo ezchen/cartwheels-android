@@ -84,12 +84,16 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 			String textQueryData = editTextQuery.getText().toString();
 			String locationQueryData = editTextLocationQuery.getText().toString();
 			
-			searchListener.search(textQueryData, locationQueryData);
+			// only close the view if the user puts in a correct search sequence
+			if (textQueryData.length() != 0 || locationQueryData.length() != 0) {
+				open = false;
+				
+				editTextQuery.setVisibility(View.GONE);
+				editTextLocationQuery.setVisibility(View.GONE);
+			}
 			
-			open = false;
-			
-			editTextQuery.setVisibility(View.GONE);
-			editTextLocationQuery.setVisibility(View.GONE);
+			searchListener.search(textQueryData, locationQueryData);	
+
 		}
 	}
 	
