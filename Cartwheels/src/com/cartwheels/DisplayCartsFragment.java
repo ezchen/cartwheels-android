@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +42,6 @@ public class DisplayCartsFragment extends Fragment
 	private int limit;
 	
 	// code up to onDetach() used to maintain callbacks to the activity
-	private LruCache<String, Bitmap> bitmapCache;
 	private TaskCallbacks taskCallbacks = dummyCallBacks;
 	
 	@Override
@@ -73,7 +71,6 @@ public class DisplayCartsFragment extends Fragment
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, TASK_FRAGMENT);
-			this.bitmapCache = fragment.getBitmapCache();
 			Log.d("fragment", "is not null");
 		} else {
 			Log.d("fragment", "null");
@@ -112,17 +109,13 @@ public class DisplayCartsFragment extends Fragment
 		// Restore the list
 		if (savedInstanceState != null) {
 			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
-						
-			RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
-			bitmapCache = storage.retainedCache;
 			
-			if (items == null || bitmapCache == null)
+			if (items == null)
 				return;
 			// recreate the list
 			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
-																R.layout.listview_cart_row, items, bitmapCache);
+																R.layout.listview_cart_row, items);
 			displayCarts.setAdapter(adapter);
-			Log.d("onActivityCreated", "bitmapCache: " + bitmapCache);
 			
 			// set the offset and limit again
 			offset = savedInstanceState.getInt("offset");
@@ -155,9 +148,8 @@ public class DisplayCartsFragment extends Fragment
 		}
 	}
 	
-	public void buildList(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
+	public void buildList(ObjectCartListItem[] items) {
 		this.items = items;
-		this.bitmapCache = cache;
 		
 		if (items == null) {
 			Toast.makeText(getActivity(), "no results", Toast.LENGTH_SHORT).show();
@@ -165,7 +157,7 @@ public class DisplayCartsFragment extends Fragment
 		}
 		
 		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
-															R.layout.listview_cart_row, items, cache);
+															R.layout.listview_cart_row, items);
 		displayCarts.setAdapter(adapter);
 	}
 
@@ -191,15 +183,6 @@ public class DisplayCartsFragment extends Fragment
 		Intent intent = new Intent(getActivity(), ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
 		
-		ObjectCartListItem item = items[position];
-		
-		Bitmap bitmap = null;
-		if (item != null) {
-			if (item.bitmapUrl != null)
-				bitmap = bitmapCache.get(item.bitmapUrl);
-		}
-		
-		intent.putExtra("bitmap", bitmap);
 		startActivity(intent);
 	}
 	

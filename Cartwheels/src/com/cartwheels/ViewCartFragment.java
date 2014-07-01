@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
+import com.squareup.picasso.Picasso;
 
 public class ViewCartFragment extends Fragment {
 
@@ -48,10 +49,8 @@ public class ViewCartFragment extends Fragment {
 		
 		if (savedInstanceState == null) {
 			item = getArguments().getParcelable("ObjectCartListItem");
-			bitmap = (Bitmap) getArguments().getParcelable("bitmap");
-			
-			if (bitmap != null)
-				cartPicture.setImageBitmap(bitmap);
+			Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
+
 			if (mapBitmap != null)
 				map.setImageBitmap(mapBitmap);
 			
@@ -65,14 +64,9 @@ public class ViewCartFragment extends Fragment {
 			// CartItem
 			if (savedInstanceState.containsKey("CartItem")) {
 				item = (ObjectCartListItem) savedInstanceState.get("CartItem");
+				Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
 			} else {
 				Log.d("onCreateView", "cart item does not exist");
-			}
-			// Bitmap
-			if (savedInstanceState.containsKey("bitmap")) {
-				bitmap = (Bitmap) savedInstanceState.get("bitmap");
-			} else {
-				Log.d("onCreateView", "bitmap does not exist");
 			}
 			
 			if (savedInstanceState.containsKey("mapBitmap")) {
@@ -80,9 +74,8 @@ public class ViewCartFragment extends Fragment {
 			} else {
 				Log.d("onCreateView", "mapBitmap does not exist");
 			}
+
 			
-			if (bitmap != null)
-				cartPicture.setImageBitmap(bitmap);
 			if (mapBitmap != null)
 				map.setImageBitmap(mapBitmap);
 			cartName.setText(item.cartName);

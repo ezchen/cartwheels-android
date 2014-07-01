@@ -1,5 +1,7 @@
 package com.cartwheels;
 
+import com.squareup.picasso.Picasso;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,13 +21,12 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 	private LruCache<String, Bitmap> cache;
 	
 	
-	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items, LruCache<String, Bitmap> cache) {
+	public CartListItemAdapter(Context context, int layoutResourceID, ObjectCartListItem[] items) {
 		super(context, layoutResourceID, items);
 		
 		this.context = context;
 		this.layoutResourceID = layoutResourceID;
 		this.items = items;
-		this.cache = cache;
 	}
 	
 	@Override
@@ -38,12 +39,7 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		ObjectCartListItem item = items[position];
 
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
-		Bitmap bitmap = cache.get(item.bitmapUrl);
-		if (bitmap != null) {
-			cartPicture.setImageBitmap(bitmap);
-		} else {
-			Log.d("getView CartListItemAdapter", "bitmap is null");
-		}
+		Picasso.with(context).load(item.bitmapUrl).into(cartPicture);
 		
 		TextView cartName = (TextView) listItem.findViewById(R.id.cartName);
 		cartName.setText(item.cartName);

@@ -25,7 +25,6 @@ import com.cartwheels.RetainFragment;
 public class SearchTaskFragment extends DialogFragment {
 	
 	private SearchTask asyncTask;
-	private LruCache<String, Bitmap> bitmapCache;
 	ProgressBar progressBar;
 	
 	@Override
@@ -83,7 +82,7 @@ public class SearchTaskFragment extends DialogFragment {
 		progressBar.setProgress(percent);
 	}
 	
-	public void taskFinished(LruCache<String, Bitmap> cache, ObjectCartListItem[] items) {
+	public void taskFinished(ObjectCartListItem[] items) {
 		if (isResumed()) {
 			Log.d("taskFinished", "dismissed");
 			dismiss();
@@ -92,19 +91,13 @@ public class SearchTaskFragment extends DialogFragment {
 		
 		FragmentManager manager = getFragmentManager();
 		Log.d("manager", "" + manager);
-		RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
-		storage.retainedCache = cache;
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
 			DisplayCartsFragment fragment = (DisplayCartsFragment) getTargetFragment();
-			fragment.buildList(cache, items);
+			fragment.buildList(items);
 			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
 		}
-	}
-	
-	public LruCache<String, Bitmap> getBitmapCache() {
-		return bitmapCache;
 	}
 	
 	public void setTask(SearchTask asyncTask) {

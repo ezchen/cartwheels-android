@@ -44,8 +44,6 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	
 	private int progress;
 	
-	private LruCache<String, Bitmap> bitmapCache;
-	
 	SearchTaskFragment fragment;
 
 	private HashMap<String, String> objectValues;
@@ -53,7 +51,6 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	public SearchTask() {
 		objectValues = new HashMap<String, String>();
 		int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		bitmapCache = new LruCache<String, Bitmap>(maxMemory / 8);
 	}
 	
 	@Override
@@ -110,7 +107,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 		// Build List View
 			
 		Log.d("on post execute", "executed");
-		fragment.taskFinished(bitmapCache, items);
+		fragment.taskFinished(items);
 		
 		super.onPostExecute(items);
 	}
@@ -155,9 +152,10 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 					JSONObject jsonBitmapUrl = arrayBitmapUrl.getJSONObject(0);
 					bitmapUrl = jsonBitmapUrl.getString(TAGS_URL_THUMB);
 				}
-				if (bitmapUrl != null)
-					cacheBitmap("http://cartwheels.us" + bitmapUrl);
-				ObjectCartListItem cartListItem = new ObjectCartListItem("http://cartwheels.us" + bitmapUrl, cartName,
+				if (bitmapUrl != null) {
+					bitmapUrl = "http://cartwheels.us" + bitmapUrl;
+				}
+				ObjectCartListItem cartListItem = new ObjectCartListItem(bitmapUrl, cartName,
 														cartZipcode, cartPermit);
 				cartListItem.lat = lat;
 				cartListItem.lon = lon;
@@ -177,56 +175,4 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 		}
 		return items;
 	}
-	
-	private void cacheBitmap(String url) {
-		Bitmap bitmap = downloadBitmap(url);
-		
-		if (bitmap != null) {
-			addBitmapToCache(bitmapCache, url, bitmap);
-		}
-	}
-	
-	private static void addBitmapToCache(LruCache<String, Bitmap> cache, 
-												String key, Bitmap bitmap) {
-		cache.put(key, bitmap);
-	}
-	
-	private static Bitmap downloadBitmap(String url) {
-        final AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-        final HttpGet getRequest = new HttpGet(url);
-        try {
-            HttpResponse response = client.execute(getRequest);
-            final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_OK) {
-                Log.w("ImageDownloader", "Error " + statusCode
-                        + " while retrieving bitmap from " + url);
-                return null;
-            }
- 
-            final HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream inputStream = null;
-                try {
-                    inputStream = entity.getContent();
-                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    return bitmap;
-                } finally {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
-                    entity.consumeContent();
-                }
-            }
-        } catch (Exception e) {
-            // Could provide a more explicit error message for IOException or
-            // IllegalStateException
-            getRequest.abort();
-            Log.w("ImageDownloader", "Error while retrieving bitmap from " + url);
-        } finally {
-            if (client != null) {
-                client.close();
-            }
-        }
-        return null;
-    }
 }

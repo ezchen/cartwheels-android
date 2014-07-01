@@ -77,23 +77,6 @@ public class ViewCartActivity extends Activity implements ActionBar.TabListener 
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-
-		Bitmap bitmap = (Bitmap) intent.getParcelableExtra("bitmap");
-		
-		String storageTag = getResources().getString(R.string.fragment_retain_ViewCart);
-		RetainFragment storage = RetainFragment.findOrCreateRetainFragment(getFragmentManager(), storageTag);
-		
-		if (storage.retainedCache == null) {
-			int size = (int)Runtime.getRuntime().freeMemory() / 1024;
-			storage.retainedCache = new LruCache<String, Bitmap>(size / 8);
-			
-			Log.d("storage.retainedCache", "" + storage.retainedCache);
-			storage.retainedCache.put("ViewCartBitmap", bitmap);
-			
-			Log.d("bitmap", "" + bitmap);
-		} else {
-			storage.retainedCache.put("ViewCartBitmap", bitmap);
-		}
 	}
 	
 	public void viewMap() {
