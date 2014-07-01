@@ -17,10 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        				TaskCallbacks {
 
 	private static final String TASKS_URL = "http://cartwheels.us/mobile/sessions.json";
 	private SharedPreferences preferences;
@@ -59,8 +61,8 @@ public class MainActivity extends Activity
     	if (preferences.contains("AuthToken")) {
     		loadTasksFromAPI(TASKS_URL);
     	} else {
-    		//Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-    		//startActivityForResult(intent, 0);
+    		Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+    		startActivityForResult(intent, 0);
     	}
     	
     }
@@ -69,9 +71,6 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
         /* Create the new activity */
         switch (position) {
         	case 1:
@@ -246,5 +245,28 @@ public class MainActivity extends Activity
                     getArguments().getInt(ARG_SECTION_NUMBER));*/
         }
     }
+	@Override
+	public void onTaskFinished() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProgressUpdate(int percent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCancelled() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPostExecute() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

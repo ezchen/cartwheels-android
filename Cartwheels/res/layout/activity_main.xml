@@ -12,8 +12,9 @@
          space available using match_parent in both dimensions.
     -->
 
-    <FrameLayout
-        android:id="@+id/container"
+    <fragment
+        android:name="com.cartwheels.DisplayCartsFragment"
+        android:id="@+id/displayCarts"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

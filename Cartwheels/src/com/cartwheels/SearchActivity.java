@@ -69,9 +69,10 @@ public class SearchActivity extends Activity
 		} else if (id == R.id.action_viewMap) {
 			// start the map activity w/ all cart data
 			
-			if (fragment != null)
+			if (fragment != null) {
+				Log.d("onOptionsItemSelected", "fragment handling selection");
 				fragment.onOptionsItemSelected(item);
-			else {
+			} else {
 				Intent intent = new Intent(SearchActivity.this, MarkerActivity.class);
 				startActivity(intent);
 			}

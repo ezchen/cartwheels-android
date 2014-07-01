@@ -3,11 +3,16 @@ package com.cartwheels;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerActivity extends Activity {
@@ -20,7 +25,9 @@ public class MarkerActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         Intent intent = getIntent();
-        items = (ObjectCartListItem[]) intent.getParcelableArrayExtra("ObjectCartListItems");
+        Parcelable[] parcelableItems = intent.getParcelableArrayExtra("ObjectCartListItems");
+        items = new ObjectCartListItem[parcelableItems.length];
+        System.arraycopy(parcelableItems, 0, items, 0, parcelableItems.length);
         setContentView(R.layout.map_marker);
         setUpMapIfNeeded();
     }
@@ -61,6 +68,25 @@ public class MarkerActivity extends Activity {
 
     private void setUpMap() {
         addMarkersToMap(items);
+        
+        final View mapView = getFragmentManager().findFragmentById(R.id.map).getView();
+        if (mapView.getViewTreeObserver().isAlive()) {
+            mapView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    
+                    for (ObjectCartListItem item : items) {
+                    	LatLng position = new LatLng(item.getLat(), item.getLon());
+                    	builder.include(position);
+                    }
+                    
+                    LatLngBounds bounds = builder.build();
+                      mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+                }
+            });
+        }
     }
     
     private void addMarkersToMap(ObjectCartListItem[] items) {

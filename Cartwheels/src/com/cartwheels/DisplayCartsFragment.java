@@ -45,16 +45,14 @@ public class DisplayCartsFragment extends Fragment
 	// code up to onDetach() used to maintain callbacks to the activity
 	private LruCache<String, Bitmap> bitmapCache;
 	private TaskCallbacks taskCallbacks = dummyCallBacks;
-	private Activity activity;
 	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("onAttach DisplayCartsFragment", "fragment is attached");
+		Log.d("onAttach DisplayCartsFragment", "fragment is attached " + activity);
 		if (!(activity instanceof TaskCallbacks)) {
 			throw new IllegalStateException("Activity must implement TaskCallbacks");
 		}
-		this.activity = activity;
 		taskCallbacks = (TaskCallbacks) activity;
 	}
 	
@@ -62,7 +60,6 @@ public class DisplayCartsFragment extends Fragment
 	public void onDetach() {
 		super.onDetach();
 		taskCallbacks = dummyCallBacks;
-		activity = null;
 	}
 	
 	/* Other stuff not related to callbacks really */
@@ -122,7 +119,7 @@ public class DisplayCartsFragment extends Fragment
 			if (items == null || bitmapCache == null)
 				return;
 			// recreate the list
-			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
+			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
 																R.layout.listview_cart_row, items, bitmapCache);
 			displayCarts.setAdapter(adapter);
 			Log.d("onActivityCreated", "bitmapCache: " + bitmapCache);
@@ -167,7 +164,7 @@ public class DisplayCartsFragment extends Fragment
 			return;
 		}
 		
-		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(activity,
+		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
 															R.layout.listview_cart_row, items, cache);
 		displayCarts.setAdapter(adapter);
 	}
@@ -191,7 +188,7 @@ public class DisplayCartsFragment extends Fragment
 			return;
 		}
 		
-		Intent intent = new Intent(activity, ViewCartActivity.class);
+		Intent intent = new Intent(getActivity(), ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", items[position]);
 		
 		ObjectCartListItem item = items[position];
@@ -212,6 +209,7 @@ public class DisplayCartsFragment extends Fragment
 		if (id == R.id.action_viewMap && getActivity() != null) {
 			Intent intent = new Intent(getActivity(), MarkerActivity.class);
 			intent.putExtra("ObjectCartListItems", items);
+			Log.d("onOptionsItemSelected", "item: " + items);
 			startActivity(intent);
 		}
 		
@@ -257,7 +255,7 @@ public class DisplayCartsFragment extends Fragment
 	
 	@Override
 	public void search(String textQueryData, String locationQueryData) {
-		if (activity != null) {
+		if (getActivity() != null) {
 			SearchTask searchTask = new SearchTask();
 			// put in tq, lq, email, auth_token,
 			searchTask.put("tq", textQueryData);
@@ -282,7 +280,7 @@ public class DisplayCartsFragment extends Fragment
 	}
 	
 	public void getData(SearchTask searchTask) {
-		SharedPreferences preferences = activity.getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		String email = preferences.getString("email", "");
 		String auth_token = preferences.getString("AuthToken", "");
 		searchTask.put("email", email);
