@@ -70,7 +70,7 @@ public class DisplayCartsFragment extends Fragment
 		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag("display");
 		
 		if (fragment != null) {
-			fragment.setTargetFragment(this, TASK_FRAGMENT);
+			fragment.setTargetFragment(this, R.integer.search_task_fragment);
 			Log.d("fragment", "is not null");
 		} else {
 			Log.d("fragment", "null");
@@ -143,7 +143,7 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == TASK_FRAGMENT && resultCode == Activity.RESULT_OK) {
+		if (requestCode == R.integer.search_task_fragment && resultCode == Activity.RESULT_OK) {
 			taskCallbacks.onTaskFinished();
 		}
 	}

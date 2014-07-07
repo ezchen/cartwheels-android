@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +23,6 @@ import com.squareup.picasso.Picasso;
 public class ViewCartFragment extends Fragment {
 
 	private ObjectCartListItem item;
-	private Bitmap bitmap;
 	private Bitmap mapBitmap;
 	
 	@Override
@@ -82,25 +82,7 @@ public class ViewCartFragment extends Fragment {
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
 		}
-		
-		// setup the options
-		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
-		
-		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
-		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
-												R.drawable.ic_action_next_item);
-		options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
-												R.drawable.ic_action_next_item);
-		options[2] = new ObjectViewCartItem(R.drawable.ic_action_edit, "Write a Review",
-												R.drawable.ic_action_next_item);
-		options[3] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
-												R.drawable.ic_action_next_item);
-		options[4] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
-												R.drawable.ic_action_next_item);
-		
-		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
-		listView.setAdapter(adapter);
-		
+		setupOptions(rootView);
 		Log.d("ViewCartFragment onCreateView", "view created");
 		return rootView;
 	}
@@ -145,6 +127,9 @@ public class ViewCartFragment extends Fragment {
 				
 			}
 		}
+		
+
+		
 	}
 	
 	public static ViewCartFragment newInstance(Bundle bundle) {
@@ -159,7 +144,6 @@ public class ViewCartFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 		outState.putString("test", "test");
 		outState.putParcelable("CartItem", item);
-		outState.putParcelable("bitmap", bitmap);
 		outState.putParcelable("mapBitmap", mapBitmap);
 		Log.d("onSaveInstanceState", "called");
 	}
@@ -177,16 +161,16 @@ public class ViewCartFragment extends Fragment {
 	private void setupOptions(View rootView) {
 		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
 		
-		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
+		ObjectViewCartItem[] options = new ObjectViewCartItem[4];
 		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
 												R.drawable.ic_action_next_item);
-		options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
+		/* options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
+												R.drawable.ic_action_next_item); */
+		options[1] = new ObjectViewCartItem(R.drawable.ic_action_edit, "Write a Review",
 												R.drawable.ic_action_next_item);
-		options[2] = new ObjectViewCartItem(R.drawable.ic_action_edit, "Write a Review",
+		options[2] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
 												R.drawable.ic_action_next_item);
-		options[3] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
-												R.drawable.ic_action_next_item);
-		options[4] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
+		options[3] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
 												R.drawable.ic_action_next_item);
 		
 		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);

@@ -1,8 +1,23 @@
-<android.support.v4.view.ViewPager 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.cartwheels.ViewCartActivity" />
+    android:layout_height="match_parent" xmlns:app1="http://schemas.android.com/apk/res/com.cartwheels">
 
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app1:pstsShouldExpand="true"
+        app1:pstsIndicatorColor="#81baa4" />
+    
+	<android.support.v4.view.ViewPager 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:id="@+id/pager"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/tabs"
+	    tools:context="com.cartwheels.ViewCartActivity" />
+
+</RelativeLayout>

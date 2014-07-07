@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Values for the async tasks -->
     <integer name="search_task_fragment">0</integer>
     
     <string name="fragment_retain_ViewCart">RETAINVIEWCART</string>
+    
+    <!-- values for the task fragments used -->
 </resources>

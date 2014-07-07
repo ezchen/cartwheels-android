@@ -16,7 +16,7 @@ public class ViewCartAdapter extends ArrayAdapter<ObjectViewCartItem> {
 	ObjectViewCartItem[] items;
 	
 	public ViewCartAdapter(Context context, int layoutResourceID, ObjectViewCartItem[] items) {
-		super(context, layoutResourceID);
+		super(context, layoutResourceID, items);
 		
 		this.context = context;
 		this.layoutResourceID = layoutResourceID;
