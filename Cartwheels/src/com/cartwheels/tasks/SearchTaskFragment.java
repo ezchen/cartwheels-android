@@ -40,7 +40,7 @@ public class SearchTaskFragment extends DialogFragment {
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		getDialog().setTitle("Progress Dialog");
+		getDialog().setTitle("");
 		
 		getDialog().setCanceledOnTouchOutside(false);
 		
@@ -65,7 +65,9 @@ public class SearchTaskFragment extends DialogFragment {
 		}
 		
 		if (getTargetFragment() != null) {
-			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_CANCELED, null);
+			getTargetFragment().
+				onActivityResult(getResources().
+						getInteger(R.integer.search_task_fragment), Activity.RESULT_CANCELED, null);
 		}
 	}
 	

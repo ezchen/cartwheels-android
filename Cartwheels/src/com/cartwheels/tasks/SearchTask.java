@@ -50,7 +50,6 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	
 	public SearchTask() {
 		objectValues = new HashMap<String, String>();
-		int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 	}
 	
 	@Override
@@ -83,7 +82,6 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 			HttpGet get = new HttpGet(uri.toString());
 			// default return values
 			json.put("success", false);
-			json.put("info", "Logout Failed");
 			
 			get.setHeader("Accept", "application/json");
 			get.setHeader("Content-Type", "application/json");

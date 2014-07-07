@@ -3,6 +3,7 @@ package com.cartwheels;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,8 +33,10 @@ public class SearchActivity extends Activity
 		Intent intent = getIntent();
 		handleIntent(intent);
 		
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
 		if (savedInstanceState != null) {
-			fragment = (DisplayCartsFragment) getFragmentManager().getFragment(savedInstanceState, "displayCarts");
+			fragment = (DisplayCartsFragment) getFragmentManager().getFragment(savedInstanceState, fragmentTag);
 		} else {
 			fragment = (DisplayCartsFragment) getFragmentManager().findFragmentById(R.id.display_carts_fragment);
 		}
@@ -92,7 +95,10 @@ public class SearchActivity extends Activity
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		getFragmentManager().putFragment(outState, "displayCarts", fragment);
+		
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
+		getFragmentManager().putFragment(outState, fragmentTag, fragment);
 	}
 	
 	//@Override
@@ -114,7 +120,9 @@ public class SearchActivity extends Activity
 		SearchTaskFragment taskFragment = new SearchTaskFragment();
 		taskFragment.setTask(searchTask);
 		
-		taskFragment.setTargetFragment(fragment, R.integer.search_task_fragment);
+		Resources resources = getResources();
+		int fragmentId = resources.getInteger(R.integer.search_task_fragment);
+		taskFragment.setTargetFragment(fragment, fragmentId);
 		taskFragment.show(getFragmentManager(), "displayCarts");
 		taskFragment.execute();
 		

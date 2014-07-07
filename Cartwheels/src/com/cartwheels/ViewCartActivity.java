@@ -111,7 +111,7 @@ public class ViewCartActivity extends Activity {
 				case 0:
 					return ViewCartFragment.newInstance(bundle);
 				case 1:
-					return PlaceholderFragment.newInstance(position+1);
+					return ViewReviewFragment.newInstance(bundle);
 				case 2:
 					return PlaceholderFragment.newInstance(position+1);				
 			}

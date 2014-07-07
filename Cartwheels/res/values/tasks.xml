@@ -5,6 +5,4 @@
     <string name="search_task_fragment_string">display</string>
     
     <string name="fragment_retain_ViewCart">RETAINVIEWCART</string>
-    
-    <!-- values for the task fragments used -->
 </resources>
