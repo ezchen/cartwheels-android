@@ -1,5 +1,6 @@
 package com.cartwheels.tasks;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.http.client.ResponseHandler;
@@ -14,17 +15,27 @@ import android.net.Uri.Builder;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.cartwheels.ObjectCartListItem;
+import com.cartwheels.ReviewItem;
 
 public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 
 	private HashMap<String, String> objectValues;
+	private String cartId;
+	
 	private int progress;
 	private ReviewTaskFragment fragment;
-	private String TAGS_DATA;
-	private String TAGS_NAME;
-	private String TAGS_RATING;
-	private String TAGS_TEXT;
+	
+	public static String TAGS_DATA = "data";
+	public static String TAGS_NAME = "user_id";
+	public static String TAGS_RATING = "rating";
+	public static String TAGS_TEXT = "text";
+	public static final String TAGS_REVIEW_ID = "id";
+	private static final String TAGS_UPDATED_AT = "updated_at";
+	private static final String TAGS_CREATED_AT = "created_at";
+	
+	public ReviewTask() {
+		objectValues = new HashMap<String, String>();
+	}
 	
 	@Override
 	protected void onPreExecute() {
@@ -42,8 +53,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
         
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("carts")
-				.appendPath("search");
+			uri.scheme("http").authority("cartwheels.us").appendPath("reviews")
+				.appendPath("data");
 			
 			for (String key : objectValues.keySet()) {
 				// if value is 0, do not append to query parameter
@@ -52,6 +63,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 					uri.appendQueryParameter(key, objectValues.get(key));
 				}
 			}
+			
+			uri.appendQueryParameter("review[cart_id]", "73");
 			
 			HttpGet get = new HttpGet(uri.toString());
 			// default return values
@@ -64,9 +77,12 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 			response = client.execute(get, responseHandler);
 			
 			json = new JSONObject(response);
+			
+			Log.d("doInBackground ReviewTask", json.toString());
 			items = buildList(json);
 			
-			Log.d("SearchTask", "jsonObject recieved");
+			if (items != null)
+				Log.d("ReviewTask items:", Arrays.toString(items));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,6 +114,46 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		objectValues.put(key, value);
 	}
 	
+	public static JSONObject getUser(int userId, HashMap<String, String> objectValues) {
+		DefaultHttpClient client = new DefaultHttpClient();
+        
+        String response = null;
+        JSONObject json = new JSONObject();
+        
+		try {
+			Builder uri = new Builder();
+			uri.scheme("http").authority("cartwheels.us").appendPath("users")
+				.appendPath("data");
+			
+			for (String key : objectValues.keySet()) {
+				// if value is 0, do not append to query parameter
+				if (objectValues.get(key).length() > 0) {
+					Log.d(key, objectValues.get(key));
+					uri.appendQueryParameter(key, objectValues.get(key));
+				}
+			}
+			
+			uri.appendQueryParameter("user[user_id]", userId + "");
+			
+			HttpGet get = new HttpGet(uri.toString());
+			// default return values
+			json.put("success", false);
+			
+			get.setHeader("Accept", "application/json");
+			get.setHeader("Content-Type", "application/json");
+			
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			response = client.execute(get, responseHandler);
+			
+			json = new JSONObject(response);
+			
+			Log.d("doInBackground ReviewTask", json.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
 	public ReviewItem[] buildList(JSONObject json) {
 		ReviewItem[] items = null;
 		
@@ -113,8 +169,14 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 				String user = innerJson.getString(TAGS_NAME);
 				String text = innerJson.getString(TAGS_TEXT);
 				int rating = innerJson.getInt(TAGS_RATING);
+				String reviewId = innerJson.getString(TAGS_REVIEW_ID);
+				String createdAt = innerJson.getString(TAGS_CREATED_AT);
+				String updatedAt = innerJson.getString(TAGS_UPDATED_AT);
 				
 				ReviewItem reviewItem = new ReviewItem(user, text, rating);
+				reviewItem.reviewId = reviewId;
+				reviewItem.createdAt = createdAt;
+				reviewItem.updatedAt = updatedAt;
 				
 				Log.d("cart list item", reviewItem.toString());
 				items[i] = reviewItem;
@@ -132,4 +194,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		return items;
 	}
 
+	public void setCartId(String id) {
+		this.cartId = id;
+	}
 }

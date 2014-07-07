@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:padding="10dp" >
+    
+    <ImageView
+        android:id="@+id/rating"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:contentDescription="rating" />
+    
+    <!-- User name -->
+    <TextView
+        android:id="@+id/reviewUser"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/rating"
+        android:text="user" />
+    
+    <!-- Review text -->
+    <TextView 
+        android:id="@+id/reviewText"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/rating"
+        android:layout_alignParentLeft="true"/>
+</RelativeLayout>

@@ -142,6 +142,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				String cartPermit = innerJson.getString(TAGS_PERMIT_NUMBER);
 				String lat = innerJson.getString(TAGS_LAT);
 				String lon = innerJson.getString(TAGS_LON);
+				String cartId = innerJson.getString(TAGS_ID);
 				
 				JSONArray arrayBitmapUrl = innerJson.getJSONArray(TAGS_PHOTOS);
 				
@@ -157,6 +158,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 														cartZipcode, cartPermit);
 				cartListItem.lat = lat;
 				cartListItem.lon = lon;
+				cartListItem.cartId = cartId;
 				
 				Log.d("cart list item", cartListItem.toString());
 				items[i] = cartListItem;

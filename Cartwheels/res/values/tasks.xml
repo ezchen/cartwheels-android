@@ -5,4 +5,7 @@
     <string name="search_task_fragment_string">display</string>
     
     <string name="fragment_retain_ViewCart">RETAINVIEWCART</string>
+    
+    <integer name="review_task_fragment">2</integer>
+    <string name="review_task_fragment_string">reviewTask</string>
 </resources>
