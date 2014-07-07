@@ -2,7 +2,7 @@
 <resources>
     <!-- Values for the async tasks -->
     <integer name="search_task_fragment">0</integer>
-    <string name="search_task_fragment">displayCarts</string>
+    <string name="search_task_fragment_string">display</string>
     
     <string name="fragment_retain_ViewCart">RETAINVIEWCART</string>
     

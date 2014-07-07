@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -65,10 +65,13 @@ public class DisplayCartsFragment extends Fragment
 		
 		// target fragment may have been redestroyed and recreated. Find it!
 		fragmentManager = getFragmentManager();
-		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag(R.string.search_task_fragment);
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
+		int fragmentId = resources.getInteger(R.integer.search_task_fragment);
+		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag(fragmentTag);
 		
 		if (fragment != null) {
-			fragment.setTargetFragment(this, R.integer.search_task_fragment);
+			fragment.setTargetFragment(this, fragmentId);
 			Log.d("fragment", "is not null");
 		} else {
 			Log.d("fragment", "null");
@@ -270,8 +273,11 @@ public class DisplayCartsFragment extends Fragment
 		SearchTaskFragment taskFragment = new SearchTaskFragment();
 		taskFragment.setTask(searchTask);
 		
-		taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
-		taskFragment.show(getFragmentManager(), R.string.search_task_fragment);
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
+		int fragmentId = resources.getInteger(R.integer.search_task_fragment);
+		taskFragment.setTargetFragment(this, fragmentId);
+		taskFragment.show(getFragmentManager(), fragmentTag);
 		taskFragment.execute();
 	}
 }
