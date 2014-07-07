@@ -32,8 +32,6 @@ public class DisplayCartsFragment extends Fragment
 	private ObjectCartListItem[] items;
 	
 	private FragmentManager fragmentManager;
-	public static final int TASK_FRAGMENT = 0;
-	public static final String TASK_FRAGMENT_TAG = "displayCarts";
 	
 	private String lastTextQuery;
 	private String lastLocationQuery;
@@ -67,7 +65,7 @@ public class DisplayCartsFragment extends Fragment
 		
 		// target fragment may have been redestroyed and recreated. Find it!
 		fragmentManager = getFragmentManager();
-		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag("display");
+		SearchTaskFragment fragment = (SearchTaskFragment) fragmentManager.findFragmentByTag(R.string.search_task_fragment);
 		
 		if (fragment != null) {
 			fragment.setTargetFragment(this, R.integer.search_task_fragment);
@@ -273,7 +271,7 @@ public class DisplayCartsFragment extends Fragment
 		taskFragment.setTask(searchTask);
 		
 		taskFragment.setTargetFragment(this, R.integer.search_task_fragment);
-		taskFragment.show(getFragmentManager(), "display");
+		taskFragment.show(getFragmentManager(), R.string.search_task_fragment);
 		taskFragment.execute();
 	}
 }
