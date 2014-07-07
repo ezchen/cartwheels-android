@@ -4,26 +4,34 @@
     android:minHeight="48dp"
     android:padding="10dp" >
     
-    <ImageView
-        android:id="@+id/rating"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:contentDescription="rating" />
+
     
     <!-- User name -->
     <TextView
         android:id="@+id/reviewUser"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_toRightOf="@id/rating"
+        android:layout_alignParentLeft="true"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:text="user" />
     
+   <ImageView
+        android:id="@+id/reviewRating"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/reviewUser"
+        android:paddingTop="8dp"
+        android:contentDescription="rating" />
+        
     <!-- Review text -->
     <TextView 
         android:id="@+id/reviewText"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_below="@id/rating"
+        android:layout_below="@id/reviewRating"
+        android:paddingTop="10dp"
         android:layout_alignParentLeft="true"/>
 </RelativeLayout>

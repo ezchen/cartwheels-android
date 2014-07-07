@@ -32,10 +32,12 @@ public class ReviewItemAdapter extends ArrayAdapter<ReviewItem> {
 		
 		ReviewItem item = items[position];
 		
-		ImageView rating = (ImageView) listItem.findViewById(R.id.rating);
-		rating.setImageResource(R.drawable.rating);
+
 		TextView userNameText = (TextView) listItem.findViewById(R.id.reviewUser);
 		userNameText.setText(item.user);
+		
+		ImageView rating = (ImageView) listItem.findViewById(R.id.reviewRating);
+		rating.setImageResource(R.drawable.rating);
 		
 		TextView text = (TextView) listItem.findViewById(R.id.reviewText);
 		text.setText(item.text);

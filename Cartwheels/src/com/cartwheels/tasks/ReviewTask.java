@@ -79,7 +79,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 			json = new JSONObject(response);
 			
 			Log.d("doInBackground ReviewTask", json.toString());
-			items = buildList(json);
+			items = buildList(json, objectValues);
 			
 			if (items != null)
 				Log.d("ReviewTask items:", Arrays.toString(items));
@@ -114,7 +114,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		objectValues.put(key, value);
 	}
 	
-	public static JSONObject getUser(int userId, HashMap<String, String> objectValues) {
+	public static JSONObject getUserJSON(String userId, HashMap<String, String> objectValues) {
 		DefaultHttpClient client = new DefaultHttpClient();
         
         String response = null;
@@ -133,7 +133,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 				}
 			}
 			
-			uri.appendQueryParameter("user[user_id]", userId + "");
+			uri.appendQueryParameter("user[id]", userId + "");
 			
 			HttpGet get = new HttpGet(uri.toString());
 			// default return values
@@ -154,7 +154,21 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		
 		return json;
 	}
-	public ReviewItem[] buildList(JSONObject json) {
+	
+	public String getUserName(JSONObject json) {
+		String userName = null;
+		try {
+			JSONArray info = json.getJSONArray(TAGS_DATA);
+			JSONObject innerJson = info.getJSONObject(0);
+			
+			userName = innerJson.getString("name");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userName;
+	}
+	
+	public ReviewItem[] buildList(JSONObject json, HashMap<String, String> objectValues) {
 		ReviewItem[] items = null;
 		
 		try {
@@ -166,7 +180,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 			for (int i = 0; i < reviews.length(); i++) {
 				JSONObject innerJson = reviews.getJSONObject(i);
 				
-				String user = innerJson.getString(TAGS_NAME);
+				String userId = innerJson.getString(TAGS_NAME);
+				String user = getUserName(getUserJSON(userId, objectValues));
 				String text = innerJson.getString(TAGS_TEXT);
 				int rating = innerJson.getInt(TAGS_RATING);
 				String reviewId = innerJson.getString(TAGS_REVIEW_ID);
