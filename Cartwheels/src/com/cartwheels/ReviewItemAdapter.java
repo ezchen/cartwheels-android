@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.cartwheels.custom_views.RatingView;
 
 public class ReviewItemAdapter extends ArrayAdapter<ReviewItem> {
 
@@ -36,8 +35,8 @@ public class ReviewItemAdapter extends ArrayAdapter<ReviewItem> {
 		TextView userNameText = (TextView) listItem.findViewById(R.id.reviewUser);
 		userNameText.setText(item.user);
 		
-		ImageView rating = (ImageView) listItem.findViewById(R.id.reviewRating);
-		rating.setImageResource(R.drawable.rating);
+		RatingView rating = (RatingView) listItem.findViewById(R.id.reviewRating);
+		rating.setRating(item.rating);
 		
 		TextView text = (TextView) listItem.findViewById(R.id.reviewText);
 		text.setText(item.text);

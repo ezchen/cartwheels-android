@@ -10,12 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cartwheels.custom_views.RatingView;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
 import com.squareup.picasso.Picasso;
@@ -41,7 +41,7 @@ public class ViewCartFragment extends Fragment {
 		
 		TextView cartName = (TextView) rootView.findViewById(R.id.viewCart_Name);
 		TextView reviews = (TextView) rootView.findViewById(R.id.viewCart_NumberOfReviews);
-		ImageView rating = (ImageView) rootView.findViewById(R.id.viewCart_Rating);
+		RatingView rating = (RatingView) rootView.findViewById(R.id.viewCart_Rating);
 		TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
 		TextView permit = (TextView) rootView.findViewById(R.id.viewCart_Permit);
 		ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
@@ -57,6 +57,7 @@ public class ViewCartFragment extends Fragment {
 			cartName.setText(item.cartName);
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
+			rating.setRating(item.rating);
 			
 			Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
 		} else {

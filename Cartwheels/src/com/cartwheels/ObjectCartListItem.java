@@ -11,6 +11,7 @@ public class ObjectCartListItem implements Parcelable {
 	public String lat;
 	public String lon;
 	public String cartId;
+	public int rating;
 	
 	public ObjectCartListItem() {
 		bitmapUrl = null;

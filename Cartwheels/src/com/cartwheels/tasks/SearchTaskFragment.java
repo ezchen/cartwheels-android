@@ -40,7 +40,8 @@ public class SearchTaskFragment extends DialogFragment {
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		getDialog().setTitle("");
+		getDialog().setTitle(null);
+		
 		
 		getDialog().setCanceledOnTouchOutside(false);
 		

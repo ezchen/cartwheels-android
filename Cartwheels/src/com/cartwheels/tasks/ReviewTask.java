@@ -64,7 +64,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 				}
 			}
 			
-			uri.appendQueryParameter("review[cart_id]", "73");
+			uri.appendQueryParameter("review[cart_id]", cartId);
 			
 			HttpGet get = new HttpGet(uri.toString());
 			// default return values
