@@ -45,6 +45,7 @@ public class ViewCartActivity extends Activity {
 		Bundle bundle = intent.getExtras();
 		adapter = new SectionsPagerAdapter(getFragmentManager(), bundle);
 
+		viewPager.setOffscreenPageLimit(2);
 		viewPager.setAdapter(adapter);
 
 		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
@@ -113,7 +114,7 @@ public class ViewCartActivity extends Activity {
 				case 1:
 					return ViewReviewFragment.newInstance(bundle);
 				case 2:
-					return PlaceholderFragment.newInstance(position+1);				
+					return ViewCartPhotosFragment.newInstance(bundle);				
 			}
 			return ViewCartFragment.newInstance(bundle);
 		}

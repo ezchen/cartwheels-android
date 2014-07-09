@@ -85,6 +85,7 @@ public class ViewReviewFragment extends Fragment
 		ReviewTaskFragment fragment = new ReviewTaskFragment();
 		fragment.setTask(reviewTask);
 		reviewTask.setFragment(fragment);
+		fragment.setShowsDialog(false);
 		
 		Resources resources = getResources();
 		int fragmentId = resources.getInteger(R.integer.review_task_fragment);
@@ -94,6 +95,7 @@ public class ViewReviewFragment extends Fragment
 		
 		reviews = (ListView) inflater.inflate(R.layout.fragment_search, container, false);
 		
+		fragment.show(getFragmentManager(), fragmentTag);
 		fragment.execute();
 		reviews.setOnItemClickListener(this);
 		
@@ -114,9 +116,9 @@ public class ViewReviewFragment extends Fragment
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Resources resources = getResources();
-		int fragmentId = resources.getInteger(R.integer.review_task_fragment);
-		if (requestCode == fragmentId && resultCode == Activity.RESULT_OK) {
+		//Resources resources = getResources();
+		//int fragmentId = resources.getInteger(R.integer.review_task_fragment);
+		if (data != null && data.hasExtra("ReviewItems") && resultCode == Activity.RESULT_OK) {
 			items = (ReviewItem[]) data.getParcelableArrayExtra("ReviewItems");
 			buildList(items);
 			Log.d("onActivityResult ViewReviewFragment", "" + items);

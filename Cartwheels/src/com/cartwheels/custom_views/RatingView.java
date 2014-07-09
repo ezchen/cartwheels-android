@@ -51,7 +51,7 @@ public class RatingView extends LinearLayout {
 	}
 	
 	public void setRating(int rating) {
-		this.rating = rating;;
+		this.rating = rating;
 		GradientDrawable shapeDrawable;
 		for (int i = 0; i < views.length && i < rating; i++) {
 			ImageView view = views[i];

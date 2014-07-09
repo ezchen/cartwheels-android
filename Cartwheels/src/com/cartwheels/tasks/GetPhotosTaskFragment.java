@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,24 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.cartwheels.R;
-import com.cartwheels.ReviewItem;
-import com.cartwheels.ViewReviewFragment;
+import com.cartwheels.ViewCartPhotosFragment;
 
-public class ReviewTaskFragment extends TaskFragment {
-
+public class GetPhotosTaskFragment extends TaskFragment {
 	ProgressBar progressBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 								Bundle savedInstanceState) {
+		getDialog().hide();
 		return null;
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setRetainInstance(true);
 	}
 	
@@ -38,35 +34,35 @@ public class ReviewTaskFragment extends TaskFragment {
 		super.onDismiss(dialog);
 		
 		if (getTargetFragment() != null) {
-			getTargetFragment().onActivityResult(1, Activity.RESULT_CANCELED, null);
+			getTargetFragment().onActivityResult(3, Activity.RESULT_CANCELED, null);
 		}
 	}
 	
-	public void onTaskFinished(ReviewItem[] items) {
+	public void onTaskFinished(String[] items) {
 		taskFinished();
 		
 		// send data to the target fragment
 		FragmentManager manager = getFragmentManager();
-		Log.d("manager", "" + manager);
+		Log.d("onTaskFinished GetPhotosTaskFragment", "" + manager);
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
-			ViewReviewFragment fragment = (ViewReviewFragment) getTargetFragment();
+			ViewCartPhotosFragment fragment = (ViewCartPhotosFragment) getTargetFragment();
 
 			Intent intent = new Intent();
-			intent.putExtra("ReviewItems", items);
+			intent.putExtra("ImageUrls", items);
 			
 			//Resources resources = getResources();
 			//int fragmentId = resources.getInteger(R.integer.review_task_fragment);
-			fragment.onActivityResult(2, Activity.RESULT_OK, intent);
+			fragment.onActivityResult(3, Activity.RESULT_OK, intent);
 		}
 	}
 	
 	public void execute(String url) {
-		((ReviewTask)asyncTask).execute(url);
+		((PhotoUrlTask)asyncTask).execute(url);
 	}
 	
 	public void execute() {
-		((ReviewTask)asyncTask).execute();
+		((PhotoUrlTask)asyncTask).execute();
 	}
 }
