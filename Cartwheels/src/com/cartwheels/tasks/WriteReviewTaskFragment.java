@@ -4,27 +4,22 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.cartwheels.ViewCartPhotosFragment;
+import com.cartwheels.WriteReviewFragment;
 
-public class GetPhotosTaskFragment extends TaskFragment {
-	
+public class WriteReviewTaskFragment extends TaskFragment {
+
 	@Override
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		
 		if (getTargetFragment() != null) {
-			getTargetFragment().onActivityResult(3, Activity.RESULT_CANCELED, null);
+			getTargetFragment().onActivityResult(4, Activity.RESULT_CANCELED, null);
 		}
 	}
 	
-	public void onTaskFinished(String[] items) {
+	public void onTaskFinished(boolean success) {
 		taskFinished();
 		
 		// send data to the target fragment
@@ -33,22 +28,21 @@ public class GetPhotosTaskFragment extends TaskFragment {
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
-			ViewCartPhotosFragment fragment = (ViewCartPhotosFragment) getTargetFragment();
+			WriteReviewFragment fragment = (WriteReviewFragment) getTargetFragment();
 
 			Intent intent = new Intent();
-			intent.putExtra("ImageUrls", items);
-			
+			intent.putExtra("success", success);
 			//Resources resources = getResources();
 			//int fragmentId = resources.getInteger(R.integer.review_task_fragment);
-			fragment.onActivityResult(3, Activity.RESULT_OK, intent);
+			fragment.onActivityResult(4, Activity.RESULT_OK, intent);
 		}
 	}
 	
 	public void execute(String url) {
-		((PhotoUrlTask)asyncTask).execute(url);
+		((WriteReviewTask)asyncTask).execute(url);
 	}
 	
 	public void execute() {
-		((PhotoUrlTask)asyncTask).execute();
+		((WriteReviewTask)asyncTask).execute();
 	}
 }

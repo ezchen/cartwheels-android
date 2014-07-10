@@ -8,9 +8,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -20,10 +22,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 public class ViewCartActivity extends Activity {
+
+	private static final int REQUEST_IMAGE_CAPTURE = 0;
 
 	private final Handler handler = new Handler();
 	
@@ -175,5 +180,6 @@ public class ViewCartActivity extends Activity {
 			return rootView;
 		}
 	}
+
 
 }

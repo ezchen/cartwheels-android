@@ -27,10 +27,14 @@ public abstract class TaskFragment extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 								Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		
+		progressBar.setVisibility(View.GONE);
+		getDialog().hide();
+		//progressBar.setVisibility(View.INVISIBLE);
+		view.setVisibility(View.GONE);
 		getDialog().setCanceledOnTouchOutside(false);
 		
 		return view;

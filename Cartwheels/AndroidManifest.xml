@@ -83,6 +83,7 @@
             android:name="com.cartwheels.ViewCartActivity"
             android:icon="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_view_cart"
+            android:launchMode="singleTop"
             android:parentActivityName="com.cartwheels.SearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -94,6 +95,11 @@
             android:label="View Carts"
             android:parentActivityName="com.cartwheels.SearchActivity">
         </activity>
+        <activity
+            android:name="com.cartwheels.WriteReviewActivity"
+            android:icon="@drawable/cw_logo_no_text_white"
+            android:label="Write Review"
+            android:parentActivityName="com.cartwheels.ViewCartActivity"/>
         <meta-data 
         	android:name="com.google.android.gms.version"
         	android:value="@integer/google_play_services_version" />

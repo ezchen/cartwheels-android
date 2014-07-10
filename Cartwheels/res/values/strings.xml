@@ -42,7 +42,7 @@
     <!-- Search -->
     <string name="search_hint">e.g Halal</string>
     <string name="title_activity_search">Search</string>
-    <string name="title_activity_view_cart">Map</string>
+    <string name="title_activity_view_cart">View Cart</string>
 
     <!-- ViewCart -->
     <string name="tab_section1">Cart</string>

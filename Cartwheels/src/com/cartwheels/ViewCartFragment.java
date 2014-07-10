@@ -1,27 +1,36 @@
 package com.cartwheels;
 
+import java.io.ByteArrayOutputStream;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cartwheels.custom_views.RatingView;
+import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
+import com.cartwheels.tasks.UploadPhotoTask;
 import com.squareup.picasso.Picasso;
 
-public class ViewCartFragment extends Fragment {
+public class ViewCartFragment extends Fragment implements OnItemClickListener {
 
+	private static final int REQUEST_IMAGE_CAPTURE = 0;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
 	
@@ -30,8 +39,6 @@ public class ViewCartFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		FragmentManager manager = getFragmentManager();
-		
-		manager.findFragmentById(1);
 	}
 	
 	@Override
@@ -48,7 +55,12 @@ public class ViewCartFragment extends Fragment {
 		ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
 		
 		if (savedInstanceState == null) {
-			item = getArguments().getParcelable("ObjectCartListItem");
+			Bundle arguments = getArguments();
+			
+			if (arguments != null)
+			item = arguments.getParcelable("ObjectCartListItem");
+			
+			if (item != null) {
 			Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
 
 			if (mapBitmap != null)
@@ -58,8 +70,9 @@ public class ViewCartFragment extends Fragment {
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
 			rating.setRating(item.rating);
+			}
 			
-			Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
 		} else {
 			// restore the fragment's state
 			// CartItem
@@ -91,7 +104,15 @@ public class ViewCartFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
+		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+			if (data != null && data.hasExtra("data")) {
+				Bundle extras = data.getExtras();
+		        Bitmap imageBitmap = (Bitmap) extras.get("data");
+		        Log.d("onActivityResult ViewCartFragment", "bitmap: " + imageBitmap);
+		        sendBitmap(imageBitmap);
+			}
+		}
+		if (data.hasExtra("mapBitmap") && resultCode == Activity.RESULT_OK) {
 			View view = getView();
 			
 			ImageView map = null;
@@ -176,6 +197,70 @@ public class ViewCartFragment extends Fragment {
 		
 		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
 		Log.d("setupOptions", "method completed");
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		
+		switch(position) {
+			case 0:
+				break;
+			case 1:
+				Intent intent = new Intent(getActivity(), WriteReviewActivity.class);
+				intent.putExtra("ObjectCartListItem", item);
+				startActivity(intent);
+				break;
+			case 2:
+				takePicture();
+				break;
+			case 3:
+				break;
+		}
+	}
+	
+	
+	public void takePicture() {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	    }
+	}
+	
+	private void sendBitmap(Bitmap bitmap) {
+		DefaultTaskFragment<UploadPhotoTask, ViewCartFragment, Boolean> fragment =
+				new DefaultTaskFragment<UploadPhotoTask, ViewCartFragment, Boolean>(6);
+		
+		UploadPhotoTask asyncTask = new UploadPhotoTask();
+		
+		// set up query parameters
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String auth_token = preferences.getString("AuthToken", "");
+		String email = preferences.getString("email", "");
+		String target_id = item.cartId + "";
+		String target_type = "Cart";
+		// encode bitmap
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+		Log.d("sendBitmap", bitmap + "");
+		byte[] bitmapdata = stream.toByteArray();
+		String encoded_image = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+		
+		Log.d("sendBitmap", encoded_image);
+		// put values in asynctask
+		asyncTask.put("auth_token", auth_token);
+		asyncTask.put("email", email);
+		
+		asyncTask.setInnerKey("photo");
+		asyncTask.putInner("encoded_image", encoded_image);
+		
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		fragment.show(getFragmentManager(), "UploadPhoto");
+		
+		String url;
+		url = "http://cartwheels.us/carts/" + target_id + "/photos";
+		fragment.execute(url);
 	}
 }

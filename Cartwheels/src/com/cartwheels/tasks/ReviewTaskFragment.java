@@ -18,20 +18,6 @@ import com.cartwheels.ViewReviewFragment;
 
 public class ReviewTaskFragment extends TaskFragment {
 
-	ProgressBar progressBar;
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-								Bundle savedInstanceState) {
-		return null;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		setRetainInstance(true);
-	}
 	
 	@Override
 	public void onDismiss(DialogInterface dialog) {

@@ -134,10 +134,7 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected JSONObject doInBackground(String... urls) {
-			Log.d("doInBackground", "method entered");
-			Log.d("hello", "hello");
 			DefaultHttpClient client = new DefaultHttpClient();
-			Log.d("hello2", "hello2");
 			String response = null;
 			JSONObject json = new JSONObject();
 			
