@@ -3,11 +3,13 @@ package com.cartwheels;
 import java.io.ByteArrayOutputStream;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -26,6 +28,9 @@ import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
 import com.cartwheels.tasks.UploadPhotoTask;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartFragment extends Fragment implements OnItemClickListener {
@@ -33,6 +38,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
+	private int CONNECTION_FAILURE_RESOLUTION_REQUEST;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -149,9 +155,15 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 				
 			}
 		}
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		if (!(activity instanceof LocationActivity)) {
+			throw new IllegalStateException("Activity must implement TaskCallbacks");
+		}
 		
-
-		
+		super.onAttach(activity);
 	}
 	
 	public static ViewCartFragment newInstance(Bundle bundle) {
@@ -216,6 +228,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 				takePicture();
 				break;
 			case 3:
+				checkin();
 				break;
 		}
 	}
@@ -261,6 +274,41 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		
 		String url;
 		url = "http://cartwheels.us/carts/" + target_id + "/photos";
+		fragment.execute(url);
+	}
+	
+	private void checkin() {
+		DefaultTaskFragment<CheckinTask, ViewCartFragment, Boolean> fragment =
+				new DefaultTaskFragment<CheckinTask, ViewCartFragment, Boolean>(7);
+		
+		CheckinTask asyncTask = new CheckinTask();
+		
+		// set up query parameters
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String auth_token = preferences.getString("AuthToken", "");
+		String email = preferences.getString("email", "");
+		String target_id = item.cartId + "";
+		
+		String innerKey = "checkin";
+		
+		// location query parameters
+		Location location = ((LocationActivity)getActivity()).getLastLocation();
+		String lat = location.getLatitude() + "";
+		String lon = location.getLongitude() + "";
+		
+		asyncTask.put("auth_token", auth_token);
+		asyncTask.put("email", email);
+		
+		asyncTask.setInnerKey(innerKey);
+		asyncTask.putInner("lat", lat);
+		asyncTask.putInner("lon", lon);
+		
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		fragment.show(getFragmentManager(), "UploadPhoto");
+		
+		String url;
+		url = "http://cartwheels.us/carts/" + target_id + "/checkins";
 		fragment.execute(url);
 	}
 }

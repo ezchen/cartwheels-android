@@ -26,7 +26,7 @@ import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-public class ViewCartActivity extends Activity {
+public class ViewCartActivity extends LocationActivity {
 
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
 

@@ -7,6 +7,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
@@ -72,6 +73,8 @@ public abstract class DefaultPostJsonAsyncTask<Results> extends AsyncTask<String
 			
 			json = new JSONObject(response);
 			results = getResult(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

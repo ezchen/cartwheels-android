@@ -9,11 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-public class PlaceHolderActivity extends Activity {
+public class PlaceHolderActivity extends LocationActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_place_holder);
 		/* Set the hierarchical parent as Main */
@@ -28,5 +29,9 @@ public class PlaceHolderActivity extends Activity {
 		}
 		
 		*/
+	}
+	
+	public void printLocation(View view) {
+		Toast.makeText(this, getLastLocation().toString(), Toast.LENGTH_SHORT).show();
 	}
 }
