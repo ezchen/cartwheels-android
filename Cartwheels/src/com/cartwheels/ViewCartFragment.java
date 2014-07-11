@@ -1,6 +1,7 @@
 package com.cartwheels;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cartwheels.custom_views.RatingView;
+import com.cartwheels.tasks.CheckinTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
@@ -45,6 +47,23 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 
 		FragmentManager manager = getFragmentManager();
+		
+		String[] tags = new String[2];
+		tags[0] = "UploadPhoto";
+		tags[1] = "Checkin";
+		
+		HashMap<String, Integer> fragmentInfo = new HashMap<String, Integer>();
+		fragmentInfo.put("UploadPhoto", 6);
+		fragmentInfo.put("Checkin", 7);
+		
+		for (String tag : fragmentInfo.keySet()) {
+			Fragment fragment = manager.findFragmentByTag(tag);
+			
+			if (fragment != null) {
+				fragment.setTargetFragment(this, fragmentInfo.get(tag));
+			}
+		}
+		
 	}
 	
 	@Override
@@ -64,7 +83,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 			Bundle arguments = getArguments();
 			
 			if (arguments != null)
-			item = arguments.getParcelable("ObjectCartListItem");
+				item = arguments.getParcelable("ObjectCartListItem");
 			
 			if (item != null) {
 			Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
@@ -176,9 +195,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString("test", "test");
 		outState.putParcelable("CartItem", item);
-		outState.putParcelable("mapBitmap", mapBitmap);
 		Log.d("onSaveInstanceState", "called");
 	}
 	
@@ -271,6 +288,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		fragment.setTask(asyncTask);
 		asyncTask.setFragment(fragment);
 		fragment.show(getFragmentManager(), "UploadPhoto");
+		fragment.setTargetFragment(this, 6);
 		
 		String url;
 		url = "http://cartwheels.us/carts/" + target_id + "/photos";
@@ -305,7 +323,9 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		
 		fragment.setTask(asyncTask);
 		asyncTask.setFragment(fragment);
-		fragment.show(getFragmentManager(), "UploadPhoto");
+		fragment.show(getFragmentManager(), "Checkin");
+		
+		fragment.setTargetFragment(this, 7);
 		
 		String url;
 		url = "http://cartwheels.us/carts/" + target_id + "/checkins";

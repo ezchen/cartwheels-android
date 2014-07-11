@@ -1,11 +1,9 @@
-package com.cartwheels;
+package com.cartwheels.tasks;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
-
-public class CheckinTask extends DefaultPostJsonAsyncTask<Boolean> {
+public class CheckinTask extends AbstractPostJsonAsyncTask<Boolean> {
 	protected Boolean getResult(JSONObject json) {
 		try {
 			return json.getBoolean("success");

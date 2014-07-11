@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import com.cartwheels.R;
 
 public class DefaultTaskFragment<
-						Task extends DefaultPostJsonAsyncTask< Results>,
+						Task extends AbstractPostJsonAsyncTask< Results>,
 						TargetFragment extends Fragment,
 						Results>
 						extends DialogFragment {
@@ -93,6 +93,10 @@ public class DefaultTaskFragment<
 	}
 	
 	public void onTaskFinished(Results items) {
+		if (items instanceof Boolean) {
+			onTaskFinished((Boolean) items);
+			return;
+		}
 		taskFinished();
 		
 		if (getTargetFragment() != null) {
@@ -106,7 +110,7 @@ public class DefaultTaskFragment<
 		}
 	}
 	
-	public void onTaskFinished(boolean items) {
+	public void onTaskFinished(Boolean items) {
 		taskFinished();
 		
 		if (getTargetFragment() != null) {
@@ -114,7 +118,7 @@ public class DefaultTaskFragment<
 			TargetFragment fragment = (TargetFragment) getTargetFragment();
 			
 			Intent intent = new Intent();
-			intent.putExtra("result", items);
+			intent.putExtra("result", items.booleanValue());
 			
 			fragment.onActivityResult(fragmentId, Activity.RESULT_OK, intent);
 		}

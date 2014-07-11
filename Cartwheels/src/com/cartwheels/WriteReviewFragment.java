@@ -67,6 +67,7 @@ public class WriteReviewFragment extends Fragment
 			
 			Intent intent = new Intent(getActivity(), ViewCartActivity.class);
 			intent.putExtra("success", success);
+			intent.putExtra("ObjectCartListItem", item);
 			startActivity(intent);
 		}
 	}

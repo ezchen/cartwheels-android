@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 
-public class UploadPhotoTask extends DefaultPostJsonAsyncTask<Boolean> {
+public class UploadPhotoTask extends AbstractPostJsonAsyncTask<Boolean> {
 
 	public UploadPhotoTask() {
 		super();
