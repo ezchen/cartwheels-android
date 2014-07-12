@@ -62,22 +62,24 @@
 	        android:hint="@string/user_password"
 	        android:inputType="textPassword" />
      
-     <EditText
-         android:id="@+id/permit"
-	     android:layout_width="match_parent"
-	     android:layout_height="50dp"
-	     android:layout_margin="5dp"
-	     android:layout_alignParentLeft="true"
+     <EditText 
+         android:id="@id/userPasswordConfirmation"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:layout_margin="5dp"
+         android:layout_alignParentLeft="true"
          android:layout_below="@id/userPassword"
          android:ems="10"
-         android:hint="@string/permit_number" />
+         android:hint="Password confirmation"
+         android:inputType="textPassword"/>
+     
      
      <Button
-	        android:id="@+id/registerButton"
+	        android:id="@+id/registerOwnerButton"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/permit"
+            android:layout_below="@id/userPasswordConfirmation"
             android:onClick="register"
             android:text="@string/register" />
 </RelativeLayout>

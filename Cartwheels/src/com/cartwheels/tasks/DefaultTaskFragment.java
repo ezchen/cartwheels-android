@@ -96,6 +96,9 @@ public class DefaultTaskFragment<
 		if (items instanceof Boolean) {
 			onTaskFinished((Boolean) items);
 			return;
+		} else if (items instanceof String) {
+			onTaskFinished((String) items);
+			return;
 		}
 		taskFinished();
 		

@@ -39,8 +39,15 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_below="@id/userPassword"
-            android:onClick="login"
             android:text="@string/login" />
+	    
+	    <Button
+	        android:id="@+id/loginAsOwnerButton"
+	        android:layout_width="150dp"
+	        android:layout_height="50dp"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@id/loginButton"
+	        android:text="login as user" />
 	    
 	    <LinearLayout 
 	        android:layout_width="match_parent"

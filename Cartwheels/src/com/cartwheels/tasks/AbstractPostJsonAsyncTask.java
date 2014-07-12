@@ -108,6 +108,7 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AsyncTask<Strin
 		return post;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setFragment(DefaultTaskFragment fragment) {
 		this.fragment = fragment;
 	}

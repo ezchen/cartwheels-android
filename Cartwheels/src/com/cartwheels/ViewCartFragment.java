@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -33,6 +34,7 @@ import com.cartwheels.tasks.UploadPhotoTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.drive.internal.g;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartFragment extends Fragment implements OnItemClickListener {
@@ -40,7 +42,6 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
-	private int CONNECTION_FAILURE_RESOLUTION_REQUEST;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -233,11 +234,25 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		
+		Intent intent;
 		switch(position) {
 			case 0:
+				Location location = ((LocationActivity)getActivity()).getLastLocation();
+				
+				String currentLat = location.getLatitude() + "";
+				String currentLon = location.getLongitude() + "";
+				
+				String cartLat = item.lat;
+				String cartLon = item.lon;
+				
+				String url = "http://maps.google.com/maps?saddr=" +
+						currentLat + "," + currentLon + "&daddr=" + cartLat + "," + cartLon;
+				intent = new Intent(android.content.Intent.ACTION_VIEW,
+						Uri.parse(url));
+				startActivity(intent);
 				break;
 			case 1:
-				Intent intent = new Intent(getActivity(), WriteReviewActivity.class);
+				intent = new Intent(getActivity(), WriteReviewActivity.class);
 				intent.putExtra("ObjectCartListItem", item);
 				startActivity(intent);
 				break;

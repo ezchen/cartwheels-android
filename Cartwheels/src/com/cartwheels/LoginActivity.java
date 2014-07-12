@@ -5,38 +5,29 @@ import java.io.IOException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri.Builder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class LoginActivity extends Activity {
 
-	private final static String LOGIN_API_ENDPOINT_URL = "http://cartwheels.us/mobile/sessions";
+
 	
 	private SharedPreferences preferences;
-	private String userEmail;
-	private String userPassword;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +48,11 @@ public class LoginActivity extends Activity {
 		
 		Intent intent = getIntent();
 		if (intent.getBooleanExtra("logout", false)) {
+			intent.removeExtra("logout");
 			logout();
 		}
 	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -89,24 +82,6 @@ public class LoginActivity extends Activity {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
-	}
-	
-	public void login(View view) {
-	    EditText userEmailField = (EditText) findViewById(R.id.userEmail);
-	    userEmail = userEmailField.getText().toString();
-	    EditText userPasswordField = (EditText) findViewById(R.id.userPassword);
-	    userPassword = userPasswordField.getText().toString();
-
-	    if (userEmail.length() == 0 || userPassword.length() == 0) {
-	        // input fields are empty
-	        Toast.makeText(this, "Please complete all the fields",
-	            Toast.LENGTH_SHORT).show();
-	        return;
-	    } else {
-	        LoginTask loginTask = new LoginTask(LoginActivity.this);
-	        loginTask.setMessageLoading("Logging in...");
-	        loginTask.execute(LOGIN_API_ENDPOINT_URL);
-	    }
 	}
 	
 	public void logout() {
@@ -186,22 +161,22 @@ public class LoginActivity extends Activity {
 			// set need to log out to false
 			try {
 				if (json.getBoolean("success")) {
-			    	SharedPreferences.Editor editor = preferences.edit();
-			    	editor.remove("AuthToken");
-			    	editor.commit();
-			    	editor.remove("email");
-			    	editor.commit();
+
 				} else{
 					// keep the auth token, but set need to log out to true
 					
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			
 			super.onPostExecute(json);
 		}
 	}
+	
+	/*
 	private class LoginTask extends UrlJsonAsyncTask {
 		 public LoginTask(Context context) {
 		        super(context);
@@ -286,24 +261,6 @@ public class LoginActivity extends Activity {
 	        }
 	    }
 	}
-
-	
-	/*
-	 * Login fragment
-	 */
-	public static class LoginFragment extends Fragment {
-
-		public LoginFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_login,
-					container, false);
-			return rootView;
-		}
-		
-	}
+*/
 
 }

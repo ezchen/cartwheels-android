@@ -69,6 +69,8 @@ public class MarkerActivity extends Activity {
     private void setUpMap() {
         addMarkersToMap(items);
         
+        mMap.setMyLocationEnabled(true);
+        
         final View mapView = getFragmentManager().findFragmentById(R.id.map).getView();
         if (mapView.getViewTreeObserver().isAlive()) {
             mapView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {

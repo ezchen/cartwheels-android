@@ -29,15 +29,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.cartwheels.tasks.DefaultTaskFragment;
+import com.cartwheels.tasks.LoginTask;
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class RegisterActivity extends Activity {
 
-	private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/registrations";
+	
 	
 	private SharedPreferences preferences;
 	private String pictureName;
@@ -89,6 +92,7 @@ public class RegisterActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/*
 	public void register(View view) {
 	    EditText userEmailField = (EditText) findViewById(R.id.userEmail);
 	    userEmail = userEmailField.getText().toString();
@@ -124,7 +128,7 @@ public class RegisterActivity extends Activity {
 	            registerTask.execute(REGISTER_API_ENDPOINT_URL);
 	    }
 	}
-	
+	*/
 	
 	/*
 	 * Methods used to handle the picture capture
@@ -253,8 +257,10 @@ public class RegisterActivity extends Activity {
 	/*
 	 * fragment used for people who want to register as a user
 	 */
-	public static class registerUserFragment extends Fragment {
+	public static class registerUserFragment extends AbstractRegisterFragment {
 
+		private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/registrations";
+		
 		public registerUserFragment() {
 		}
 
@@ -263,14 +269,26 @@ public class RegisterActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_register,
 					container, false);
+			
+			Button button = (Button) rootView.findViewById(R.id.registerButton);
+			button.setOnClickListener(this);
 			return rootView;
+		}
+		
+		@Override
+		protected void execute(
+				DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment) {
+			fragment.execute(REGISTER_API_ENDPOINT_URL);
 		}
 	}
 	
 	/*
 	 * fragment used for people who want to register as a cart
 	 */
-	public static class registerOwnerFragment extends Fragment {
+	public static class registerOwnerFragment extends AbstractRegisterFragment {
+		
+		private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/owners/registrations";
+		
 		public registerOwnerFragment() {
 			
 		}
@@ -280,7 +298,16 @@ public class RegisterActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_register_owner,
 					container, false);
+			
+			Button button = (Button) rootView.findViewById(R.id.registerOwnerButton);
+			button.setOnClickListener(this);
 			return rootView;
+		}
+		
+		@Override
+		protected void execute(
+				DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment) {
+			fragment.execute(REGISTER_API_ENDPOINT_URL);
 		}
 	}
 
