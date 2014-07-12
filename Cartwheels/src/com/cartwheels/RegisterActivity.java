@@ -173,6 +173,7 @@ public class RegisterActivity extends Activity {
 	    return image;
 	}
 	
+	/*
 	private class RegisterTask extends UrlJsonAsyncTask {
 		public RegisterTask(Context context) {
 			super(context);
@@ -254,6 +255,7 @@ public class RegisterActivity extends Activity {
 	    }
 	}
 
+*/
 	/*
 	 * fragment used for people who want to register as a user
 	 */

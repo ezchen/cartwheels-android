@@ -239,17 +239,21 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 			case 0:
 				Location location = ((LocationActivity)getActivity()).getLastLocation();
 				
-				String currentLat = location.getLatitude() + "";
-				String currentLon = location.getLongitude() + "";
-				
-				String cartLat = item.lat;
-				String cartLon = item.lon;
-				
-				String url = "http://maps.google.com/maps?saddr=" +
-						currentLat + "," + currentLon + "&daddr=" + cartLat + "," + cartLon;
-				intent = new Intent(android.content.Intent.ACTION_VIEW,
-						Uri.parse(url));
-				startActivity(intent);
+				if (location != null) {
+					String currentLat = location.getLatitude() + "";
+					String currentLon = location.getLongitude() + "";
+					
+					String cartLat = item.lat;
+					String cartLon = item.lon;
+					
+					String url = "http://maps.google.com/maps?saddr=" +
+							currentLat + "," + currentLon + "&daddr=" + cartLat + "," + cartLon;
+					intent = new Intent(android.content.Intent.ACTION_VIEW,
+							Uri.parse(url));
+					startActivity(intent);
+				} else {
+					
+				}
 				break;
 			case 1:
 				intent = new Intent(getActivity(), WriteReviewActivity.class);
