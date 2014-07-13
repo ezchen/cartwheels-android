@@ -47,7 +47,7 @@
 	        android:layout_height="50dp"
 	        android:layout_alignParentRight="true"
 	        android:layout_below="@id/loginButton"
-	        android:text="login as user" />
+	        android:text="login as owner" />
 	    
 	    <LinearLayout 
 	        android:layout_width="match_parent"

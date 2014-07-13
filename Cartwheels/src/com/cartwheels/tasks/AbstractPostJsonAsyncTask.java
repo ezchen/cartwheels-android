@@ -13,14 +13,11 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public abstract class AbstractPostJsonAsyncTask<Results> extends AsyncTask<String, Void, Results> {
+public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
 	private HashMap<String, String> objectValues;
 	
 	private HashMap<String, String> innerObjectValues;
-	
-	@SuppressWarnings("rawtypes")
-	private DefaultTaskFragment fragment;
 
 	private String innerJsonObjKey;
 
@@ -53,15 +50,17 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AsyncTask<Strin
 				}
 			}
 			
-			for (String key : innerObjectValues.keySet()) {
-				if (key.length() > 0 && innerObjectValues.get(key) != null) {
-					String value = innerObjectValues.get(key);
-					innerJsonObj.put(key, value);
-					Log.d("doInBackground defaultPostJsonAsyncTask", value);
+			if (innerJsonObjKey != null) {
+				for (String key : innerObjectValues.keySet()) {
+					if (key.length() > 0 && innerObjectValues.get(key) != null) {
+						String value = innerObjectValues.get(key);
+						innerJsonObj.put(key, value);
+						Log.d("doInBackground defaultPostJsonAsyncTask", value);
+					}
 				}
+				
+				holder.put(innerJsonObjKey, innerJsonObj);
 			}
-			
-			holder.put(innerJsonObjKey, innerJsonObj);
 			Log.d("doInBackground", "" + innerJsonObjKey);
 			json.put("success", false);
 			
@@ -79,13 +78,6 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AsyncTask<Strin
 			e.printStackTrace();
 		}
 		return results;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void onPostExecute(Results items) {
-		fragment.onTaskFinished(items);
-		super.onPostExecute(items);
 	}
 	
 	public void put(String key, String value) {
@@ -106,11 +98,6 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AsyncTask<Strin
 		post.setHeader("Content-Type", "application/json");
 		
 		return post;
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public void setFragment(DefaultTaskFragment fragment) {
-		this.fragment = fragment;
 	}
 	
 	protected abstract Results getResult(JSONObject json);

@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -27,14 +26,12 @@ import android.widget.TextView;
 
 import com.cartwheels.custom_views.RatingView;
 import com.cartwheels.tasks.CheckinTask;
+import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
+import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
 import com.cartwheels.tasks.UploadPhotoTask;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.drive.internal.g;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartFragment extends Fragment implements OnItemClickListener {
@@ -213,7 +210,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 	private void setupOptions(View rootView) {
 		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
 		
-		ObjectViewCartItem[] options = new ObjectViewCartItem[4];
+		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
 		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
 												R.drawable.ic_action_next_item);
 		/* options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
@@ -224,7 +221,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 												R.drawable.ic_action_next_item);
 		options[3] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
 												R.drawable.ic_action_next_item);
-		
+		options[4] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Claim Cart",
+												R.drawable.ic_action_next_item);
 		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
@@ -265,6 +263,9 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 				break;
 			case 3:
 				checkin();
+				break;
+			case 4:
+				claimCart();
 				break;
 		}
 	}
@@ -349,5 +350,34 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		String url;
 		url = "http://cartwheels.us/carts/" + target_id + "/checkins";
 		fragment.execute(url);
+	}
+	
+	private void claimCart() {
+		
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		String permit_number = item.permit;
+		
+		String cartId = item.cartId;
+		
+		String[] path = new String[3];
+		path[0] = "carts";
+		path[1] = cartId;
+		path[2] = "claim";
+		
+		DefaultGetJsonAsyncTask asyncTask = new DefaultGetJsonAsyncTask("http", "cartwheels.us", path);
+		
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		asyncTask.put("permit_number", permit_number);
+		
+		DefaultTaskFragment<DefaultGetJsonAsyncTask, ViewCartFragment, Boolean> fragment =
+				new DefaultTaskFragment<DefaultGetJsonAsyncTask, ViewCartFragment, Boolean>(10);
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		
+		fragment.execute();
 	}
 }

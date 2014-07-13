@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import com.cartwheels.R;
 
 public class DefaultTaskFragment<
-						Task extends AbstractPostJsonAsyncTask< Results>,
+						Task extends AbstractJsonAsyncTask<Results>,
 						TargetFragment extends Fragment,
 						Results>
 						extends DialogFragment {
@@ -146,7 +146,6 @@ public class DefaultTaskFragment<
 	}
 	
 
-	@SuppressWarnings("unchecked")
 	public void execute() {
 		asyncTask.execute();
 	}

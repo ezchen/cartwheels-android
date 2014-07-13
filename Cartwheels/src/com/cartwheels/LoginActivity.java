@@ -25,8 +25,6 @@ import com.savagelook.android.UrlJsonAsyncTask;
 
 public class LoginActivity extends Activity {
 
-
-	
 	private SharedPreferences preferences;
 	
 	@Override

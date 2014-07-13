@@ -32,14 +32,11 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		FragmentManager manager = getFragmentManager();
 		
 		Fragment fragment = null;
-		try {
 			fragment = manager.findFragmentByTag("loginFragment");
-		} catch(ClassCastException e) {
-			e.printStackTrace();
-		}
 		if (fragment != null)
 			fragment.setTargetFragment(this, 8);
 	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -126,8 +123,11 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		switch (view.getId()) {
 		case R.id.loginButton:
 			login("user");
+			break;
 		case R.id.loginAsOwnerButton:
 			login("owner");
+			Log.d("onClick loginFragment", "loggedInAsOwner");
+			break;
 		}
 	}
 }
