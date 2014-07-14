@@ -12,7 +12,7 @@ public class WriteReviewActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_default);
 		
 		Intent intent = getIntent();
 		Bundle arguments = intent.getExtras();

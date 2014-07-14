@@ -23,6 +23,7 @@ import com.cartwheels.tasks.LoginTask;
 public class LoginFragment extends Fragment implements OnClickListener {
 
 	private final static String LOGIN_API_ENDPOINT_URL = "http://cartwheels.us/mobile/sessions";
+	private final static String LOGIN_API_OWNER_ENDPOINT_URL = "http://cartwheels.us/mobile/owners/sessions";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	    SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 	    SharedPreferences.Editor editor = preferences.edit();
 	    editor.putString("email", userEmail);
+	    editor.putString("LoginType", innerKey);
 	    editor.commit();
 	    
 	    LoginTask asyncTask = new LoginTask();
@@ -77,7 +79,12 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	    fragment.setTargetFragment(this, 8);
 	    fragment.show(getFragmentManager(), "loginFragment");
 	    
-	    fragment.execute(LOGIN_API_ENDPOINT_URL);
+	    if (innerKey.equals("user")) {
+	    	fragment.execute(LOGIN_API_ENDPOINT_URL);
+	    } else {
+	    	fragment.execute(LOGIN_API_OWNER_ENDPOINT_URL);
+	    }
+
 	}
 	
 	@Override

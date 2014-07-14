@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.cartwheels.tasks.DefaultDeleteAsyncTask;
+import com.cartwheels.tasks.DefaultTaskFragment;
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class LoginActivity extends Activity {
@@ -31,11 +34,6 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new LoginFragment()).commit();
-		}
 		
 		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 	}
@@ -46,7 +44,8 @@ public class LoginActivity extends Activity {
 		
 		Intent intent = getIntent();
 		if (intent.getBooleanExtra("logout", false)) {
-			intent.removeExtra("logout");
+			if (intent.hasExtra("logout"))
+				intent.removeExtra("logout");
 			logout();
 		}
 	}
@@ -83,9 +82,39 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void logout() {
-		LogoutTask logoutTask = new LogoutTask(LoginActivity.this);
-		logoutTask.setMessageLoading("Logging out...");
-		logoutTask.execute();
+		Fragment fragment = getFragmentManager().findFragmentById(R.id.loginFragment);
+		
+		SharedPreferences preferences = getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String loginType = preferences.getString("LoginType", "user");
+		
+		String[] path;
+		if (loginType.equals("user")) {
+			path = new String[2];
+			path[0] = "mobile";
+			path[1] = "sessions";
+		} else {
+			path = new String[3];
+			path[0] = "mobile";
+			path[1] = "owners";
+			path[2] = "sessions";
+		}
+
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		DefaultDeleteAsyncTask asyncTask = new DefaultDeleteAsyncTask("http", "cartwheels.us", path);
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		
+		DefaultTaskFragment<DefaultDeleteAsyncTask, LoginFragment, Boolean> taskFragment =
+				new DefaultTaskFragment<DefaultDeleteAsyncTask, LoginFragment, Boolean>(11);
+		
+		taskFragment.setTask(asyncTask);
+		asyncTask.setFragment(taskFragment);
+		taskFragment.setTargetFragment(fragment, 11);
+		taskFragment.show(getFragmentManager(), "logoutFragment");
+		
+		taskFragment.execute();
 	}
 
 	public void switchRegister(View view) {
@@ -99,166 +128,5 @@ public class LoginActivity extends Activity {
 		intent.putExtra("user", false);
 		startActivity(intent);
 	}
-	
-	private class LogoutTask extends UrlJsonAsyncTask {
-		public LogoutTask(Context context) {
-			super(context);
-		}
-		
-		@Override
-		protected JSONObject doInBackground(String... urls) {
-			DefaultHttpClient client = new DefaultHttpClient();
-			String response = null;
-			JSONObject json = new JSONObject();
-			
-			Log.d("doInBackground LogoutTask", preferences.getString("AuthToken", "no value"));
-			Log.d("doInBackground LogoutTask", preferences.getString("email","no value"));
-			
-			try {
-				Builder uri = new Builder();
-				uri.scheme("http").authority("cartwheels.us").appendPath("mobile")
-					.appendPath("sessions");
-				
-				uri.appendQueryParameter("auth_token", preferences.getString("AuthToken", ""));
-				uri.appendQueryParameter("email", preferences.getString("email", ""));
-				
-
-				HttpDelete delete = new HttpDelete(uri.build().toString());
-				
-				// default return values
-				json.put("success", false);
-				json.put("info", "Logout Failed");
-				Log.d("email", preferences.getString("email", ""));
-				Log.d("AuthToken", preferences.getString("AuthToken",""));
-				
-				// request headers
-				delete.setHeader("Accept", "application/json");
-				delete.setHeader("Content-Type", "application/json");
-				
-				ResponseHandler<String> responseHandler = new BasicResponseHandler();
-				response = client.execute(delete, responseHandler);
-				json = new JSONObject(response);
-			} catch (HttpResponseException e) {
-				e.printStackTrace();
-				Log.e("doInBackground LogoutTask HTTP", e.toString());
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Log.e("doInBackground LogoutTask JSON", e.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-				Log.e("doInBackground LogoutTask IO", e.toString());
-			}
-			
-			return json;
-		}
-		
-		@Override
-		protected void onPostExecute(JSONObject json) {
-			
-			// delete the auth token on android
-			// set need to log out to false
-			try {
-				if (json.getBoolean("success")) {
-
-				} else{
-					// keep the auth token, but set need to log out to true
-					
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			super.onPostExecute(json);
-		}
-	}
-	
-	/*
-	private class LoginTask extends UrlJsonAsyncTask {
-		 public LoginTask(Context context) {
-		        super(context);
-		    }
-
-	    @Override
-	    protected JSONObject doInBackground(String... urls) {
-	        DefaultHttpClient client = new DefaultHttpClient();
-	        HttpPost post = new HttpPost(urls[0]);
-	        JSONObject holder = new JSONObject();
-	        JSONObject userObj = new JSONObject();
-	        String response = null;
-	        JSONObject json = new JSONObject();
-
-	        try {
-	            try {
-	                // setup the returned values in case
-	                // something goes wrong
-	                json.put("success", false);
-	                json.put("info", "Something went wrong. Retry!");
-	                // add the user email and password to
-	                // the params
-	                userObj.put("email", userEmail);
-	                userObj.put("password", userPassword);
-	                holder.put("user", userObj);
-	                StringEntity se = new StringEntity(holder.toString());
-	                post.setEntity(se);
-	                
-	                SharedPreferences.Editor editor = preferences.edit();
-	                editor.putString("email", userEmail);
-	                editor.commit();
-
-	                // setup the request headers
-	                post.setHeader("Accept", "application/json");
-	                post.setHeader("Content-Type", "application/json");
-
-	                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	                response = client.execute(post, responseHandler);
-	                json = new JSONObject(response);
-
-	            } catch (HttpResponseException e) {
-	                e.printStackTrace();
-	                Log.e("ClientProtocol", "" + e);
-	                json.put("info", "Email and/or password are invalid. Retry!");
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                Log.e("IO", "" + e);
-	            }
-	        } catch (JSONException e) {
-	            e.printStackTrace();
-	            Log.e("JSON", "" + e);
-	        }
-
-	        return json;
-	    }
-
-	    @Override
-	    protected void onPostExecute(JSONObject json) {
-	        try {
-	            if (json.getBoolean("success")) {
-	                // everything is ok
-	                SharedPreferences.Editor editor = preferences.edit();
-	                // save the returned auth_token into
-	                // the SharedPreferences
-	                editor.putString("AuthToken", json.getJSONObject("data").getString("auth_token"));
-	                editor.commit();
-	                
-	                Log.d("onPostExecute authToken", json.getJSONObject("data").getString("auth_token"));
-
-	                // launch the HomeActivity and close this one
-	                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-	                startActivity(intent);
-	                finish();
-	            }
-	            Toast.makeText(context, json.getString("info"), Toast.LENGTH_SHORT).show();
-	        } catch (Exception e) {
-	            // something went wrong: show a Toast
-	            // with the exception message
-	            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-	        } finally {
-	            super.onPostExecute(json);
-	        }
-	    }
-	}
-*/
 
 }
