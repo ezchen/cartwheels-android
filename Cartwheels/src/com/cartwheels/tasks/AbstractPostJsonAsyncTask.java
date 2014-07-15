@@ -15,7 +15,7 @@ import android.util.Log;
 
 public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
-	private HashMap<String, String> objectValues;
+	protected HashMap<String, String> objectValues;
 	
 	private HashMap<String, String> innerObjectValues;
 
