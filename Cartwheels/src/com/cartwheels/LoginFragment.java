@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.cartwheels.tasks.DefaultTaskFragment;
-import com.cartwheels.tasks.LoginTask;
+import com.cartwheels.tasks.LoginWithInfoTask;
+import com.cartwheels.tasks.LoginWithInfoTaskFragment;
 
 /*
  * Login fragment
@@ -63,10 +63,9 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	    editor.putString("LoginType", innerKey);
 	    editor.commit();
 	    
-	    LoginTask asyncTask = new LoginTask();
+	    LoginWithInfoTask asyncTask = new LoginWithInfoTask();
 	    
-	    DefaultTaskFragment<LoginTask, LoginFragment, String> fragment =
-	    		new DefaultTaskFragment<LoginTask, LoginFragment, String>(8);
+	    LoginWithInfoTaskFragment fragment = new LoginWithInfoTaskFragment(8);
 	    
 	    asyncTask.setInnerKey(innerKey);
 	    
@@ -92,12 +91,12 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		if (requestCode == 8 && resultCode == Activity.RESULT_OK) {
 			boolean completed = false;
 			if (data != null) {
-				if (data.hasExtra("result")) {
+				if (data.hasExtra("auth_token")) {
 					SharedPreferences preferences = 
 							getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 					
 					SharedPreferences.Editor editor = preferences.edit();
-					String auth_token = data.getStringExtra("result");
+					String auth_token = data.getStringExtra("auth_token");
 					editor.putString("AuthToken", auth_token);
 					editor.commit();
 					

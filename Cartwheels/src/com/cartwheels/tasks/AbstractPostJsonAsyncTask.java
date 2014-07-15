@@ -17,9 +17,9 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 	
 	protected HashMap<String, String> objectValues;
 	
-	private HashMap<String, String> innerObjectValues;
+	protected HashMap<String, String> innerObjectValues;
 
-	private String innerJsonObjKey;
+	protected String innerJsonObjKey;
 
 	public AbstractPostJsonAsyncTask() {
 		objectValues = new HashMap<String, String>();

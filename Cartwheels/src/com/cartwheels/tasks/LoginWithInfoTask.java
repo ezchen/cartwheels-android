@@ -25,13 +25,17 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		JSONObject json = new JSONObject();
 		
 		Builder uri = new Builder();
-		uri.scheme("http").authority("cartwheels.us").appendPath("users")
+		uri.scheme("http").authority("cartwheels.us").appendPath(innerJsonObjKey + "s")
 			.appendPath("data");
-		uri.appendQueryParameter("email", objectValues.get("email"));
+		
+		String email = innerObjectValues.get("email");
+		Log.d("email LoginWIthInfoTask", email);
+		
+		uri.appendQueryParameter("email", innerObjectValues.get("email"));
 		uri.appendQueryParameter("auth_token", info.get("auth_token"));
 		uri.appendQueryParameter("offset", "0");
-		uri.appendQueryParameter("limit", "1");
-		uri.appendQueryParameter("user[email]", objectValues.get("email"));
+		uri.appendQueryParameter("limit", "20");
+		uri.appendQueryParameter("owner[email]", innerObjectValues.get("email"));
 		
 		HttpGet get = new HttpGet(uri.build().toString());
 		
@@ -45,7 +49,7 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 			
 			json = new JSONObject(response);
 			
-			Log.d("doInBackground ReviewTask", json.toString());
+			Log.d("doInBackground LoginWithInfoTask", json.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
