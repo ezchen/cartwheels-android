@@ -2,17 +2,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="90dp"
-    android:padding="10dp" >
+    android:background="@drawable/card"
+    android:padding="10dp"
+    android:paddingLeft="0dp"
+    android:layout_margin="0dp" >
  
     <!-- Cart Picture -->
     <ImageView
         android:id="@+id/cartPicture"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerInside"
-        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
         android:contentDescription="@string/cart_image_description" />
  
     <!-- Cart Name -->
@@ -20,6 +26,10 @@
         android:id="@+id/cartName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ems="25"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_toRightOf="@id/cartPicture"
@@ -27,13 +37,22 @@
         android:text="@string/cart_name"
         android:textColor="#000000" />
     
+    <RatingBar
+        android:id="@+id/cartRating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/cartPicture"
+        android:layout_below="@id/cartName"/>
+    
     <!-- Cart Zipcode -->
     <TextView
         android:id="@+id/cartZipcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:layout_below="@id/cartName"
+        android:layout_below="@id/cartRating"
         android:layout_toRightOf="@id/cartPicture"
         android:paddingLeft="10dp"
         android:text="@string/zipcode" />
@@ -49,5 +68,6 @@
         android:paddingLeft="10dp"
         android:text="@string/permit_number"
         android:textSize="12sp" />
+
  
 </RelativeLayout>

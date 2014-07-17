@@ -23,6 +23,7 @@ import android.util.Log;
 import android.util.LruCache;
 
 import com.cartwheels.ObjectCartListItem;
+import com.squareup.picasso.Picasso;
 
 public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]> 
 									implements myAsyncTask {

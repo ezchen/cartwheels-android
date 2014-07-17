@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -119,6 +120,28 @@ public class NavigationDrawerFragment extends Fragment {
         		R.layout.navigation_drawer_header,
         		container,
         		false);
+        
+        /* Change the username and whether or not they are a cart owner */
+        TextView username = (TextView) header.findViewById(R.id.username);
+        TextView isCartOwner = (TextView) header.findViewById(R.id.cartOwner);
+        
+        Activity activity = getActivity();
+        
+        if (activity != null) {
+        	SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+        	
+        	String name = preferences.getString("name", "Username");
+        	String userType = preferences.getString("userType", "User");
+        	
+        	if (userType.equals("owner")) {
+        		userType = "Cart Owner";
+        	} else {
+        		userType = "User";
+        	}
+        	
+        	username.setText(name);
+        	isCartOwner.setText(userType);
+        }
         mDrawerListView.addHeaderView(header, null, false);
         return mDrawerListView;
     }

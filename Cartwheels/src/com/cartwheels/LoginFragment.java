@@ -98,6 +98,12 @@ public class LoginFragment extends Fragment implements OnClickListener {
 					SharedPreferences.Editor editor = preferences.edit();
 					String auth_token = data.getStringExtra("auth_token");
 					editor.putString("AuthToken", auth_token);
+					
+					Bundle extras = data.getExtras();
+					for (String key : extras.keySet()) {
+						String extra = extras.getString(key);
+						editor.putString(key, extra);
+					}
 					editor.commit();
 					
 					// start the main activity
@@ -120,6 +126,12 @@ public class LoginFragment extends Fragment implements OnClickListener {
 				editor.remove("email");
 				editor.commit();
 			}
+		} else if (requestCode == 11 && resultCode == Activity.RESULT_OK) {
+			// clear everythign in sharedpreferences
+			SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+			SharedPreferences.Editor editor = preferences.edit();
+			editor.clear();
+			editor.commit();
 		}
 	}
 

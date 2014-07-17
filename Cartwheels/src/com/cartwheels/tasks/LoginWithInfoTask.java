@@ -6,6 +6,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,8 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		uri.scheme("http").authority("cartwheels.us").appendPath(innerJsonObjKey + "s")
 			.appendPath("data");
 		
+		info.put("userType", innerJsonObjKey);
+		
 		String email = innerObjectValues.get("email");
 		Log.d("email LoginWIthInfoTask", email);
 		
@@ -49,7 +52,25 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 			
 			json = new JSONObject(response);
 			
-			Log.d("doInBackground LoginWithInfoTask", json.toString());
+			JSONArray jsonInfo = json.getJSONArray("data");
+			JSONObject innerJson = jsonInfo.getJSONObject(0);
+			
+			// take user name and time created
+			String name = innerJson.getString("name");
+			String createdAt = innerJson.getString("created_at");
+			
+			info.put("name", name);
+			info.put("createdAt", createdAt);
+			
+			// take two carts to show as a preview on the home page later
+			JSONArray jsonCarts = innerJson.getJSONArray("carts");
+			
+			for (int i = 0; i < jsonCarts.length(); i++) {
+				String cartId = jsonCarts.getJSONObject(i).getString("id");
+				info.put("cartId" + i, cartId);
+			}
+			
+			Log.d("doInBackground LoginWithInfoTask", jsonCarts.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -9,44 +9,75 @@
 	    android:gravity="right"
 	    tools:context="com.cartwheels.LoginActivity$PlaceHolderFragment" >
 	    
+	    <ImageView
+	        android:id="@+id/loginLogo"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="30dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/cw_logo_no_text_white" />
+	    	    
+	    <TextView
+	        android:id="@+id/loginCartwheels"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/loginLogo"
+	        android:layout_centerHorizontal="true"
+	        android:textColor="@android:color/white"
+	        android:textSize="40sp"
+	        android:textStyle="bold"
+	        android:text="Cartwheels" />
+	    
 	    <EditText
 	        android:id="@+id/userEmail"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
+	        android:layout_height="48dp"
 	        android:layout_margin="5dp"
-	        android:layout_alignParentTop="true"
+	        android:layout_below="@id/loginCartwheels"
 	        android:layout_alignParentLeft="true"
 	        android:ems="10"
 	        android:hint="@string/user_email"
-	        android:inputType="textEmailAddress" >
+	        android:inputType="textEmailAddress"
+	        android:background="@drawable/edittext_rounded_corners" >
 	        <requestFocus />
 	    </EditText>
 	    
 	    <EditText
 	        android:id="@+id/userPassword"
 	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
+	        android:layout_height="48dp"
 	        android:layout_margin="5dp"
 	        android:layout_alignParentLeft="true"
 	        android:layout_below="@id/userEmail"
 	        android:ems="10"
 	        android:hint="@string/user_password"
-	        android:inputType="textPassword" />
+	        android:inputType="textPassword"
+	        android:background="@drawable/edittext_rounded_corners" />
 	    
 	    <Button
             android:id="@+id/loginButton"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="500dp"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/userPassword"
+            android:background="@drawable/buttonstate"
             android:text="@string/login" />
 	    
 	    <Button
 	        android:id="@+id/loginAsOwnerButton"
-	        android:layout_width="150dp"
+	        android:layout_width="500dp"
 	        android:layout_height="50dp"
-	        android:layout_alignParentRight="true"
+	        android:layout_marginTop="0dp"
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginBottom="10dp"
+	        android:textColor="@android:color/white"
+	        android:layout_centerHorizontal="true"
 	        android:layout_below="@id/loginButton"
+	        android:background="@drawable/buttonstate"
 	        android:text="login as owner" />
 	    
 	    <LinearLayout 
@@ -55,20 +86,18 @@
 	        android:layout_alignParentBottom="true"
 	        android:orientation="horizontal"
 	        android:weightSum="2"
+	        android:background="@android:color/transparent"
 	        style="@android:style/ButtonBar">
 		    <Button
 		        android:id="@+id/switchRegisterButtonUser"
 		        android:layout_height="wrap_content"
 		        android:layout_width="0dp"
 		        android:layout_weight="1"
+		        android:background="@android:color/transparent"
 		        android:onClick="switchRegister"
 		        style="?android:attr/buttonBarButtonStyle"
+		        android:textColor="@android:color/white"
 		        android:text="@string/registerUser"/>
-		    
-		   <View 
-		        android:layout_height="fill_parent"
-   			    android:layout_width="2px"
-    		 	android:background="@android:color/white"/>
 		    
 		    <Button
 		        android:id="@+id/switchRegisterButtonOwner"
@@ -77,8 +106,11 @@
 		        android:layout_weight="1"
 		        android:onClick="switchRegisterOwner"
 		        style="?android:attr/buttonBarButtonStyle"
+		        android:background="@android:color/transparent"
+		        android:textColor="@android:color/white"
 		        android:text="@string/registerOwner" />
 	    </LinearLayout>
-	        
+
+
 	        
 	</RelativeLayout>

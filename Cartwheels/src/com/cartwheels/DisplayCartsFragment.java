@@ -1,5 +1,8 @@
 package com.cartwheels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -13,25 +16,35 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.SearchTaskFragment;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
 
 public class DisplayCartsFragment extends Fragment
 											implements OnItemClickListener,
-														SearchListener {
+														SearchListener, OnScrollListener {
 
 	private ListView displayCarts;
 	private ObjectCartListItem[] items;
 	
+	private ArrayList<ObjectCartListItem> arrayListItems;
+	private SwingBottomInAnimationAdapter swingBottomInAnimationAdapter;
+	private CartListItemAdapter adapter;
+	
 	private FragmentManager fragmentManager;
+	
+	boolean task;
+	boolean moreResults;
 	
 	private String lastTextQuery;
 	private String lastLocationQuery;
@@ -89,9 +102,17 @@ public class DisplayCartsFragment extends Fragment
 		
 		View view = inflater.inflate(R.layout.view_more_carts, container);
 		View previousCarts = inflater.inflate(R.layout.load_previous_carts, container);
-		displayCarts.addFooterView(previousCarts);
-		displayCarts.addFooterView(view);
 		
+		if (savedInstanceState == null) {
+			arrayListItems = new ArrayList<ObjectCartListItem>();
+		} else {
+			arrayListItems = savedInstanceState.getParcelableArrayList("ObjectCartArrayListItems");
+		}
+		adapter = new CartListItemAdapter(R.layout.listview_cart_row, getActivity(), arrayListItems);
+		swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
+		swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+		swingBottomInAnimationAdapter.setAbsListView(displayCarts);
+		displayCarts.setAdapter(swingBottomInAnimationAdapter);
 		
 		return displayCarts;
 	}
@@ -111,12 +132,16 @@ public class DisplayCartsFragment extends Fragment
 		if (savedInstanceState != null) {
 			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
 			
+			arrayListItems = savedInstanceState.getParcelableArrayList("ObjectCartArrayListItems");
+			
 			if (items == null)
 				return;
 			// recreate the list
-			ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
-																R.layout.listview_cart_row, items);
-			displayCarts.setAdapter(adapter);
+			adapter = new CartListItemAdapter(R.layout.listview_cart_row, getActivity(), arrayListItems);
+			swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
+			swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+			swingBottomInAnimationAdapter.setAbsListView(displayCarts);
+			displayCarts.setAdapter(swingBottomInAnimationAdapter);
 			
 			// set the offset and limit again
 			offset = savedInstanceState.getInt("offset");
@@ -125,6 +150,12 @@ public class DisplayCartsFragment extends Fragment
 			lastTextQuery = savedInstanceState.getString("lastTextQuery", "");
 			lastLocationQuery = savedInstanceState.getString("lastLocationQuery", "");
 		} else {
+			arrayListItems = new ArrayList<ObjectCartListItem>();
+			adapter = new CartListItemAdapter(R.layout.listview_cart_row, getActivity(), arrayListItems);
+			swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(adapter);
+			swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+			swingBottomInAnimationAdapter.setAbsListView(displayCarts);
+			displayCarts.setAdapter(swingBottomInAnimationAdapter);
 			offset = 0;
 			lastTextQuery = "";
 			lastLocationQuery = "";
@@ -138,6 +169,7 @@ public class DisplayCartsFragment extends Fragment
 		outState.putInt("limit", limit);
 		outState.putString("lastTextQuery", lastTextQuery);
 		outState.putString("lastLocationQuery", lastLocationQuery);
+		outState.putParcelableArrayList("ObjectCartArrayListItems", arrayListItems);
 		super.onSaveInstanceState(outState);
 	}
 	
@@ -157,9 +189,19 @@ public class DisplayCartsFragment extends Fragment
 			return;
 		}
 		
-		ArrayAdapter<ObjectCartListItem> adapter = new CartListItemAdapter(getActivity(),
-															R.layout.listview_cart_row, items);
-		displayCarts.setAdapter(adapter);
+		// no more results
+		if (items.length < limit) {
+			moreResults = false;
+		}
+		
+		if (displayCarts != null) {
+			task = false;
+			arrayListItems.addAll(Arrays.asList(items));
+			swingBottomInAnimationAdapter.notifyDataSetChanged();
+			adapter.notifyDataSetChanged();
+			displayCarts.setOnScrollListener(this);
+			displayCarts.invalidate();
+		}
 	}
 
 	@Override
@@ -182,7 +224,7 @@ public class DisplayCartsFragment extends Fragment
 		}
 		
 		Intent intent = new Intent(getActivity(), ViewCartActivity.class);
-		intent.putExtra("ObjectCartListItem", items[position]);
+		intent.putExtra("ObjectCartListItem", arrayListItems.get(position));
 		
 		startActivity(intent);
 	}
@@ -245,10 +287,19 @@ public class DisplayCartsFragment extends Fragment
 			searchTask.put("tq", textQueryData);
 			searchTask.put("lq", locationQueryData);
 			
+			if (lastTextQuery.equals(textQueryData) && lastLocationQuery.equals(locationQueryData)) {
+				Toast.makeText(getActivity(), "Same Search Input", Toast.LENGTH_LONG).show();;
+				hide();
+				return;
+			}
 			lastTextQuery = textQueryData;
 			lastLocationQuery = locationQueryData;
 
 			offset = 0;
+			moreResults = true;
+			arrayListItems.clear();
+			adapter.notifyDataSetChanged();
+			swingBottomInAnimationAdapter.notifyDataSetChanged();
 			
 			// offset always starts at 0
 			searchTask.put("offset", 0 + "");
@@ -279,5 +330,34 @@ public class DisplayCartsFragment extends Fragment
 		taskFragment.setTargetFragment(this, fragmentId);
 		taskFragment.show(getFragmentManager(), fragmentTag);
 		taskFragment.execute();
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+        boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+        loadMore = loadMore && arrayListItems != null && arrayListItems.size() >= 20;
+        if(loadMore && !task && moreResults) {
+        	task = true;
+        	offset += 20;
+            getMoreCarts();
+        }
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void hide() {
+		SearchView view = (SearchView) getActivity().findViewById(R.id.searchView);
+		view.hide();
+	}
+
+	public void show() {
+		SearchView view = (SearchView) getActivity().findViewById(R.id.searchView);
+		view.show();
 	}
 }

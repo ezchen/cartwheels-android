@@ -48,4 +48,6 @@
     <string name="tab_section1">Cart</string>
     <string name="tab_section2">Reviews</string>
     <string name="tab_section3">Photos</string>
+    <string name="title_activity_my_profile">MyProfileActivity</string>
+
 </resources>

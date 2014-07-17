@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.cartwheels.DisplayCartsFragment;
@@ -41,7 +43,7 @@ public class SearchTaskFragment extends DialogFragment {
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
 		getDialog().setTitle(null);
-		
+		getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		getDialog().setCanceledOnTouchOutside(false);
 		
@@ -99,7 +101,10 @@ public class SearchTaskFragment extends DialogFragment {
 			Log.d("taskFinished", "fragment is not null");
 			DisplayCartsFragment fragment = (DisplayCartsFragment) getTargetFragment();
 			fragment.buildList(items);
-			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, null);
+			
+			Intent intent = new Intent();
+			intent.putExtra("ObjectCartListItems", items);
+			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, intent);
 		}
 	}
 	

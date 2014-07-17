@@ -12,12 +12,20 @@ public class ObjectCartListItem implements Parcelable {
 	public String lon;
 	public String cartId;
 	public int rating;
+	public String createdAt;
+	public String description;
+	
 	
 	public ObjectCartListItem() {
 		bitmapUrl = null;
-		cartName = null;
-		zipcode = null;
-		permit = null;
+		cartName = "Unknown";
+		zipcode = "Unknown";
+		permit = "Unkmown";
+		lat = "Unknown";
+		lon = "Unknown";
+		cartId = "Unknown";
+		createdAt = "Unknown";
+		description = "Unknown";
 	}
 	
 	// Icon, cartName, zipCode, Permit
@@ -29,6 +37,9 @@ public class ObjectCartListItem implements Parcelable {
 		lat = parcel.readString();
 		lon = parcel.readString();
 		cartId = parcel.readString();
+		rating = parcel.readInt();
+		createdAt = parcel.readString();
+		description = parcel.readString();
 	}
 	
 	public ObjectCartListItem(String bitmapUrl, String cartName, String zipcode, String permit) {
@@ -76,6 +87,9 @@ public class ObjectCartListItem implements Parcelable {
 		parcel.writeString(lat);
 		parcel.writeString(lon);
 		parcel.writeString(cartId);
+		parcel.writeInt(rating);
+		parcel.writeString(createdAt);
+		parcel.writeString(description);
 	}
 	
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods

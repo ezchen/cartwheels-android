@@ -14,10 +14,10 @@ import android.os.AsyncTask;
 
 public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
-	private HashMap<String, String> objectValues;
-	private String scheme;
-	private String authority;
-	private String[] path;
+	protected HashMap<String, String> objectValues;
+	protected String scheme;
+	protected String authority;
+	protected String[] path;
 
 	public AbstractGetJsonAsyncTask(String scheme, String authority, String[] path) {
 		objectValues = new HashMap<String, String>();

@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.cartwheels.R;
@@ -45,11 +46,8 @@ public class DefaultTaskFragment<
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		progressBar.setVisibility(View.GONE);
-		getDialog().hide();
-		//progressBar.setVisibility(View.INVISIBLE);
-		view.setVisibility(View.GONE);
 		getDialog().setCanceledOnTouchOutside(false);
+		getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		
 		return view;
 	}
@@ -92,6 +90,12 @@ public class DefaultTaskFragment<
 		asyncTask = null;
 	}
 	
+	protected Intent getIntent(Results items) {
+		Intent intent = new Intent();
+		intent.putExtra("result", (Parcelable) items);
+		return intent;
+	}
+	
 	public void onTaskFinished(Results items) {
 		if (items instanceof Boolean) {
 			onTaskFinished((Boolean) items);
@@ -106,8 +110,7 @@ public class DefaultTaskFragment<
 			@SuppressWarnings("unchecked")
 			TargetFragment fragment = (TargetFragment) getTargetFragment();
 			
-			Intent intent = new Intent();
-			intent.putExtra("result", (Parcelable) items);
+			Intent intent = getIntent(items);
 			
 			fragment.onActivityResult(fragmentId, Activity.RESULT_OK, intent);
 		}

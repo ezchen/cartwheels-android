@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 import com.cartwheels.tasks.DefaultTaskFragment;
-import com.cartwheels.tasks.LoginTask;
+import com.cartwheels.tasks.RegisterTask;
 
 public abstract class AbstractRegisterFragment extends Fragment
 												implements OnClickListener {
@@ -73,7 +73,7 @@ public abstract class AbstractRegisterFragment extends Fragment
 		editor.putString("email", email);
 		editor.commit();
 		// basic fields that both users and owners have
-		LoginTask asyncTask = new LoginTask();
+		RegisterTask asyncTask = new RegisterTask();
 		
 		asyncTask.setInnerKey(innerKey);
 		asyncTask.putInner("email", email);
@@ -85,8 +85,8 @@ public abstract class AbstractRegisterFragment extends Fragment
 			asyncTask.putInner("zip_code", zipcode);
 		}
 		
-		DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment =
-				new DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String>(9);
+		DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String> fragment =
+				new DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String>(9);
 		
 		fragment.setTask(asyncTask);
 		asyncTask.setFragment(fragment);
@@ -97,5 +97,5 @@ public abstract class AbstractRegisterFragment extends Fragment
 		execute(fragment);
 	}
 	
-	protected abstract void execute(DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment);
+	protected abstract void execute(DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String> fragment);
 }

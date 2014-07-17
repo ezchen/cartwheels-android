@@ -72,8 +72,11 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 		
 		if (!open) {
 			// add to view
+			view.setVisibility(View.VISIBLE);
 			editTextQuery.setVisibility(View.VISIBLE);
 			editTextLocationQuery.setVisibility(View.VISIBLE);
+			Button button = (Button) view.findViewById(R.id.search_button);
+			button.setVisibility(View.VISIBLE);
 			
 			open = true;
 		} else {
@@ -102,6 +105,26 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 		return this.searchListener;
 	}
 	
+	public void hide() {
+		View view = findViewById(R.id.view_search);
+		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
+		EditText editTextLocationQuery = (EditText) findViewById(R.id.locationQuery);
+		
+		editTextQuery.setVisibility(View.GONE);
+		editTextLocationQuery.setVisibility(View.GONE);
+		
+		open=false;
+	}
+	
+	public void show() {
+		View view = findViewById(R.id.view_search);
+		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
+		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
+		
+		editTextQuery.setVisibility(View.VISIBLE);
+		editTextLocationQuery.setVisibility(View.VISIBLE);
+		open=true;
+	}
 	public interface SearchListener {
 		
 		void search(String textQueryData, String locationQueryData);

@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class LoginTask extends AbstractPostJsonAsyncTask<String> {
+public class RegisterTask extends AbstractPostJsonAsyncTask<String> {
 
 	@Override
 	protected String getResult(JSONObject json) {

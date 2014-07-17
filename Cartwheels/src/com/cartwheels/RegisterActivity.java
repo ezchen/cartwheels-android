@@ -35,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cartwheels.tasks.DefaultTaskFragment;
-import com.cartwheels.tasks.LoginTask;
+import com.cartwheels.tasks.RegisterTask;
 import com.savagelook.android.UrlJsonAsyncTask;
 
 public class RegisterActivity extends Activity {
@@ -279,7 +279,7 @@ public class RegisterActivity extends Activity {
 		
 		@Override
 		protected void execute(
-				DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment) {
+				DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String> fragment) {
 			fragment.execute(REGISTER_API_ENDPOINT_URL);
 		}
 	}
@@ -308,7 +308,7 @@ public class RegisterActivity extends Activity {
 		
 		@Override
 		protected void execute(
-				DefaultTaskFragment<LoginTask, AbstractRegisterFragment, String> fragment) {
+				DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String> fragment) {
 			fragment.execute(REGISTER_API_ENDPOINT_URL);
 		}
 	}

@@ -13,7 +13,7 @@
     -->
 
     <fragment
-        android:name="com.cartwheels.DisplayCartsFragment"
+        android:name="com.cartwheels.MainActivity$PlaceholderFragment"
         android:id="@+id/displayCarts"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

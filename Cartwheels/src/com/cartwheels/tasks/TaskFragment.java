@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.cartwheels.R;
@@ -31,11 +32,8 @@ public abstract class TaskFragment extends DialogFragment {
 		View view = inflater.inflate(R.layout.fragment_task, container);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
-		progressBar.setVisibility(View.GONE);
-		getDialog().hide();
-		//progressBar.setVisibility(View.INVISIBLE);
-		view.setVisibility(View.GONE);
 		getDialog().setCanceledOnTouchOutside(false);
+		getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		return view;
 	}
