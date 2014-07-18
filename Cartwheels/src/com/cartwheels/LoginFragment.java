@@ -1,8 +1,10 @@
 package com.cartwheels;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -140,12 +142,31 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		
 		switch (view.getId()) {
 		case R.id.loginButton:
-			login("user");
+			showDialog("Choose Account Type");
+			//login("user");
 			break;
 		case R.id.loginAsOwnerButton:
 			login("owner");
 			Log.d("onClick loginFragment", "loggedInAsOwner");
 			break;
 		}
+	}
+	
+	public void showDialog(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("User", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   login("user");
+		           }
+		       })
+		       .setNegativeButton("Cart Owner", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   	login("owner");
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }

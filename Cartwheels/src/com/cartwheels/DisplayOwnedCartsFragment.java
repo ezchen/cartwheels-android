@@ -26,6 +26,14 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 
 	ArrayList<ObjectCartListItem> items;
 	
+	int updatePosition;
+	String updateName;
+	String updatePermit;
+	String updateDescription;
+	
+	DisplayOwnedCartsExpandableAdapter adapter;
+	SwingBottomInAnimationAdapter swingBottomInAnimation;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -170,15 +178,60 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 			} else {
 				Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
 			}
+		} else if (resultCode == 30 && requestCode == Activity.RESULT_OK) {
+			
+	    	
+    		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+    		String email = preferences.getString("email", "");
+    		String auth_token = preferences.getString("AuthToken", "");
+    		DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean> taskFragment =
+    				new DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean>(31);
+    		
+    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask();
+    		asyncTask.put("email", email);
+    		asyncTask.put("auth_token", auth_token);
+    		
+    		updatePosition = data.getIntExtra("position", -1);
+    		
+    		updateName = data.getStringExtra("CartName");
+    		updatePermit = data.getStringExtra("CartPermit");
+    		updateDescription = data.getStringExtra("CartDescription");
+    		if (updatePosition >= 0 && updatePosition < items.size()) {
+    			
+    			ObjectCartListItem item = items.get(updatePosition);
+    			asyncTask.setInnerKey("cart");
+    			asyncTask.putInner("name", updateName);
+    			asyncTask.putInner("permit", updatePermit);
+    			asyncTask.putInner("description", updateDescription);
+    			
+        		taskFragment.setTargetFragment(this, 31);
+        		taskFragment.setTask(asyncTask);
+        		asyncTask.setFragment(taskFragment);
+        		
+        		taskFragment.show(getFragmentManager(), "updateCartLocation");
+        		taskFragment.execute("http://cartwheels.us/carts/" + item.cartId);
+    		}
+		} else if (resultCode == 31 && requestCode == Activity.RESULT_OK) {
+			if (data.getBooleanExtra("result", false)) {
+				Toast.makeText(getActivity(), "Cart Successfuly Updated", Toast.LENGTH_SHORT).show();
+				ObjectCartListItem item = items.get(updatePosition);
+				item.cartName = updateName;
+				item.permit = updatePermit;
+				item.description = updateDescription;
+				adapter.notifyDataSetChanged();
+				swingBottomInAnimation.notifyDataSetChanged();
+			} else {
+				Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
 	private void buildList(ArrayList<ObjectCartListItem> items) {
 		this.items = items;
-		DisplayOwnedCartsExpandableAdapter adapter = 
+		adapter = 
 				new DisplayOwnedCartsExpandableAdapter(getActivity(), R.layout.listview_expandable_owned_carts,
 						R.id.activity_expandablelistitem_card_title, R.id.activity_expandablelistitem_card_content, items);
-		SwingBottomInAnimationAdapter swingBottomInAnimation = new SwingBottomInAnimationAdapter(adapter);
+		swingBottomInAnimation = new SwingBottomInAnimationAdapter(adapter);
 		swingBottomInAnimation.setInitialDelayMillis(300);
 		
 		ListView listView = (ListView) getActivity().findViewById(android.R.id.list);

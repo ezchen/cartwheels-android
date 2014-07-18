@@ -28,7 +28,12 @@ public class DisplayOwnedCartsActivity extends LocationActivity {
     	
     	// update location
     	if (fragment != null) {
-    		fragment.onActivityResult(20, RESULT_OK, intent);
+    		
+    		if (intent.getAction().equals("start.fragment.action")) {
+    			fragment.onActivityResult(20, RESULT_OK, intent);
+    		} else if (intent.getAction().equals("start.fragment.editCart")) {
+    			fragment.onActivityResult(30, RESULT_OK, intent);
+    		}
     	}
     }
     
@@ -43,6 +48,7 @@ public class DisplayOwnedCartsActivity extends LocationActivity {
 		super.onResume();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("start.fragment.action");
+		filter.addAction("start.fragment.editCart");
 		registerReceiver(receiver, filter);
 	}
 	

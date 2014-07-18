@@ -89,10 +89,10 @@ public class MainActivity extends Activity
         		startActivity(new Intent(this, DisplayOwnedCartsActivity.class));
         		break;
         	case 5:
-        		startActivity(new Intent(this, PlaceHolderActivity.class));
+        		startActivity(new Intent(this, SettingsActivity.class));
         		break;
         	case 6:
-        		startActivity(new Intent(this, PlaceHolderActivity.class));
+        		startActivity(new Intent(this, SettingsActivity.class));
         		break;
         }
     }

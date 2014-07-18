@@ -1,6 +1,5 @@
 package com.cartwheels;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -11,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.itemmanipulation.ExpandableListItemAdapter;
 import com.squareup.picasso.Picasso;
@@ -111,17 +110,61 @@ public class DisplayOwnedCartsExpandableAdapter extends
 				showDialog("Do you want to update location for \n" + item.cartName, position);
 				break;
 			case R.id.ownedCartEditOption:
-				showDialog("Change this wtf", 0);
+				showEditCartDialog("Edit Cart", 0);
 				break;
 		}
 	}
+
+	
+	public void showEditCartDialog(String message, final int position) {
+		View view = LayoutInflater.from(context).inflate(R.layout.edit_cart_dialog_body, null, false);
+		
+		final EditText editCartName = (EditText) view.findViewById(R.id.editCartNameText);
+		final EditText editPermit = (EditText) view.findViewById(R.id.editCartPermitText);
+		final EditText editDescription = (EditText) view.findViewById(R.id.editCartDescription);
+		
+		ObjectCartListItem item = getItem(position);
+		editCartName.setText(item.cartName);
+		editPermit.setText(item.permit);
+		editDescription.setText(item.description);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setView(view).setTitle(message)
+		       .setCancelable(false)
+		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   String cartName = editCartName.getText().toString();
+		        	   String cartPermit = editPermit.getText().toString();
+		        	   String cartDescription = editDescription.getText().toString();
+		        	   editCart(cartName, cartPermit, cartDescription, position);
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	protected void editCart(String cartName, String cartPermit,
+			String cartDescription, int position) {
+		Intent intent = new Intent("start.fragment.editCart");
+		intent.putExtra("CartName", cartName);
+		intent.putExtra("CartPermit", cartPermit);
+		intent.putExtra("CartDescription", cartDescription);
+		intent.putExtra("position", position);
+		context.sendBroadcast(intent);
+	}
+	
 	
 	private void updateLocation(final int position) {
 		Intent intent = new Intent("start.fragment.action");
 		intent.putExtra("position", position);
 		context.sendBroadcast(intent);
 	}
-	
+
 	public void showDialog(String message, final int position) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setMessage(message)
