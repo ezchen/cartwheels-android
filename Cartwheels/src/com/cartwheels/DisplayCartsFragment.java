@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -61,6 +62,10 @@ public class DisplayCartsFragment extends Fragment
 		Log.d("onAttach DisplayCartsFragment", "fragment is attached " + activity);
 		if (!(activity instanceof TaskCallbacks)) {
 			throw new IllegalStateException("Activity must implement TaskCallbacks");
+		}
+		
+		if (!(activity instanceof LocationActivity)) {
+			throw new IllegalStateException("Activity must implement LocationActivity");
 		}
 		taskCallbacks = (TaskCallbacks) activity;
 	}
@@ -146,6 +151,7 @@ public class DisplayCartsFragment extends Fragment
 			// set the offset and limit again
 			offset = savedInstanceState.getInt("offset");
 			limit = savedInstanceState.getInt("limit");
+			moreResults = savedInstanceState.getBoolean("moreResults");
 			
 			lastTextQuery = savedInstanceState.getString("lastTextQuery", "");
 			lastLocationQuery = savedInstanceState.getString("lastLocationQuery", "");
@@ -170,6 +176,7 @@ public class DisplayCartsFragment extends Fragment
 		outState.putString("lastTextQuery", lastTextQuery);
 		outState.putString("lastLocationQuery", lastLocationQuery);
 		outState.putParcelableArrayList("ObjectCartArrayListItems", arrayListItems);
+		outState.putBoolean("moreResults", moreResults);
 		super.onSaveInstanceState(outState);
 	}
 	
@@ -207,22 +214,6 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
-		int length = parent.getAdapter().getCount();
-		
-		Log.d("position", "" + position);
-		if (position == length - 1) {
-			offset += 20;
-			getMoreCarts();
-			return;
-		}
-		
-		if (position == length - 2) {
-			offset -= 20;
-			getMoreCarts();
-			return;
-		}
-		
 		Intent intent = new Intent(getActivity(), ViewCartActivity.class);
 		intent.putExtra("ObjectCartListItem", arrayListItems.get(position));
 		
@@ -234,8 +225,7 @@ public class DisplayCartsFragment extends Fragment
 		int id = item.getItemId();
 		if (id == R.id.action_viewMap && getActivity() != null) {
 			Intent intent = new Intent(getActivity(), MarkerActivity.class);
-			intent.putExtra("ObjectCartListItems", items);
-			Log.d("onOptionsItemSelected", "item: " + items);
+			intent.putExtra("ObjectCartListItems", arrayListItems);
 			startActivity(intent);
 		}
 		
@@ -284,23 +274,32 @@ public class DisplayCartsFragment extends Fragment
 		if (getActivity() != null) {
 			SearchTask searchTask = new SearchTask();
 			// put in tq, lq, email, auth_token,
-			searchTask.put("tq", textQueryData);
-			searchTask.put("lq", locationQueryData);
 			
-			if (lastTextQuery.equals(textQueryData) && lastLocationQuery.equals(locationQueryData)) {
+			boolean useLocation = locationQueryData.equals("Current Location");
+			if (!useLocation && lastTextQuery.equals(textQueryData) && lastLocationQuery.equals(locationQueryData)) {
 				Toast.makeText(getActivity(), "Same Search Input", Toast.LENGTH_LONG).show();;
 				hide();
 				return;
 			}
+			
 			lastTextQuery = textQueryData;
 			lastLocationQuery = locationQueryData;
 
+			Location location = ((LocationActivity) getActivity()).getLastLocation();
+			String lat = location.getLatitude() + "";
+			String lon = location.getLongitude() + "";
+			if (useLocation) {
+				locationQueryData = lat + "," + lon;
+			}
 			offset = 0;
 			moreResults = true;
 			arrayListItems.clear();
 			adapter.notifyDataSetChanged();
 			swingBottomInAnimationAdapter.notifyDataSetChanged();
 			
+			
+			searchTask.put("tq", textQueryData);
+			searchTask.put("lq", locationQueryData);
 			// offset always starts at 0
 			searchTask.put("offset", 0 + "");
 			searchTask.put("limit", "" + limit);

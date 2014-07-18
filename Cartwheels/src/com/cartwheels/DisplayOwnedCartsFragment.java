@@ -3,16 +3,20 @@ package com.cartwheels;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.cartwheels.tasks.DefaultPutJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.GetOwnedCartsInfoTask;
 import com.cartwheels.tasks.UpdateOwnedCartTask;
@@ -20,9 +24,19 @@ import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAni
 
 public class DisplayOwnedCartsFragment extends ListFragment {
 
+	ArrayList<ObjectCartListItem> items;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		if (!(activity instanceof LocationActivity)) {
+			throw new IllegalStateException("Activity must extend LocationActivity");
+		}
+		super.onAttach(activity);
 	}
 	
 	@Override
@@ -115,11 +129,55 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 				
 				buildList(items);
 			}
+		} else if (resultCode == 20 && requestCode == Activity.RESULT_OK) {
+	    	
+    		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+    		String email = preferences.getString("email", "");
+    		String auth_token = preferences.getString("AuthToken", "");
+    		DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean> taskFragment =
+    				new DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean>(21);
+    		
+    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask();
+    		asyncTask.put("email", email);
+    		asyncTask.put("auth_token", auth_token);
+    		
+    		int position = data.getIntExtra("position", -1);
+    		
+    		if (position >= 0 && position < items.size()) {
+    			Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
+    			ObjectCartListItem item = items.get(position);
+    			
+    			Location location = ((LocationActivity)getActivity()).getLastLocation();
+    			String lat = location.getLatitude() + "";
+    			String lon = location.getLongitude() + "";
+    			
+    			asyncTask.setInnerKey("cart");
+    			asyncTask.putInner("name", item.cartName);
+    			asyncTask.putInner("lat", lat);
+    			asyncTask.putInner("lon", lon);
+    			
+        		
+        		taskFragment.setTargetFragment(this, 21);
+        		taskFragment.setTask(asyncTask);
+        		asyncTask.setFragment(taskFragment);
+        		
+        		taskFragment.show(getFragmentManager(), "updateCartLocation");
+        		taskFragment.execute("http://cartwheels.us/carts/" + item.cartId);
+    		}
+		} else if (resultCode == 21 && requestCode == Activity.RESULT_OK) {
+			if (data.getBooleanExtra("result", false)) {
+				Toast.makeText(getActivity(), "Cart Successfuly Updated", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
 	private void buildList(ArrayList<ObjectCartListItem> items) {
-		DisplayOwnedCartsAdapter adapter = new DisplayOwnedCartsAdapter(R.layout.listview_owned_carts, getActivity(), items);
+		this.items = items;
+		DisplayOwnedCartsExpandableAdapter adapter = 
+				new DisplayOwnedCartsExpandableAdapter(getActivity(), R.layout.listview_expandable_owned_carts,
+						R.id.activity_expandablelistitem_card_title, R.id.activity_expandablelistitem_card_content, items);
 		SwingBottomInAnimationAdapter swingBottomInAnimation = new SwingBottomInAnimationAdapter(adapter);
 		swingBottomInAnimation.setInitialDelayMillis(300);
 		
@@ -127,4 +185,6 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 		swingBottomInAnimation.setAbsListView(listView);
 		setListAdapter(swingBottomInAnimation);
 	}
+	
+	
 }

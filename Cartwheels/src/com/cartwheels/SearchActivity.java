@@ -15,7 +15,7 @@ import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.SearchTaskFragment;
 
-public class SearchActivity extends Activity
+public class SearchActivity extends LocationActivity
 								implements TaskCallbacks {
 	
 	SharedPreferences preferences;

@@ -1,6 +1,7 @@
 package com.cartwheels;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -17,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -27,14 +29,13 @@ import android.widget.TextView;
 import com.cartwheels.custom_views.RatingView;
 import com.cartwheels.tasks.CheckinTask;
 import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
-import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.ImageDownloaderTask;
 import com.cartwheels.tasks.StaticMapsTaskFragment;
 import com.cartwheels.tasks.UploadPhotoTask;
 import com.squareup.picasso.Picasso;
 
-public class ViewCartFragment extends Fragment implements OnItemClickListener {
+public class ViewCartFragment extends Fragment implements OnItemClickListener, OnClickListener {
 
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
 	private ObjectCartListItem item;
@@ -76,6 +77,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		TextView permit = (TextView) rootView.findViewById(R.id.viewCart_Permit);
 		ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
 		ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
+		
+		map.setOnClickListener(this);
 		
 		if (savedInstanceState == null) {
 			Bundle arguments = getArguments();
@@ -379,5 +382,14 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener {
 		asyncTask.setFragment(fragment);
 		
 		fragment.execute();
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		ArrayList<ObjectCartListItem> items = new ArrayList<ObjectCartListItem>();
+		items.add(item);
+		Intent intent = new Intent(getActivity(), MarkerActivity.class);
+		intent.putExtra("ObjectCartListItems", items);
+		startActivity(intent);
 	}
 }

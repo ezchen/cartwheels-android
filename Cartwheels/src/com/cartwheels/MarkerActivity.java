@@ -1,9 +1,10 @@
 package com.cartwheels;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
@@ -18,16 +19,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MarkerActivity extends Activity {
 
     private GoogleMap mMap;
-    private ObjectCartListItem[] items;
+    private ArrayList<ObjectCartListItem> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         Intent intent = getIntent();
-        Parcelable[] parcelableItems = intent.getParcelableArrayExtra("ObjectCartListItems");
-        items = new ObjectCartListItem[parcelableItems.length];
-        System.arraycopy(parcelableItems, 0, items, 0, parcelableItems.length);
+        ArrayList<ObjectCartListItem> parcelableItems = intent.getParcelableArrayListExtra("ObjectCartListItems");
+        items = new ArrayList<ObjectCartListItem>(parcelableItems);
         setContentView(R.layout.map_marker);
         setUpMapIfNeeded();
     }
@@ -91,11 +91,11 @@ public class MarkerActivity extends Activity {
         }
     }
     
-    private void addMarkersToMap(ObjectCartListItem[] items) {
+    private void addMarkersToMap(ArrayList<ObjectCartListItem> items) {
     	
-    	if (items != null && items.length != 0) {
-	    	for (int i = 0; i < items.length; i++) {
-	    		ObjectCartListItem item = items[i];
+    	if (items != null && items.size() != 0) {
+	    	for (int i = 0; i < items.size(); i++) {
+	    		ObjectCartListItem item = items.get(i);
 	    		
 	    		LatLng position = new LatLng(item.getLat(), item.getLon());
 	    		

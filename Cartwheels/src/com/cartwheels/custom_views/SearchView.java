@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.cartwheels.R;
@@ -21,6 +22,7 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 	private EditText locationQuery;
 	
 	private boolean open;
+	private boolean locationOn;
 	
 	private SearchListener searchListener;
 	
@@ -33,9 +35,9 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
 		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
 		
+		ImageView getLocationButton = (ImageView) view.findViewById(R.id.getLocationImageButton);
+		getLocationButton.setOnClickListener(this);
 		// hide until user presses the search button
-		editTextQuery.setVisibility(View.INVISIBLE);
-		editTextLocationQuery.setVisibility(View.INVISIBLE);
 		Log.d("SearchView Constructor", "created");
 		Button button = (Button) findViewById(R.id.search_button);
 		
@@ -50,6 +52,10 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 		
 		EditText editTextQuery = (EditText) view.findViewById(R.id.textQuery);
 		EditText editTextLocationQuery = (EditText) view.findViewById(R.id.locationQuery);
+		editTextLocationQuery.setHint("Everywhere");
+		
+		ImageView getLocationButton = (ImageView) view.findViewById(R.id.getLocationImageButton);
+		getLocationButton.setOnClickListener(this);
 		
 		open = true;
 		Log.d("SearchView Constructor", "created");
@@ -88,9 +94,11 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 			String locationQueryData = editTextLocationQuery.getText().toString();
 			
 			// only close the view if the user puts in a correct search sequence
+			if (locationOn) {
+				locationQueryData = "Current Location";
+			}
 			if (textQueryData.length() != 0 || locationQueryData.length() != 0) {
 				open = false;
-				
 				editTextQuery.setVisibility(View.GONE);
 				editTextLocationQuery.setVisibility(View.GONE);
 			}
@@ -133,7 +141,31 @@ public class SearchView extends RelativeLayout implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Log.d("SearchButton", "clicked");
-		search();
+		
+		int id = v.getId();
+		
+		switch (id) {
+		case R.id.search_button:
+			search();
+			break;
+		case R.id.getLocationImageButton:
+			setLocation();
+			break;
+		}
+		
+	}
+	
+	private void setLocation() {
+		EditText editText = (EditText) findViewById(R.id.locationQuery);
+		if (locationOn) {
+			editText.setHint("Everywhere");
+			editText.setHintTextColor(getResources().getColor(android.R.color.tertiary_text_dark));
+		} else {
+			editText.setHint("Current Location");
+			editText.setHintTextColor(getResources().getColor(R.color.theme_color));
+			editText.setText("");
+		}
+		locationOn = !locationOn;
 	}
 
 }
