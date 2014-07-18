@@ -87,15 +87,21 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				item = arguments.getParcelable("ObjectCartListItem");
 			
 			if (item != null) {
-			Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
-
-			if (mapBitmap != null)
-				map.setImageBitmap(mapBitmap);
+				Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
 			
-			cartName.setText(item.cartName);
-			zipcode.setText("Zipcode: " + item.zipcode);
-			permit.setText("Permit: c" + item.permit);
-			rating.setRating(item.rating);
+				map.setImageBitmap(mapBitmap);
+				String lat = item.lat;
+				String lon = item.lon;
+				
+				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+							+ "center=" + lat + "," 
+							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
+				Picasso.with(getActivity()).load(url).into(map);
+			
+				cartName.setText(item.cartName);
+				zipcode.setText("Zipcode: " + item.zipcode);
+				permit.setText("Permit: c" + item.permit);
+				rating.setRating(item.rating);
 			}
 			
 			//Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
@@ -105,25 +111,22 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			if (savedInstanceState.containsKey("CartItem")) {
 				item = (ObjectCartListItem) savedInstanceState.get("CartItem");
 				Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
-			} else {
-				Log.d("onCreateView", "cart item does not exist");
+				
+				String lat = item.lat;
+				String lon = item.lon;
+				
+				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+							+ "center=" + lat + "," 
+							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
+				Picasso.with(getActivity()).load(url).into(map);
+				Picasso.with(getActivity()).load(url).into(map);
 			}
 			
-			if (savedInstanceState.containsKey("mapBitmap")) {
-				mapBitmap = (Bitmap) savedInstanceState.get("mapBitmap");
-			} else {
-				Log.d("onCreateView", "mapBitmap does not exist");
-			}
-
-			
-			if (mapBitmap != null)
-				map.setImageBitmap(mapBitmap);
 			cartName.setText(item.cartName);
 			zipcode.setText("Zipcode: " + item.zipcode);
 			permit.setText("Permit: c" + item.permit);
 		}
 		setupOptions(rootView);
-		Log.d("ViewCartFragment onCreateView", "view created");
 		return rootView;
 	}
 	
@@ -136,43 +139,6 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		        Bitmap imageBitmap = (Bitmap) extras.get("data");
 		        Log.d("onActivityResult ViewCartFragment", "bitmap: " + imageBitmap);
 		        sendBitmap(imageBitmap);
-			}
-		}
-		if (data.hasExtra("mapBitmap") && resultCode == Activity.RESULT_OK) {
-			View view = getView();
-			
-			ImageView map = null;
-			if (view != null) {
-				map = (ImageView) view.findViewById(R.id.viewCart_Map);
-			}
-			
-			mapBitmap = (Bitmap) data.getParcelableExtra("mapBitmap");
-			Log.d("onActivityResult ViewCartFragment", mapBitmap + "");
-			
-			if (map != null)
-				map.setImageBitmap(mapBitmap);
-		}
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		Log.d("onActivityCreated", "called" + getArguments());
-		if (savedInstanceState == null) {
-			if (getArguments().containsKey("ObjectCartListItem")) {
-				ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
-				String lat = item.lat;
-				String lon = item.lon;
-				
-				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
-							+ "center=" + lat + "," 
-							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
-				
-				getMapBitmap(url);
-			}
-		} else {
-			if (getActivity() != null) {
-				
 			}
 		}
 	}
@@ -198,16 +164,6 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		super.onSaveInstanceState(outState);
 		outState.putParcelable("CartItem", item);
 		Log.d("onSaveInstanceState", "called");
-	}
-	
-	public void getMapBitmap(String url) {
-		ImageDownloaderTask task = new ImageDownloaderTask();
-		StaticMapsTaskFragment fragment = new StaticMapsTaskFragment();
-		
-		task.setFragment(fragment);
-		fragment.setTask(task);
-		fragment.setTargetFragment(this, 1);
-		fragment.execute(url);
 	}
 	
 	private void setupOptions(View rootView) {
