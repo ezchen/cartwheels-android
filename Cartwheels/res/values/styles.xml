@@ -30,5 +30,10 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:textStyle">bold</item>
     </style>
-
+    
+    <style name="cartwheels_rating_bar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/cartwheels_rating_bar_full</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">48dip</item>
+    </style>
 </resources>

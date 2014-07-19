@@ -36,11 +36,20 @@
 	        android:text="TextView" />
 	    
 	    <include
-	        android:id="@+id/ownedCartUpdateLocationOption"
+	        android:id="@+id/ownedCartViewCartOption"
 	        android:background="@android:drawable/list_selector_background" 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/ownedCartDescription"
+	        android:focusable="true"
+	        layout="@layout/listview_viewcart_row" />
+	    	    
+	    <include
+	        android:id="@+id/ownedCartUpdateLocationOption"
+	        android:background="@android:drawable/list_selector_background" 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/ownedCartViewCartOption"
 	        android:focusable="true"
 	        layout="@layout/listview_viewcart_row" />
 	    
@@ -50,6 +59,15 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/ownedCartUpdateLocationOption"
+	        android:focusable="true"
+	        layout="@layout/listview_viewcart_row" />
+	    
+	    <include
+	        android:id="@+id/ownedCartUpdateMenuOption" 
+	        android:background="@android:drawable/list_selector_background" 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/ownedCartEditOption"
 	        android:focusable="true"
 	        layout="@layout/listview_viewcart_row" />
 	</RelativeLayout>

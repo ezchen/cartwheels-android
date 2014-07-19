@@ -43,6 +43,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	private static final String TAGS_UPDATED_AT="updated_at";
 	private static final String TAGS_PHOTOS="photos";
 	private static final String TAGS_URL_THUMB="image_url";
+	private static final String TAGS_ADDRESS="address";
 	
 	private int progress;
 	
@@ -145,6 +146,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				String lat = innerJson.getString(TAGS_LAT);
 				String lon = innerJson.getString(TAGS_LON);
 				String cartId = innerJson.getString(TAGS_ID);
+				String address = innerJson.getString(TAGS_ADDRESS);
 				
 				int rating;
 				if (!innerJson.isNull(TAGS_RATING)) {
@@ -168,6 +170,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				cartListItem.lon = lon;
 				cartListItem.cartId = cartId;
 				cartListItem.rating = rating;
+				cartListItem.address = address;
 				
 				Log.d("cart list item", cartListItem.toString());
 				items[i] = cartListItem;

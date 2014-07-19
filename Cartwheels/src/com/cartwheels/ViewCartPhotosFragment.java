@@ -7,8 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,12 +24,14 @@ import android.widget.GridView;
 import com.cartwheels.tasks.GetPhotosTaskFragment;
 import com.cartwheels.tasks.PhotoUrlTask;
 
-public class ViewCartPhotosFragment extends Fragment implements OnItemClickListener {
+public class ViewCartPhotosFragment extends Fragment implements OnItemClickListener, OnRefreshListener {
 
 
 	
 	private GridView cartPhotos;
 	private String[] imageUrls;
+	
+	private CustomSwipeRefreshLayout swipeLayout;
 	
 	int offset;
 	int limit;
@@ -43,7 +51,7 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setHasOptionsMenu(true);
 		fragmentManager = getFragmentManager();
 		
 		Resources resources = getResources();
@@ -61,10 +69,25 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 									Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_display_cart_photos, container, false);
+		cartPhotos = (GridView) view.findViewById(R.id.photos);
+
+        swipeLayout = (CustomSwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setGridView(cartPhotos);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
+                android.R.color.holo_green_light, 
+                android.R.color.holo_orange_light, 
+                android.R.color.holo_red_light);
+        
+		cartPhotos.setOnItemClickListener(this);
 		
-		super.onCreateView(inflater, container, savedInstanceState);
-		
-		ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
+		load();
+		return cartPhotos;
+	}
+	
+	private void load() {
+ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
 		
 		String cartId = item.cartId;
 		PhotoUrlTask photoUrlTask = new PhotoUrlTask();
@@ -92,13 +115,8 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 		fragment.setTargetFragment(this, fragmentId);
 		
 		
-		cartPhotos = (GridView) inflater.inflate(R.layout.fragment_display_cart_photos, container, false);
-		
 		fragment.show(getFragmentManager(), "PhotoUrlTask");
 		fragment.execute();
-		cartPhotos.setOnItemClickListener(this);
-		
-		return cartPhotos;
 	}
 
 	public static ViewCartPhotosFragment newInstance(Bundle arguments) {
@@ -130,5 +148,33 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+	    menu.clear();
+	    inflater.inflate(R.menu.view_cart, menu);
+	    super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            load();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	@Override
+	public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 5000);
 	}
 }

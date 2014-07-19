@@ -17,13 +17,15 @@
         android:paddingBottom="10dp"
         android:text="user" />
     
-   <com.cartwheels.custom_views.RatingView
-       android:id="@+id/reviewRating"
-       android:layout_height="wrap_content"
-       android:layout_width="wrap_content"
-       android:layout_toRightOf="@id/reviewUser"
-       android:paddingTop="8dp"
-       custom:rating="0" />
+    <RatingBar
+        android:id="@+id/reviewRating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/reviewUser"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/cartName"/>
 
     <!-- Review text -->
     <TextView 

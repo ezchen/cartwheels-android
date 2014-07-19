@@ -97,17 +97,13 @@ public class NavigationDrawerFragment extends Fragment {
         });
         
         /* Create the custom navigation drawer with icons */
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[5];
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
         drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_search,
         		getString(R.string.title_section2));
-        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_email,
-        		getString(R.string.title_section3));
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_person,
-        		getString(R.string.title_section4));
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_action_cart,
+        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_cart,
         		getString(R.string.title_section5));
-        drawerItem[4] = new ObjectDrawerItem(R.drawable.ic_action_settings,
-        		getString(R.string.title_section6));
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_logout,
+        		"Logout");
         
         mDrawerListView.setAdapter(new DrawerItemCustomAdapter(
                 getActivity(),

@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,34 +19,44 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cartwheels.custom_views.RatingView;
 import com.cartwheels.tasks.CheckinTask;
 import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
+import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
-import com.cartwheels.tasks.ImageDownloaderTask;
-import com.cartwheels.tasks.StaticMapsTaskFragment;
 import com.cartwheels.tasks.UploadPhotoTask;
+import com.cartwheels.tasks.WriteReviewTask;
+import com.cartwheels.tasks.WriteReviewTaskFragment;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartFragment extends Fragment implements OnItemClickListener, OnClickListener {
 
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
+	private static final int REQUEST_IMAGE_CAPTURE_MENU = 1;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
+	
+	private AlertDialog alert;
+	private Bitmap dialogBitmap;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setHasOptionsMenu(true);
 		FragmentManager manager = getFragmentManager();
 		
 		String[] tags = new String[2];
@@ -71,10 +83,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		View rootView = inflater.inflate(R.layout.fragment_view_cart, container, false);
 		
 		TextView cartName = (TextView) rootView.findViewById(R.id.viewCart_Name);
-		TextView reviews = (TextView) rootView.findViewById(R.id.viewCart_NumberOfReviews);
-		RatingView rating = (RatingView) rootView.findViewById(R.id.viewCart_Rating);
+		RatingBar rating = (RatingBar) rootView.findViewById(R.id.viewCart_CartRating);
 		TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
-		TextView permit = (TextView) rootView.findViewById(R.id.viewCart_Permit);
 		ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
 		ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
 		
@@ -87,7 +97,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				item = arguments.getParcelable("ObjectCartListItem");
 			
 			if (item != null) {
-				Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
+				Picasso.with(getActivity()).load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
 			
 				map.setImageBitmap(mapBitmap);
 				String lat = item.lat;
@@ -99,8 +109,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				Picasso.with(getActivity()).load(url).into(map);
 			
 				cartName.setText(item.cartName);
-				zipcode.setText("Zipcode: " + item.zipcode);
-				permit.setText("Permit: c" + item.permit);
+				zipcode.setText(item.address);
 				rating.setRating(item.rating);
 			}
 			
@@ -110,7 +119,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			// CartItem
 			if (savedInstanceState.containsKey("CartItem")) {
 				item = (ObjectCartListItem) savedInstanceState.get("CartItem");
-				Picasso.with(getActivity()).load(item.bitmapUrl).into(cartPicture);
+				Picasso.with(getActivity()).load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
 				
 				String lat = item.lat;
 				String lon = item.lon;
@@ -123,8 +132,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			}
 			
 			cartName.setText(item.cartName);
-			zipcode.setText("Zipcode: " + item.zipcode);
-			permit.setText("Permit: c" + item.permit);
+			rating.setRating(item.rating);
+			zipcode.setText(item.address);
 		}
 		setupOptions(rootView);
 		return rootView;
@@ -139,6 +148,49 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		        Bitmap imageBitmap = (Bitmap) extras.get("data");
 		        Log.d("onActivityResult ViewCartFragment", "bitmap: " + imageBitmap);
 		        sendBitmap(imageBitmap);
+			}
+		} else if (requestCode == REQUEST_IMAGE_CAPTURE_MENU && resultCode == Activity.RESULT_OK) {
+			if (data != null && data.hasExtra("data")) {
+				Bundle extras = data.getExtras();
+				Bitmap imageBitmap = (Bitmap) extras.get("data");
+				
+				ImageView imageView = (ImageView) alert.findViewById(R.id.menuItemImage);
+				imageView.setImageBitmap(imageBitmap);
+				dialogBitmap = imageBitmap;
+			}
+		} else if (requestCode == 41 && resultCode == Activity.RESULT_OK) {
+			if (data != null) {
+				if (data.getBooleanExtra("result", false)) {
+					Toast.makeText(getActivity(), "Menu Updated", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getActivity(), "Updating Menu Was Unsuccessful", Toast.LENGTH_SHORT).show();
+				}
+			}
+		} else if (requestCode == 4 && resultCode == Activity.RESULT_OK) {
+			if (data != null) {
+				if (data.getBooleanExtra("result", false)) {
+					Toast.makeText(getActivity(), "Review Uploaded", Toast.LENGTH_SHORT).show();
+				} else {
+					SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+					String userType = preferences.getString("LoginType", "");
+					if ("owner".equals(userType)) {
+						Toast.makeText(getActivity(), "You cannot make a review, you're an owner", Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(getActivity(), "Review Unsuccessful", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		} else if (requestCode == 7 && resultCode == Activity.RESULT_OK) {
+			if (data != null) {
+				Toast.makeText(getActivity(), "Checkin Successful", Toast.LENGTH_SHORT).show();
+			} else {
+				SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+				String userType = preferences.getString("LoginType", "");
+				if ("owner".equals(userType)) {
+					Toast.makeText(getActivity(), "Owners cannot checkin", Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getActivity(), "Checkin Unsuccessful", Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 	}
@@ -178,9 +230,9 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 												R.drawable.ic_action_next_item);
 		options[2] = new ObjectViewCartItem(R.drawable.ic_action_new_picture, "Add Photo",
 												R.drawable.ic_action_next_item);
-		options[3] = new ObjectViewCartItem(R.drawable.ic_action_about, "More Info",
+		options[3] = new ObjectViewCartItem(R.drawable.ic_action_location_searching, "Check In",
 												R.drawable.ic_action_next_item);
-		options[4] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Claim Cart",
+		options[4] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Add Menu Item",
 												R.drawable.ic_action_next_item);
 		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
 		listView.setAdapter(adapter);
@@ -213,27 +265,26 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				}
 				break;
 			case 1:
-				intent = new Intent(getActivity(), WriteReviewActivity.class);
-				intent.putExtra("ObjectCartListItem", item);
-				startActivity(intent);
+				showWriteReviewDialog();
 				break;
 			case 2:
-				takePicture();
+				takePicture(REQUEST_IMAGE_CAPTURE);
 				break;
 			case 3:
-				checkin();
+				showCheckInDialog(item.cartName);
 				break;
 			case 4:
-				claimCart();
+				showUpdateMenuDialog();
+				Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
 				break;
 		}
 	}
 	
 	
-	public void takePicture() {
+	public void takePicture(int requestCode) {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	        startActivityForResult(takePictureIntent, requestCode);
 	    }
 	}
 	
@@ -340,12 +391,155 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		fragment.execute();
 	}
 
+	private void updateMenu(Bitmap bitmap, String name, String price) {
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		String cartId = item.cartId;
+		String url = "http://cartwheels.us/carts/" + cartId + "/menu/items";
+		
+		String encodedImage = null;
+		
+		if (bitmap != null) {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+			Log.d("sendBitmap", bitmap + "");
+			byte[] bitmapdata = stream.toByteArray();
+			encodedImage = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+		}
+		
+		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask();
+		DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean> fragment =
+				new DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean>(41);
+		
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		
+		asyncTask.setInnerKey("menu_item");
+		asyncTask.putInner("price", price);
+		asyncTask.putInner("name", name);
+		asyncTask.putInner("encoded_image", encodedImage);
+		
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		fragment.setTargetFragment(this, 41);
+		fragment.show(getFragmentManager(), "UpdateMenu");
+		fragment.execute(url);
+	}
+	
+	private void showUpdateMenuDialog() {
+		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_menu_item, null, false);
+		
+		final ImageView foodImage = (ImageView) view.findViewById(R.id.menuItemImage);
+		final TextView foodName = (TextView) view.findViewById(R.id.menuItemName);
+		final TextView price = (TextView) view.findViewById(R.id.menuItemPrice);
+		foodImage.setOnClickListener(this);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(view)
+		       .setCancelable(false)
+		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   updateMenu(dialogBitmap, foodName.getText().toString(), price.getText().toString());
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		alert = builder.create();
+		alert.show();
+	}
+	
+	private void showCheckInDialog(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("Check In", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   checkin();
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	private void showWriteReviewDialog() {
+		View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_write_review, null, false);
+		
+		final RatingBar ratingBar = (RatingBar) view.findViewById(R.id.writeReviewRatingBar);
+		final EditText editText = (EditText) view.findViewById(R.id.writeReviewText);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(view).setTitle("Write Review")
+		       .setCancelable(false)
+		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   float rating = ratingBar.getRating();
+		        	   String text = editText.getText().toString();
+		        	   writeReview(rating, text);
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		alert = builder.create();
+		alert.show();
+	}
+	
+	protected void writeReview(float rating, String text) {
+		WriteReviewTask asyncTask = new WriteReviewTask();
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		int realRating = (int) rating;
+		String realText = text;
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		asyncTask.put("review[rating]", ((int)rating) + "");
+		asyncTask.put("review[text]", text);
+		
+		asyncTask.setCartId(item.cartId);
+		
+		WriteReviewTaskFragment fragment = new WriteReviewTaskFragment();
+		fragment.setTask(asyncTask);
+		fragment.setTargetFragment(this, 4);
+		
+		asyncTask.setFragment(fragment);
+		
+		fragment.execute();
+		fragment.show(getFragmentManager(), "WriteReview");
+	}
+
 	@Override
-	public void onClick(View arg0) {
-		ArrayList<ObjectCartListItem> items = new ArrayList<ObjectCartListItem>();
-		items.add(item);
-		Intent intent = new Intent(getActivity(), MarkerActivity.class);
-		intent.putExtra("ObjectCartListItems", items);
-		startActivity(intent);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+	    menu.clear();
+	    super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public void onClick(View v) {
+		int id = v.getId();
+		
+		if (id == R.id.viewCart_Map) {
+			ArrayList<ObjectCartListItem> items = new ArrayList<ObjectCartListItem>();
+			items.add(item);
+			Intent intent = new Intent(getActivity(), MarkerActivity.class);
+			intent.putExtra("ObjectCartListItems", items);
+			startActivity(intent);
+		} else if (id == R.id.menuItemImage) {
+			takePicture(REQUEST_IMAGE_CAPTURE_MENU);
+		}
 	}
 }

@@ -7,6 +7,7 @@ public class ObjectCartListItem implements Parcelable {
 	public String bitmapUrl;
 	public String cartName;
 	public String zipcode;
+	public String address;
 	public String permit;
 	public String lat;
 	public String lon;
@@ -33,6 +34,7 @@ public class ObjectCartListItem implements Parcelable {
 		bitmapUrl = parcel.readString();
 		cartName = parcel.readString();
 		zipcode = parcel.readString();
+		address = parcel.readString();
 		permit = parcel.readString();
 		lat = parcel.readString();
 		lon = parcel.readString();
@@ -83,6 +85,7 @@ public class ObjectCartListItem implements Parcelable {
 		parcel.writeString(bitmapUrl);
 		parcel.writeString(cartName);
 		parcel.writeString(zipcode);
+		parcel.writeString(address);
 		parcel.writeString(permit);
 		parcel.writeString(lat);
 		parcel.writeString(lon);

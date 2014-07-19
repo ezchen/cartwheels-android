@@ -1,12 +1,11 @@
 package com.cartwheels.tasks;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-
-import com.cartwheels.WriteReviewFragment;
 
 public class WriteReviewTaskFragment extends TaskFragment {
 
@@ -28,7 +27,7 @@ public class WriteReviewTaskFragment extends TaskFragment {
 		
 		if (getTargetFragment() != null) {
 			Log.d("taskFinished", "fragment is not null");
-			WriteReviewFragment fragment = (WriteReviewFragment) getTargetFragment();
+			Fragment fragment = getTargetFragment();
 
 			Intent intent = new Intent();
 			intent.putExtra("success", success);

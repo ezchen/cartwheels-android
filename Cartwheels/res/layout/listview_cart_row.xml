@@ -10,15 +10,15 @@
     <!-- Cart Picture -->
     <ImageView
         android:id="@+id/cartPicture"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
         android:contentDescription="@string/cart_image_description" />
  
     <!-- Cart Name -->
@@ -56,18 +56,6 @@
         android:layout_toRightOf="@id/cartPicture"
         android:paddingLeft="10dp"
         android:text="@string/zipcode" />
-    
-    <!-- Cart Permit -->
-
-    <TextView
-        android:id="@+id/cartPermit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cartZipcode"
-        android:layout_toRightOf="@id/cartPicture"
-        android:paddingLeft="10dp"
-        android:text="@string/permit_number"
-        android:textSize="12sp" />
 
  
 </RelativeLayout>

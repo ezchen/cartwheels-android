@@ -1,6 +1,7 @@
 package com.cartwheels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,22 +11,27 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MarkerActivity extends Activity {
+public class MarkerActivity extends Activity implements OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private ArrayList<ObjectCartListItem> items;
+    private HashMap<Marker, ObjectCartListItem> itemMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         Intent intent = getIntent();
+        itemMap = new HashMap<Marker, ObjectCartListItem>();
         ArrayList<ObjectCartListItem> parcelableItems = intent.getParcelableArrayListExtra("ObjectCartListItems");
         items = new ArrayList<ObjectCartListItem>(parcelableItems);
         setContentView(R.layout.map_marker);
@@ -70,12 +76,15 @@ public class MarkerActivity extends Activity {
         addMarkersToMap(items);
         
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(this);
         
         final View mapView = getFragmentManager().findFragmentById(R.id.map).getView();
         if (mapView.getViewTreeObserver().isAlive()) {
             mapView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
+                	
+                	if (items != null && items.size() != 0) {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
                     
                     for (ObjectCartListItem item : items) {
@@ -86,6 +95,7 @@ public class MarkerActivity extends Activity {
                     LatLngBounds bounds = builder.build();
                       mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+                	}
                 }
             });
         }
@@ -98,9 +108,15 @@ public class MarkerActivity extends Activity {
 	    		ObjectCartListItem item = items.get(i);
 	    		
 	    		LatLng position = new LatLng(item.getLat(), item.getLon());
-	    		
-	    		mMap.addMarker(new MarkerOptions().position(position).title(item.cartName));
+	    		itemMap.put(mMap.addMarker(new MarkerOptions().position(position).title(item.cartName)), item);
 	    	}
     	}
     }
+
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		Intent intent = new Intent(MarkerActivity.this, ViewCartActivity.class);
+		intent.putExtra("ObjectCartListItem", itemMap.get(marker));
+		startActivity(intent);
+	}
 }

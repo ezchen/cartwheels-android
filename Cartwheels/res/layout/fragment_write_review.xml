@@ -10,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        style="@style/cartwheels_rating_bar"
         android:numStars="5"
-        android:stepSize="1" />
+        android:stepSize=".5" />
 
     <EditText
         android:id="@+id/writeReviewText"
@@ -25,11 +26,5 @@
 
         <requestFocus />
     </EditText>
-    
-    <Button 
-        android:id="@+id/writeReviewButton"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:text="Write Review" />
 
 </LinearLayout>

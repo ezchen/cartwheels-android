@@ -1,28 +1,42 @@
 package com.cartwheels;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultPutJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.GetOwnedCartsInfoTask;
 import com.cartwheels.tasks.UpdateOwnedCartTask;
+import com.cartwheels.tasks.WriteReviewTask;
+import com.cartwheels.tasks.WriteReviewTaskFragment;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
-public class DisplayOwnedCartsFragment extends ListFragment {
+public class DisplayOwnedCartsFragment extends ListFragment implements OnClickListener {
 
 	ArrayList<ObjectCartListItem> items;
 	
@@ -30,6 +44,9 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 	String updateName;
 	String updatePermit;
 	String updateDescription;
+	AlertDialog alert;
+	private Bitmap dialogBitmap;
+	private ObjectCartListItem focusedItem;
 	
 	DisplayOwnedCartsExpandableAdapter adapter;
 	SwingBottomInAnimationAdapter swingBottomInAnimation;
@@ -223,7 +240,83 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 			} else {
 				Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
 			}
+		} else if (resultCode == 50 && requestCode == Activity.RESULT_OK) {
+			if (data != null) {
+				focusedItem = data.getParcelableExtra("ObjectCartListItem");
+				if (focusedItem != null)
+					showUpdateMenuDialog();
+			}
+		} else if (resultCode == 60 && requestCode == Activity.RESULT_OK) {
+			Bundle extras = data.getExtras();
+			Bitmap imageBitmap = (Bitmap) extras.get("data");
+			
+			ImageView imageView = (ImageView) alert.findViewById(R.id.menuItemImage);
+			imageView.setImageBitmap(imageBitmap);
+			dialogBitmap = imageBitmap;
 		}
+	}
+	
+	private void showUpdateMenuDialog() {
+		View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_edit_menu_item, null, false);
+		
+		final ImageView foodImage = (ImageView) view.findViewById(R.id.menuItemImage);
+		final TextView foodName = (TextView) view.findViewById(R.id.menuItemName);
+		final TextView price = (TextView) view.findViewById(R.id.menuItemPrice);
+		foodImage.setOnClickListener(this);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(view)
+		       .setCancelable(false)
+		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   updateMenu(dialogBitmap, foodName.getText().toString(), price.getText().toString());
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		alert = builder.create();
+		alert.show();
+	}
+
+	protected void updateMenu(Bitmap bitmap, String name,
+			String price) {
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		String cartId = focusedItem.cartId;
+		String url = "http://cartwheels.us/carts/" + cartId + "/menu/items";
+		
+		String encodedImage = null;
+		
+		if (bitmap != null) {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+			Log.d("sendBitmap", bitmap + "");
+			byte[] bitmapdata = stream.toByteArray();
+			encodedImage = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+		}
+		
+		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask();
+		DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean> fragment =
+				new DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean>(41);
+		
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		
+		asyncTask.setInnerKey("menu_item");
+		asyncTask.putInner("price", price);
+		asyncTask.putInner("name", name);
+		asyncTask.putInner("encoded_image", encodedImage);
+		
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		fragment.setTargetFragment(this, 41);
+		fragment.show(getFragmentManager(), "UpdateMenu");
+		fragment.execute(url);
 	}
 
 	private void buildList(ArrayList<ObjectCartListItem> items) {
@@ -238,6 +331,16 @@ public class DisplayOwnedCartsFragment extends ListFragment {
 		swingBottomInAnimation.setAbsListView(listView);
 		setListAdapter(swingBottomInAnimation);
 	}
+
+	@Override
+	public void onClick(View arg0) {
+		takePicture(60);
+	}
 	
-	
+	public void takePicture(int requestCode) {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+	        startActivityForResult(takePictureIntent, requestCode);
+	    }
+	}
 }

@@ -66,15 +66,27 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		TextView description = (TextView) view.findViewById(R.id.ownedCartDescription);
 		
 		ratingBar.setRating(item.rating);
-		zipCode.setText(item.zipcode);
+		if (item.address != null)
+		zipCode.setText(item.address);
+		if (item.permit != null)
 		permit.setText(item.permit);
-		description.setText(item.description);
+		
+		if (item.description != null && !item.description.equals("null")){
+			description.setText(item.description);
+		}
 		
 		// Inflate options view
+		View viewCart = view.findViewById(R.id.ownedCartViewCartOption);
+		ImageView viewCartImage = (ImageView) viewCart.findViewById(R.id.viewCart_OptionIcon);
+		viewCartImage.setImageResource(R.drawable.ic_action_about);
+		
+		TextView viewCartText =
+				(TextView) viewCart.findViewById(R.id.viewCart_OptionName);
+		viewCartText.setText("More Info");
+		viewCart.setTag(position);
+		viewCart.setOnClickListener(this);
+		
 		View updateLocationView = view.findViewById(R.id.ownedCartUpdateLocationOption);
-		
-		
-		
 		ImageView updateLocationImageView =
 				(ImageView) updateLocationView.findViewById(R.id.viewCart_OptionIcon);
 		
@@ -95,6 +107,16 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		editTextView.setText("Edit Cart");
 		editCartView.setOnClickListener(this);
 		
+		View addMenuView = view.findViewById(R.id.ownedCartUpdateMenuOption);
+		ImageView addMenuImageView =
+				(ImageView) addMenuView.findViewById(R.id.viewCart_OptionIcon);
+		TextView addMenuTextView =
+				(TextView) addMenuView.findViewById(R.id.viewCart_OptionName);
+		addMenuImageView.setImageResource(R.drawable.ic_action_labels);
+		addMenuTextView.setText("Add Menu Item");
+		addMenuView.setTag(position);
+		addMenuView.setOnClickListener(this);
+		
 		return view;
 	}
 
@@ -110,7 +132,15 @@ public class DisplayOwnedCartsExpandableAdapter extends
 				showDialog("Do you want to update location for \n" + item.cartName, position);
 				break;
 			case R.id.ownedCartEditOption:
-				showEditCartDialog("Edit Cart", 0);
+				showEditCartDialog("Edit Cart", position);
+				break;
+			case R.id.ownedCartUpdateMenuOption:
+				updateMenu(item);
+				break;
+			case R.id.ownedCartViewCartOption:
+				Intent intent = new Intent("start.fragment.viewCart");
+				intent.putExtra("ObjectCartListItem", item);
+				context.sendBroadcast(intent);
 				break;
 		}
 	}
@@ -158,6 +188,11 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		context.sendBroadcast(intent);
 	}
 	
+	protected void updateMenu(ObjectCartListItem item) {
+		Intent intent = new Intent("start.fragment.updateMenu");
+		intent.putExtra("ObjectCartListItem", item);
+		context.sendBroadcast(intent);
+	}
 	
 	private void updateLocation(final int position) {
 		Intent intent = new Intent("start.fragment.action");

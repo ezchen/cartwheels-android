@@ -290,6 +290,7 @@ public class DisplayCartsFragment extends Fragment
 			String lon = location.getLongitude() + "";
 			if (useLocation) {
 				locationQueryData = lat + "," + lon;
+				lastLocationQuery = lat + "," + lon;
 			}
 			offset = 0;
 			moreResults = true;

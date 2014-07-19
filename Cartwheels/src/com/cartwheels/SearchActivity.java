@@ -67,9 +67,7 @@ public class SearchActivity extends LocationActivity
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		} else if (id == R.id.action_viewMap) {
+		if (id == R.id.action_viewMap) {
 			// start the map activity w/ all cart data
 			
 			if (fragment != null) {

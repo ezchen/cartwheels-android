@@ -26,7 +26,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 	private ReviewTaskFragment fragment;
 	
 	public static String TAGS_DATA = "data";
-	public static String TAGS_NAME = "user_id";
+	public static String TAGS_USER = "user";
+	public static String TAGS_NAME = "name";
 	public static String TAGS_RATING = "rating";
 	public static String TAGS_TEXT = "text";
 	public static final String TAGS_REVIEW_ID = "id";
@@ -155,19 +156,6 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		return json;
 	}
 	
-	public String getUserName(JSONObject json) {
-		String userName = null;
-		try {
-			JSONArray info = json.getJSONArray(TAGS_DATA);
-			JSONObject innerJson = info.getJSONObject(0);
-			
-			userName = innerJson.getString("name");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return userName;
-	}
-	
 	public ReviewItem[] buildList(JSONObject json, HashMap<String, String> objectValues) {
 		ReviewItem[] items = null;
 		
@@ -179,9 +167,9 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 			
 			for (int i = 0; i < reviews.length(); i++) {
 				JSONObject innerJson = reviews.getJSONObject(i);
+				JSONObject userJson = innerJson.getJSONObject(TAGS_USER);
 				
-				String userId = innerJson.getString(TAGS_NAME);
-				String user = getUserName(getUserJSON(userId, objectValues));
+				String user = userJson.getString(TAGS_NAME);
 				String text = innerJson.getString(TAGS_TEXT);
 				int rating = innerJson.getInt(TAGS_RATING);
 				String reviewId = innerJson.getString(TAGS_REVIEW_ID);

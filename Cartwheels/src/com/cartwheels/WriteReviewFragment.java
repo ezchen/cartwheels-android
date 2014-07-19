@@ -55,8 +55,8 @@ public class WriteReviewFragment extends Fragment
 		
 		View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 		
-		Button button = (Button) view.findViewById(R.id.writeReviewButton);
-		button.setOnClickListener(this);
+		//Button button = (Button) view.findViewById(R.id.writeReviewButton);
+		//button.setOnClickListener(this);
 		return view;
 	}
 

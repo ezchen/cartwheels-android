@@ -9,6 +9,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,7 +47,7 @@ public class ViewReviewFragment extends Fragment
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setHasOptionsMenu(true);
 		offset = 0;
 		limit = 20;
 		
@@ -130,6 +133,54 @@ public class ViewReviewFragment extends Fragment
 		
 		if (reviews != null)
 			reviews.setAdapter(adapter);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+	    menu.clear();
+	    inflater.inflate(R.menu.view_cart, menu);
+	    super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            load();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	private void load() {
+		String cartId = item.cartId;
+		ReviewTask reviewTask = new ReviewTask();
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		
+		reviewTask.put("email", email);
+		reviewTask.put("AuthToken", auth_token);
+		reviewTask.put("offset", "" + offset);
+		reviewTask.put("limit", "" + limit);
+		
+		reviewTask.setCartId(cartId);
+		
+		ReviewTaskFragment fragment = new ReviewTaskFragment();
+		fragment.setTask(reviewTask);
+		reviewTask.setFragment(fragment);
+		fragment.setShowsDialog(false);
+		
+		Resources resources = getResources();
+		int fragmentId = resources.getInteger(R.integer.review_task_fragment);
+		String fragmentTag = resources.getString(R.string.review_task_fragment_string);
+		fragment.setTargetFragment(this, fragmentId);
+		
+		fragment.show(getFragmentManager(), fragmentTag);
+		fragment.execute();
 	}
 	
 	@Override

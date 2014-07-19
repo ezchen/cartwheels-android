@@ -14,5 +14,12 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    
+    <item
+        android:id="@+id/action_viewMap"
+        android:showAsAction="always|withText"
+        android:title="Map"
+        android:visible="true"
+        android:titleCondensed="Map"/>
 
 </menu>

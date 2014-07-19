@@ -56,6 +56,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 				String cartId = innerJsonObj.getString("id");
 				String permit_number = innerJsonObj.getString("permit_number");
 				String zip_code = innerJsonObj.getString("zip_code");
+				String address = innerJsonObj.getString("address");
 				
 				JSONArray photoJsonArray = innerJsonObj.getJSONArray("photos");
 				JSONObject defaultPhotoJson = photoJsonArray.getJSONObject(0);
@@ -69,6 +70,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 				item.description = description;
 				item.permit = permit_number;
 				item.zipcode = zip_code;
+				item.address = address;
 				
 				String defaultPhotoUrl = defaultPhotoJson.getString("image_url");
 				

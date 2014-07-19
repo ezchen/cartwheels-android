@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -16,11 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
+import com.cartwheels.custom_views.SearchView;
+import com.cartwheels.tasks.SearchTask;
+import com.cartwheels.tasks.SearchTaskFragment;
 import com.savagelook.android.UrlJsonAsyncTask;
 
-public class MainActivity extends Activity
+public class MainActivity extends LocationActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         				TaskCallbacks {
 
@@ -31,6 +36,10 @@ public class MainActivity extends Activity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+	
+	private SearchView searchView;
+	
+	DisplayCartsFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +55,28 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         
         preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
-    }
+        
+        Intent intent = getIntent();
+		handleIntent(intent);
+		
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
+		if (savedInstanceState != null) {
+			fragment = (DisplayCartsFragment) getFragmentManager().getFragment(savedInstanceState, fragmentTag);
+		} else {
+			fragment = (DisplayCartsFragment) getFragmentManager().findFragmentById(R.id.display_carts_fragment);
+		}
+		
+		preferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+		
+		// access the view to set this as the searchListener
+		searchView = (SearchView) findViewById(R.id.searchView);
+		searchView.setSearchListener(fragment);
+		
+		/*
+		SearchTask searchTask = new SearchTask(SearchActivity.this);
+		searchTask.execute("http://cartwheels.us/carts/data"); */
+	}
     
     private void loadTasksFromAPI(String url) {
         //GetTasksTask getTasksTask = new GetTasksTask(MainActivity.this);
@@ -74,26 +104,13 @@ public class MainActivity extends Activity
         /* Create the new activity */
         switch (position) {
         	case 1:
-        		Intent intent = new Intent(this, SearchActivity.class);
-        		String message = getString(R.string.title_section1);
-        		intent.putExtra("example", message);
-        		startActivity(intent);
+        		Toast.makeText(this, "Search Page Already Selected", Toast.LENGTH_SHORT).show();
         		break;
         	case 2:
-        		startActivity(new Intent(this, PlaceHolderActivity.class));
-        		break;
-        	case 3:
-        		startActivity(new Intent(this, MyProfileActivity.class));
-        		break;
-        	case 4:
         		startActivity(new Intent(this, DisplayOwnedCartsActivity.class));
         		break;
-        	case 5:
-        		startActivity(new Intent(this, SettingsActivity.class));
-        		break;
-        	case 6:
-        		startActivity(new Intent(this, SettingsActivity.class));
-        		break;
+        	case 3:
+        		logout();
         }
     }
 
@@ -129,41 +146,88 @@ public class MainActivity extends Activity
         actionBar.setTitle("Home");
     }
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.global, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.search, menu);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-    	
-    	Log.d("onOptionsItemSelected", "yes");
-        int id = item.getItemId();
-        Log.d("menuItemNumber", "" + id);
-        Log.d("action_logout", "" + R.id.action_logout);
-        switch (id) {
-        	case R.id.action_logout: 
-        		logout();
-        		Log.d("onOptionsItemSelected", "logout");
-        		return true;
-        	case R.id.action_settings:
-        		return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		} else if (id == R.id.action_viewMap) {
+			// start the map activity w/ all cart data
+			
+			if (fragment != null) {
+				Log.d("onOptionsItemSelected", "fragment handling selection");
+				fragment.onOptionsItemSelected(item);
+			} else {
+				Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
+				startActivity(intent);
+			}
+		}
+		return super.onOptionsItemSelected(item);
+	}
     
+    public void handleIntent(Intent intent) {
+		if (intent.hasExtra("tq")) {
+			String tq = intent.getStringExtra("tq");
+			String lq = intent.getStringExtra("lq");
+
+			search(tq, lq);
+		}
+	}
+    
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		Resources resources = getResources();
+		String fragmentTag = resources.getString(R.string.search_task_fragment_string);
+		getFragmentManager().putFragment(outState, fragmentTag, fragment);
+	}
+	
+	//@Override
+	public void search(String textQueryData, String locationQueryData) {
+		SearchTask searchTask = new SearchTask();
+		
+		// put in tq, lq, email, auth_token,
+		searchTask.put("tq", textQueryData);
+		searchTask.put("lq", locationQueryData);
+		
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		searchTask.put("email", email);
+		searchTask.put("auth_token", auth_token);
+		
+		Log.d("searchActivity", "search called: " + textQueryData + " " + locationQueryData);
+		Log.d("searchActivity search", "searchTask created");
+		
+		SearchTaskFragment taskFragment = new SearchTaskFragment();
+		taskFragment.setTask(searchTask);
+		
+		Resources resources = getResources();
+		int fragmentId = resources.getInteger(R.integer.search_task_fragment);
+		taskFragment.setTargetFragment(fragment, fragmentId);
+		taskFragment.show(getFragmentManager(), "displayCarts");
+		taskFragment.execute();
+		
+		Log.d("searchActivity search", "TaskFragment SuccessfullyCreated");
+		if (textQueryData.length() == 0 && locationQueryData.length() == 0) {
+			Toast.makeText(this, "Please complete one of the search fields", Toast.LENGTH_SHORT).show();
+		} else {
+			
+		}
+	}
+	
     private void logout() {
 
     	Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -172,37 +236,6 @@ public class MainActivity extends Activity
     	
     }
 
-    private class GetTasksTask extends UrlJsonAsyncTask {
-        public GetTasksTask(Context context) {
-            super(context);
-        }
-
-        /*
-        @Override
-        protected void onPostExecute(JSONObject json) {
-            try {
-                JSONArray jsonTasks = json.getJSONObject("data").getJSONArray("tasks");
-                int length = jsonTasks.length();
-                List<String> tasksTitles = new ArrayList<String>(length);
-
-                for (int i = 0; i < length; i++) {
-                    tasksTitles.add(jsonTasks.getJSONObject(i).getString("title"));
-                }
-
-                ListView tasksListView = (ListView) findViewById (R.id.tasks_list_view);
-                if (tasksListView != null) {
-                    tasksListView.setAdapter(new ArrayAdapter<String>(MainActivity.this,
-                      android.R.layout.simple_list_item_1, tasksTitles));
-                }
-            } catch (Exception e) {
-            Toast.makeText(context, e.getMessage(),
-                Toast.LENGTH_LONG).show();
-            } finally {
-            	super.onPostExecute(json);
-            }
-        }
-        */
-    }
     /**
      * A placeholder fragment containing a simple view.
      */

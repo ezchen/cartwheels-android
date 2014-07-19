@@ -56,7 +56,7 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		ObjectCartListItem item = getItem(position);
 
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
-		Picasso.with(context).load(item.bitmapUrl).into(cartPicture);
+		Picasso.with(context).load(item.bitmapUrl).transform(new RoundedTransform(10, 3)).into(cartPicture);
 		
 		RatingBar ratingBar = (RatingBar) listItem.findViewById(R.id.cartRating);
 		ratingBar.setRating(item.rating);
@@ -65,10 +65,7 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		cartName.setText(item.cartName);
 		
 		TextView cartZipcode = (TextView) listItem.findViewById(R.id.cartZipcode);
-		cartZipcode.setText(item.zipcode);
-		
-		TextView cartPermit = (TextView) listItem.findViewById(R.id.cartPermit);
-		cartPermit.setText(item.permit);
+		cartZipcode.setText(item.address);
 
 		return listItem;
 	}
