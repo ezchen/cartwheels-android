@@ -123,24 +123,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cartwheels.MainActivity" />
         </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBz60dO6igMgI8BxuxrR2OzPRrXys0OtZE" />
-
-        <activity
-            android:name="com.cartwheels.MyProfileActivity"
-            android:label="@string/title_activity_my_profile"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
-            android:parentActivityName="com.cartwheels.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cartwheels.MainActivity" />
-        </activity>
         <activity
             android:name="com.cartwheels.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -151,6 +133,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cartwheels.MainActivity" />
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBz60dO6igMgI8BxuxrR2OzPRrXys0OtZE" />
+
     </application>
 
 </manifest>
