@@ -4,28 +4,20 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:background="@color/theme_color"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cartwheels.RegisterActivity$PlaceholderFragment" >
-    
-    <ImageView 
-        android:id="@+id/defaultProfilePicture"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"
-        android:onClick="takePicture"
-        android:src="@drawable/default_profile_picture"/>
     
     <EditText
         android:id="@+id/firstName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="5dp"
-        android:layout_below="@id/defaultProfilePicture"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:ems="10"
+        android:background="@drawable/edittext_rounded_corners"
         android:hint="@string/first_name" >       
         <requestFocus/>
     </EditText>
@@ -38,6 +30,7 @@
         android:layout_below="@id/firstName"
         android:layout_alignParentLeft="true"
         android:ems="10"
+        android:background="@drawable/edittext_rounded_corners"
         android:hint="@string/last_name" />
         
     <EditText
@@ -49,6 +42,7 @@
         android:layout_below="@id/lastName"
         android:ems="10"
         android:hint="@string/user_email"
+        android:background="@drawable/edittext_rounded_corners"
         android:inputType="textEmailAddress" />
 
      <EditText
@@ -60,10 +54,11 @@
 	        android:layout_below="@id/userEmail"
 	        android:ems="10"
 	        android:hint="@string/user_password"
+	        android:background="@drawable/edittext_rounded_corners"
 	        android:inputType="textPassword" />
      
      <EditText 
-         android:id="@id/userPasswordConfirmation"
+         android:id="@+id/userPasswordConfirmation"
          android:layout_width="match_parent"
          android:layout_height="50dp"
          android:layout_margin="5dp"
@@ -71,15 +66,18 @@
          android:layout_below="@id/userPassword"
          android:ems="10"
          android:hint="Password confirmation"
+         android:background="@drawable/edittext_rounded_corners"
          android:inputType="textPassword"/>
      
      
      <Button
 	        android:id="@+id/registerOwnerButton"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/userPasswordConfirmation"
             android:onClick="register"
+            android:background="@drawable/buttonstate"
             android:text="@string/register" />
 </RelativeLayout>

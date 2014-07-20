@@ -1,15 +1,28 @@
 package com.cartwheels;
 
+import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
+
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TableLayout.LayoutParams;
 
 public class DisplayOwnedCartsActivity extends LocationActivity
 											implements NavigationDrawerFragment.NavigationDrawerCallbacks{
@@ -66,7 +79,6 @@ public class DisplayOwnedCartsActivity extends LocationActivity
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Home");
     }
     
 	@Override
@@ -109,4 +121,26 @@ public class DisplayOwnedCartsActivity extends LocationActivity
     	startActivity(intent);
     	
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Inflate the menu; this adds items to the action bar if it is present.
+		menu.clear();
+		getMenuInflater().inflate(R.menu.owned_carts_fragment, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		switch (id) {
+		case R.id.action_refresh:
+			return false;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

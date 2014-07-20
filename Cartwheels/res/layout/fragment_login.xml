@@ -13,7 +13,7 @@
 	        android:id="@+id/loginLogo"
 	        android:layout_alignParentTop="true"
 	        android:layout_centerHorizontal="true"
-	        android:layout_marginTop="30dp"
+	        android:layout_marginTop="50dp"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:src="@drawable/cw_logo_no_text_white" />
@@ -65,20 +65,6 @@
             android:layout_below="@id/userPassword"
             android:background="@drawable/buttonstate"
             android:text="@string/login" />
-	    
-	    <Button
-	        android:id="@+id/loginAsOwnerButton"
-	        android:layout_width="500dp"
-	        android:layout_height="50dp"
-	        android:layout_marginTop="0dp"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        android:layout_marginBottom="10dp"
-	        android:textColor="@android:color/white"
-	        android:layout_centerHorizontal="true"
-	        android:layout_below="@id/loginButton"
-	        android:background="@drawable/buttonstate"
-	        android:text="login as owner" />
 	    
 	    <LinearLayout 
 	        android:layout_width="match_parent"

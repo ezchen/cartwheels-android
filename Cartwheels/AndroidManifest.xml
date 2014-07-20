@@ -32,7 +32,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.cartwheels.MainActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/app_name"
             android:configChanges="orientation"
     		android:screenOrientation="portrait" >
@@ -43,7 +43,7 @@
         </activity>
         <activity
             android:name="com.cartwheels.PlaceHolderActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_place_holder"
             android:parentActivityName="com.cartwheels.MainActivity"
             android:configChanges="orientation"
@@ -54,7 +54,7 @@
         </activity>
         <activity
             android:name="com.cartwheels.SearchActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_search"
             android:configChanges="orientation"
     		android:screenOrientation="portrait"
@@ -73,21 +73,21 @@
         </activity>
         <activity
             android:name="com.cartwheels.LoginActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_login"
             android:configChanges="orientation"
     		android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cartwheels.RegisterActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_register"
             android:configChanges="orientation"
     		android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.cartwheels.ViewCartActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_view_cart"
             android:launchMode="singleTop"
             android:configChanges="orientation"
@@ -99,7 +99,7 @@
         </activity>
         <activity
             android:name="com.cartwheels.MarkerActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="View Carts"
             android:configChanges="orientation"
     		android:screenOrientation="portrait"
@@ -107,14 +107,14 @@
         </activity>
         <activity
             android:name="com.cartwheels.WriteReviewActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="Write Review"
             android:configChanges="orientation"
     		android:screenOrientation="portrait"
             android:parentActivityName="com.cartwheels.ViewCartActivity" />
         <activity
             android:name="com.cartwheels.DisplayOwnedCartsActivity"
-            android:icon="@drawable/cw_logo_no_text_white"
+            android:logo="@drawable/cw_logo_no_text_white"
             android:label="Owned Carts"
             android:configChanges="orientation"
     		android:screenOrientation="portrait"

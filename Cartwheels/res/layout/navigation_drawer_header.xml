@@ -6,23 +6,13 @@
     android:paddingRight="10dp"
     android:paddingLeft="10dp">
     
-    <ImageView
-        android:id="@+id/profilePicture"
-        android:src="@drawable/example_profile_picture"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:paddingRight="10dp"/>
-    
     <TextView
         android:id="@+id/username"
         android:inputType="textPersonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:layout_toRightOf="@id/profilePicture"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
@@ -36,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/username"
-        android:layout_toRightOf="@id/profilePicture"
+        android:layout_alignParentLeft="true"
         android:textSize="12sp"
         android:textStyle="italic"
         android:fontFamily="sans-serif"

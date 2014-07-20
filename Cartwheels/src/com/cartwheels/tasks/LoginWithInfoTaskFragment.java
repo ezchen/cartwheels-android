@@ -29,17 +29,21 @@ public class LoginWithInfoTaskFragment extends
 			
 			ArrayList<CharSequence> cartId = new ArrayList<CharSequence>();
 			
+			if (items != null) {
 			for (String key : items.keySet()) {
 				if (key.contains("cartId")) {
-					cartId.add(items.get(key));
+					//cartId.add(items.get(key));
 				} else {
 					intent.putExtra(key, items.get(key));
 				}
 			}
 			
-			intent.putCharSequenceArrayListExtra("cartId", cartId);
+			//intent.putCharSequenceArrayListExtra("cartId", cartId);
 			
 			fragment.onActivityResult(fragmentId, Activity.RESULT_OK, intent);
+			} else {
+				fragment.onActivityResult(fragmentId, Activity.RESULT_OK, intent);
+			}
 		}
 	}
 }

@@ -16,6 +16,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -182,15 +184,24 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			}
 		} else if (requestCode == 7 && resultCode == Activity.RESULT_OK) {
 			if (data != null) {
-				Toast.makeText(getActivity(), "Checkin Successful", Toast.LENGTH_SHORT).show();
-			} else {
-				SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
-				String userType = preferences.getString("LoginType", "");
-				if ("owner".equals(userType)) {
-					Toast.makeText(getActivity(), "Owners cannot checkin", Toast.LENGTH_SHORT).show();
-				} else {
-					Toast.makeText(getActivity(), "Checkin Unsuccessful", Toast.LENGTH_SHORT).show();
+				if (data.getBooleanExtra("success", false)) {
+					Toast.makeText(getActivity(), "Checkin Successful", Toast.LENGTH_SHORT).show();
+					
+					} else {
+						SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+						String userType = preferences.getString("LoginType", "");
+					if ("owner".equals(userType)) {
+						Toast.makeText(getActivity(), "Owners cannot checkin", Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(getActivity(), "Checkin Unsuccessful", Toast.LENGTH_SHORT).show();
+					}
 				}
+			}
+		} else if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
+			if (data.getBooleanExtra("success", false)) {
+				Toast.makeText(getActivity(), "Cart Claimed", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getActivity(), "Wrong Permit Number. Stop Stealing", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -221,7 +232,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 	private void setupOptions(View rootView) {
 		ListView listView = (ListView) rootView.findViewById(R.id.viewCart_Options);
 		
-		ObjectViewCartItem[] options = new ObjectViewCartItem[5];
+		ObjectViewCartItem[] options = new ObjectViewCartItem[6];
 		options[0] = new ObjectViewCartItem(R.drawable.ic_action_directions, "Get Directions",
 												R.drawable.ic_action_next_item);
 		/* options[1] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Menu",
@@ -234,6 +245,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 												R.drawable.ic_action_next_item);
 		options[4] = new ObjectViewCartItem(R.drawable.ic_action_labels, "Add Menu Item",
 												R.drawable.ic_action_next_item);
+		options[5] = new ObjectViewCartItem(R.drawable.ic_action_cart, "Claim This Cart", R.drawable.ic_action_next_item);
 		ViewCartAdapter adapter = new ViewCartAdapter(getActivity(), R.layout.listview_viewcart_row, options);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
@@ -275,11 +287,35 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				break;
 			case 4:
 				showUpdateMenuDialog();
-				Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
+				break;
+			case 5:
+				showClaimDialog();
 				break;
 		}
 	}
 	
+	private void showClaimDialog() {
+
+		final EditText textView = new EditText(getActivity());
+		textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		textView.setInputType(InputType.TYPE_CLASS_NUMBER);
+		textView.setHint("Permit Number");
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setView(textView).setTitle("Claim Cart")
+		       .setCancelable(false)
+		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   claimCart();
+		           }
+		       })
+		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 	
 	public void takePicture(int requestCode) {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -387,6 +423,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				new DefaultTaskFragment<DefaultGetJsonAsyncTask, ViewCartFragment, Boolean>(10);
 		fragment.setTask(asyncTask);
 		asyncTask.setFragment(fragment);
+		fragment.setTargetFragment(this, 10);
+		fragment.show(getFragmentManager(), "Claim Cart");
 		
 		fragment.execute();
 	}

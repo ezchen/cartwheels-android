@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cartwheels.tasks.LoginWithInfoTask;
 import com.cartwheels.tasks.LoginWithInfoTaskFragment;
@@ -46,8 +47,6 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		View rootView = inflater.inflate(R.layout.fragment_login,
 				container, false);
 		Button button = (Button) rootView.findViewById(R.id.loginButton);
-		Button loginAsOwner = (Button) rootView.findViewById(R.id.loginAsOwnerButton);
-		loginAsOwner.setOnClickListener(this);
 		button.setOnClickListener(this);
 		return rootView;
 	}
@@ -93,7 +92,8 @@ public class LoginFragment extends Fragment implements OnClickListener {
 		if (requestCode == 8 && resultCode == Activity.RESULT_OK) {
 			boolean completed = false;
 			if (data != null) {
-				if (data.hasExtra("auth_token")) {
+				if (data.hasExtra("auth_token") && data.getStringExtra("auth_token") != null &&
+						data.getStringExtra("auth_token").length() > 0) {
 					SharedPreferences preferences = 
 							getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 					
@@ -113,6 +113,7 @@ public class LoginFragment extends Fragment implements OnClickListener {
 					startActivity(intent);
 					completed = true;
 				} else {
+					Toast.makeText(getActivity(), "Login Failed. Are you logging in as the right account type?", Toast.LENGTH_SHORT).show();
 					Log.e("onActivityResult loginActivity", "auth_token is null");
 				}
 			} else {
@@ -145,17 +146,13 @@ public class LoginFragment extends Fragment implements OnClickListener {
 			showDialog("Choose Account Type");
 			//login("user");
 			break;
-		case R.id.loginAsOwnerButton:
-			login("owner");
-			Log.d("onClick loginFragment", "loggedInAsOwner");
-			break;
 		}
 	}
 	
 	public void showDialog(String message) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage(message)
-		       .setCancelable(false)
+		       .setCancelable(true)
 		       .setPositiveButton("User", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		        	   login("user");

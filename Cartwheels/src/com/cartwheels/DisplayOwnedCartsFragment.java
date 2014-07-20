@@ -17,13 +17,14 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +33,6 @@ import com.cartwheels.tasks.DefaultPutJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.GetOwnedCartsInfoTask;
 import com.cartwheels.tasks.UpdateOwnedCartTask;
-import com.cartwheels.tasks.WriteReviewTask;
-import com.cartwheels.tasks.WriteReviewTaskFragment;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
 public class DisplayOwnedCartsFragment extends ListFragment implements OnClickListener {
@@ -54,6 +53,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -342,5 +342,20 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 	    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 	        startActivityForResult(takePictureIntent, requestCode);
 	    }
+	}
+	
+	@Override
+	public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+	    switch (item.getItemId()) {
+	    case R.id.action_refresh:
+	    	updateUserInfo();
+	    	return true;
+	    }
+	    return super.onOptionsItemSelected(item);
 	}
 }

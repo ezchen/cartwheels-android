@@ -46,7 +46,7 @@ public class MenuItemAdapter extends ArrayAdapter<FoodMenuItem> {
 		Picasso.with(context).load(imageUrl).into(menuImageView);
 		menuItemNameView.setText(name);
 		menuItemPriceView.setText(price);
-		menuItemDescriptionView.setText(description);
+		menuItemDescriptionView.setText("");
 		return listItem;
 	}
 }

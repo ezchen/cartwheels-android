@@ -142,12 +142,7 @@ public class RegisterActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-	        Bundle extras = data.getExtras();
-	        Bitmap imageBitmap = (Bitmap) extras.get("data");
-	        ImageView imageView = (ImageView) findViewById(R.id.defaultProfilePicture);
-	        imageView.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap, 125, 125, false));
-	    }
+	    super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	/*

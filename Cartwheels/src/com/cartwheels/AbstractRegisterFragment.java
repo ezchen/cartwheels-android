@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.RegisterTask;
@@ -31,15 +32,21 @@ public abstract class AbstractRegisterFragment extends Fragment
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
 			if (data != null && data.hasExtra("result")) {
-				String auth_token = data.getStringExtra("result");
-				SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
-				SharedPreferences.Editor editor = preferences.edit();
-				
-				editor.putString("AuthToken", auth_token);
-				editor.commit();
-				
-				Intent intent = new Intent(getActivity(), MainActivity.class);
-				startActivity(intent);
+				if (data.getStringExtra("result") != null && data.getStringExtra("result").length() > 0) {
+					Toast.makeText(getActivity(), "Register Successful", Toast.LENGTH_SHORT).show();
+					String auth_token = data.getStringExtra("result");
+					SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+					SharedPreferences.Editor editor = preferences.edit();
+					
+					editor.putString("AuthToken", auth_token);
+					editor.commit();
+					
+					Intent intent = new Intent(getActivity(), LoginActivity.class);
+					startActivity(intent);
+				} else {
+					Toast.makeText(getActivity(), "Register Unsuccessful", Toast.LENGTH_SHORT).show();
+				}
+
 			} else {
 				Log.d("onActivityResult", "AuthToken is null");
 			}

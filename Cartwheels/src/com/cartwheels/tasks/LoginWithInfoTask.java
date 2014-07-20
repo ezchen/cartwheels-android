@@ -29,6 +29,10 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		uri.scheme("http").authority("cartwheels.us").appendPath(innerJsonObjKey + "s")
 			.appendPath("data");
 		
+		if (info != null) {
+		String auth_token = info.get("auth_token");
+		
+		if (auth_token != null && auth_token.length() > 0) {
 		info.put("userType", innerJsonObjKey);
 		
 		String email = innerObjectValues.get("email");
@@ -63,18 +67,20 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 			info.put("createdAt", createdAt);
 			
 			// take two carts to show as a preview on the home page later
-			JSONArray jsonCarts = innerJson.getJSONArray("carts");
+			//JSONArray jsonCarts = innerJson.getJSONArray("carts");
 			
+			/*
 			for (int i = 0; i < jsonCarts.length(); i++) {
 				String cartId = jsonCarts.getJSONObject(i).getString("id");
 				info.put("cartId" + i, cartId);
-			}
+			}*/
 			
-			Log.d("doInBackground LoginWithInfoTask", jsonCarts.toString());
+			//Log.d("doInBackground LoginWithInfoTask", jsonCarts.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		}
+		}
 		return info;
 	}
 	

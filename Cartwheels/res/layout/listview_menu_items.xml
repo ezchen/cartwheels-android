@@ -6,8 +6,9 @@
 
     <ImageView
         android:id="@+id/menuItemImage"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="10dp"
         android:layout_alignParentLeft="true" />
     
     <TextView
@@ -23,12 +24,14 @@
         android:id="@+id/menuItemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/menuItemImage"
         android:layout_below="@id/menuItemName"
         android:text="0$" />
     
     <TextView
         android:id="@+id/menuItemDescription"
+        android:layout_marginLeft="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/menuItemImage"

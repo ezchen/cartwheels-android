@@ -107,6 +107,10 @@ public class MainActivity extends LocationActivity
         		Toast.makeText(this, "Search Page Already Selected", Toast.LENGTH_SHORT).show();
         		break;
         	case 2:
+        		if ("user".equals(preferences.getString("LoginType", "user"))) {
+        			Toast.makeText(this, "Only owners can access this page", Toast.LENGTH_SHORT).show();
+        			return;
+        		}
         		startActivity(new Intent(this, DisplayOwnedCartsActivity.class));
         		break;
         	case 3:
