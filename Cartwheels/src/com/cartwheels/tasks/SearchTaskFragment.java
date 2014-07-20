@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import com.cartwheels.DisplayCartsFragment;
 import com.cartwheels.ObjectCartListItem;
 import com.cartwheels.R;
-import com.cartwheels.RetainFragment;
 
 /*
  * Fragment used to store AsyncTask to support orientation change in
