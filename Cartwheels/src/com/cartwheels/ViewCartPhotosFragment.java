@@ -31,7 +31,7 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	private GridView cartPhotos;
 	private String[] imageUrls;
 	
-	private CustomSwipeRefreshLayout swipeLayout;
+	private SwipeRefreshLayout swipeLayout;
 	
 	int offset;
 	int limit;
@@ -72,8 +72,8 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 		View view = inflater.inflate(R.layout.fragment_display_cart_photos, container, false);
 		cartPhotos = (GridView) view.findViewById(R.id.photos);
 
-        swipeLayout = (CustomSwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeLayout.setGridView(cartPhotos);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setEnabled(true);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
                 android.R.color.holo_green_light, 
@@ -87,7 +87,7 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	}
 	
 	private void load() {
-ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
+		ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
 		
 		String cartId = item.cartId;
 		PhotoUrlTask photoUrlTask = new PhotoUrlTask();
