@@ -106,13 +106,6 @@
             android:parentActivityName="com.cartwheels.SearchActivity" >
         </activity>
         <activity
-            android:name="com.cartwheels.WriteReviewActivity"
-            android:logo="@drawable/cw_logo_no_text_white"
-            android:label="Write Review"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
-            android:parentActivityName="com.cartwheels.ViewCartActivity" />
-        <activity
             android:name="com.cartwheels.DisplayOwnedCartsActivity"
             android:logo="@drawable/cw_logo_no_text_white"
             android:label="Owned Carts"
