@@ -173,6 +173,12 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
     			ObjectCartListItem item = items.get(position);
     			
     			Location location = ((LocationActivity)getActivity()).getLastLocation();
+    			
+    			if (location == null) {
+    				Toast.makeText(getActivity(), "Location Services Are Off. Please Turn Them On.", Toast.LENGTH_SHORT).show();
+    				return;
+    			}
+    			
     			String lat = location.getLatitude() + "";
     			String lon = location.getLongitude() + "";
     			

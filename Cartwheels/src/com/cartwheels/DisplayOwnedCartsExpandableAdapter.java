@@ -66,8 +66,11 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		TextView description = (TextView) view.findViewById(R.id.ownedCartDescription);
 		
 		ratingBar.setRating(item.rating);
-		if (item.address != null)
-		zipCode.setText(item.address);
+		if (item.address != null && !item.address.equals("null"))
+			zipCode.setText(item.address);
+		else
+			zipCode.setText("item unavailable");
+		
 		if (item.permit != null)
 		permit.setText(item.permit);
 		

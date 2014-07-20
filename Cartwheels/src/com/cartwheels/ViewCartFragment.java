@@ -273,7 +273,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 							Uri.parse(url));
 					startActivity(intent);
 				} else {
-					
+					Toast.makeText(getActivity(), "Location Services Are Off. Please Turn Them On.", Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case 1:
@@ -305,7 +305,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		       .setCancelable(false)
 		       .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
-		        	   claimCart();
+		        	   String permit = textView.getText().toString();
+		        	   claimCart(permit);
 		           }
 		       })
 		       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -377,6 +378,12 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		
 		// location query parameters
 		Location location = ((LocationActivity)getActivity()).getLastLocation();
+		
+		if (location == null) {
+			Toast.makeText(getActivity(),
+					"Location Services Are Off. You Must Have Location Services On To Checkin", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		String lat = location.getLatitude() + "";
 		String lon = location.getLongitude() + "";
 		
@@ -398,13 +405,11 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		fragment.execute(url);
 	}
 	
-	private void claimCart() {
+	private void claimCart(String permit_number) {
 		
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		String email = preferences.getString("email", "");
 		String auth_token = preferences.getString("AuthToken", "");
-		
-		String permit_number = item.permit;
 		
 		String cartId = item.cartId;
 		
@@ -539,9 +544,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		String email = preferences.getString("email", "");
 		String auth_token = preferences.getString("AuthToken", "");
-		
-		int realRating = (int) rating;
-		String realText = text;
+
 		asyncTask.put("email", email);
 		asyncTask.put("auth_token", auth_token);
 		asyncTask.put("review[rating]", ((int)rating) + "");

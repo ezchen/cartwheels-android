@@ -65,7 +65,11 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		cartName.setText(item.cartName);
 		
 		TextView cartZipcode = (TextView) listItem.findViewById(R.id.cartZipcode);
-		cartZipcode.setText(item.address);
+		
+		if (item.address != null && !item.address.equals("null"))
+			cartZipcode.setText(item.address);
+		else
+			cartZipcode.setText("Address Unavailable");
 
 		return listItem;
 	}

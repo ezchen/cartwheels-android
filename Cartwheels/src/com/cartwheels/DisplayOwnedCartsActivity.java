@@ -1,28 +1,17 @@
 package com.cartwheels;
 
-import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
-
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TableLayout.LayoutParams;
 
 public class DisplayOwnedCartsActivity extends LocationActivity
 											implements NavigationDrawerFragment.NavigationDrawerCallbacks{

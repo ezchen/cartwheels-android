@@ -105,9 +105,6 @@ public class DisplayCartsFragment extends Fragment
 		
 		displayCarts.setOnItemClickListener(this);
 		
-		View view = inflater.inflate(R.layout.view_more_carts, container);
-		View previousCarts = inflater.inflate(R.layout.load_previous_carts, container);
-		
 		if (savedInstanceState == null) {
 			arrayListItems = new ArrayList<ObjectCartListItem>();
 		} else {
@@ -285,12 +282,19 @@ public class DisplayCartsFragment extends Fragment
 			lastTextQuery = textQueryData;
 			lastLocationQuery = locationQueryData;
 
-			Location location = ((LocationActivity) getActivity()).getLastLocation();
-			String lat = location.getLatitude() + "";
-			String lon = location.getLongitude() + "";
+
 			if (useLocation) {
-				locationQueryData = lat + "," + lon;
-				lastLocationQuery = lat + "," + lon;
+				Location location = ((LocationActivity) getActivity()).getLastLocation();
+				
+				if (location == null) {
+					Toast.makeText(getActivity(), "Location Services Are Off. Please Turn Them On.", Toast.LENGTH_SHORT).show();
+					return;
+				} else {
+					String lat = location.getLatitude() + "";
+					String lon = location.getLongitude() + "";
+					locationQueryData = lat + "," + lon;
+					lastLocationQuery = lat + "," + lon;
+				}
 			}
 			offset = 0;
 			moreResults = true;
