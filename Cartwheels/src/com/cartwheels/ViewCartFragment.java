@@ -35,7 +35,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cartwheels.custom_views.RatingView;
 import com.cartwheels.tasks.CheckinTask;
 import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
 import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
