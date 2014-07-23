@@ -54,7 +54,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
         
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("reviews")
+			uri.scheme("https").authority("cartwheels.us").appendPath("reviews")
 				.appendPath("data");
 			
 			for (String key : objectValues.keySet()) {
@@ -123,7 +123,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
         
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("users")
+			uri.scheme("https").authority("cartwheels.us").appendPath("users")
 				.appendPath("data");
 			
 			for (String key : objectValues.keySet()) {

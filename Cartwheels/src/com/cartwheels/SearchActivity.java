@@ -49,7 +49,7 @@ public class SearchActivity extends LocationActivity
 		
 		/*
 		SearchTask searchTask = new SearchTask(SearchActivity.this);
-		searchTask.execute("http://cartwheels.us/carts/data"); */
+		searchTask.execute("https://cartwheels.us/carts/data"); */
 	}
 
 	@Override

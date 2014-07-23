@@ -74,7 +74,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 				
 				String defaultPhotoUrl = defaultPhotoJson.getString("image_url");
 				
-				item.bitmapUrl = "http://cartwheels.us" + defaultPhotoUrl;
+				item.bitmapUrl = "https://cartwheels.us" + defaultPhotoUrl;
 				
 				items.add(item);
 				Log.d("doInBackground GetOwnedCartsInfoTask", json + "");

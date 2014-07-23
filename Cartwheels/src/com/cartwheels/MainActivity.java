@@ -29,7 +29,7 @@ public class MainActivity extends LocationActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         				TaskCallbacks {
 
-	private static final String TASKS_URL = "http://cartwheels.us/mobile/sessions.json";
+	private static final String TASKS_URL = "https://cartwheels.us/mobile/sessions.json";
 	private SharedPreferences preferences;
 	
     /**
@@ -75,7 +75,7 @@ public class MainActivity extends LocationActivity
 		
 		/*
 		SearchTask searchTask = new SearchTask(SearchActivity.this);
-		searchTask.execute("http://cartwheels.us/carts/data"); */
+		searchTask.execute("https://cartwheels.us/carts/data"); */
 	}
     
     private void loadTasksFromAPI(String url) {

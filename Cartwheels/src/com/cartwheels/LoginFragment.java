@@ -25,8 +25,8 @@ import com.cartwheels.tasks.LoginWithInfoTaskFragment;
  */
 public class LoginFragment extends Fragment implements OnClickListener {
 
-	private final static String LOGIN_API_ENDPOINT_URL = "http://cartwheels.us/mobile/sessions";
-	private final static String LOGIN_API_OWNER_ENDPOINT_URL = "http://cartwheels.us/mobile/owners/sessions";
+	private final static String LOGIN_API_ENDPOINT_URL = "https://cartwheels.us/mobile/sessions";
+	private final static String LOGIN_API_OWNER_ENDPOINT_URL = "https://cartwheels.us/mobile/owners/sessions";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

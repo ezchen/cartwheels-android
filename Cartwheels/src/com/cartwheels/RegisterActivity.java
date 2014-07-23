@@ -256,7 +256,7 @@ public class RegisterActivity extends Activity {
 	 */
 	public static class registerUserFragment extends AbstractRegisterFragment {
 
-		private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/registrations";
+		private final static String REGISTER_API_ENDPOINT_URL = "https://cartwheels.us/mobile/registrations";
 		
 		public registerUserFragment() {
 		}
@@ -284,7 +284,7 @@ public class RegisterActivity extends Activity {
 	 */
 	public static class registerOwnerFragment extends AbstractRegisterFragment {
 		
-		private final static String REGISTER_API_ENDPOINT_URL = "http://cartwheels.us/mobile/owners/registrations";
+		private final static String REGISTER_API_ENDPOINT_URL = "https://cartwheels.us/mobile/owners/registrations";
 		
 		public registerOwnerFragment() {
 			

@@ -71,7 +71,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
         Log.d("SearchTask doInBackground", "method entered");
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("carts")
+			uri.scheme("https").authority("cartwheels.us").appendPath("carts")
 				.appendPath("search");
 			
 			for (String key : objectValues.keySet()) {
@@ -162,7 +162,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 					bitmapUrl = jsonBitmapUrl.getString(TAGS_URL_THUMB);
 				}
 				if (bitmapUrl != null) {
-					bitmapUrl = "http://cartwheels.us" + bitmapUrl;
+					bitmapUrl = "https://cartwheels.us" + bitmapUrl;
 				}
 				ObjectCartListItem cartListItem = new ObjectCartListItem(bitmapUrl, cartName,
 														cartZipcode, cartPermit);

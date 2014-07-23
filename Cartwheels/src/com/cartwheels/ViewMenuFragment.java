@@ -52,7 +52,7 @@ public class ViewMenuFragment extends ListFragment {
 		item = getArguments().getParcelable("ObjectCartListItem");
 		String cartId = item.cartId;
 		
-		String scheme = "http";
+		String scheme = "https";
 		String authority = "cartwheels.us";
 		String[] path = new String[2];
 		path[0] = "menu_items";

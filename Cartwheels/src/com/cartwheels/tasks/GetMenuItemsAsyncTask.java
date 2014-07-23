@@ -50,8 +50,8 @@ public class GetMenuItemsAsyncTask extends AbstractGetJsonAsyncTask<ArrayList<Fo
 				double price = 0;
 				JSONArray notes = null;
 
-				String image_url = "http://cartwheels.us/systems/images/default.png";
-				String image_url_large = "http://cartwheels.us/systems/images/default.png";
+				String image_url = "https://cartwheels.us/systems/images/default.png";
+				String image_url_large = "https://cartwheels.us/systems/images/default.png";
 				
 				String description = null;
 				String name = null;
@@ -72,9 +72,9 @@ public class GetMenuItemsAsyncTask extends AbstractGetJsonAsyncTask<ArrayList<Fo
 					JSONObject photo = innerJson.getJSONObject(TAGS_PHOTO);
 					
 					if (photo.has(TAGS_IMAGE_URL))
-						image_url = "http://cartwheels.us" + photo.getString(TAGS_IMAGE_URL);
+						image_url = "https://cartwheels.us" + photo.getString(TAGS_IMAGE_URL);
 					if (photo.has(TAGS_IMAGE_URL_LARGE))
-						image_url_large = "http://cartwheels.us" + photo.getString(TAGS_IMAGE_URL_LARGE);
+						image_url_large = "https://cartwheels.us" + photo.getString(TAGS_IMAGE_URL_LARGE);
 				}
 				
 				if (innerJson.has(TAGS_DESCRIPTION))

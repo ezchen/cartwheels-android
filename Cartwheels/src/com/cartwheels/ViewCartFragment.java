@@ -104,7 +104,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				String lat = item.lat;
 				String lon = item.lon;
 				
-				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+				String url = "https://maps.googleapis.com/maps/api/staticmap?" 
 							+ "center=" + lat + "," 
 							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
 				Picasso.with(getActivity()).load(url).into(map);
@@ -125,7 +125,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				String lat = item.lat;
 				String lon = item.lon;
 				
-				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+				String url = "https://maps.googleapis.com/maps/api/staticmap?" 
 							+ "center=" + lat + "," 
 							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
 				Picasso.with(getActivity()).load(url).into(map);
@@ -266,7 +266,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 					String cartLat = item.lat;
 					String cartLon = item.lon;
 					
-					String url = "http://maps.google.com/maps?saddr=" +
+					String url = "https://maps.google.com/maps?saddr=" +
 							currentLat + "," + currentLon + "&daddr=" + cartLat + "," + cartLon;
 					intent = new Intent(android.content.Intent.ACTION_VIEW,
 							Uri.parse(url));
@@ -357,7 +357,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		fragment.setTargetFragment(this, 6);
 		
 		String url;
-		url = "http://cartwheels.us/carts/" + target_id + "/photos";
+		url = "https://cartwheels.us/carts/" + target_id + "/photos";
 		fragment.execute(url);
 	}
 	
@@ -400,7 +400,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		fragment.setTargetFragment(this, 7);
 		
 		String url;
-		url = "http://cartwheels.us/carts/" + target_id + "/checkins";
+		url = "https://cartwheels.us/carts/" + target_id + "/checkins";
 		fragment.execute(url);
 	}
 	
@@ -417,7 +417,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		path[1] = cartId;
 		path[2] = "claim";
 		
-		DefaultGetJsonAsyncTask asyncTask = new DefaultGetJsonAsyncTask("http", "cartwheels.us", path);
+		DefaultGetJsonAsyncTask asyncTask = new DefaultGetJsonAsyncTask("https", "cartwheels.us", path);
 		
 		asyncTask.put("email", email);
 		asyncTask.put("auth_token", auth_token);
@@ -439,7 +439,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		String auth_token = preferences.getString("AuthToken", "");
 		
 		String cartId = item.cartId;
-		String url = "http://cartwheels.us/carts/" + cartId + "/menu/items";
+		String url = "https://cartwheels.us/carts/" + cartId + "/menu/items";
 		
 		String encodedImage = null;
 		

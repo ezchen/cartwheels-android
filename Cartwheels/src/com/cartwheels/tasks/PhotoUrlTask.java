@@ -55,7 +55,7 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
         Log.d("SearchTask doInBackground", "method entered");
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("carts")
+			uri.scheme("https").authority("cartwheels.us").appendPath("carts")
 				.appendPath("data");
 			
 			for (String key : objectValues.keySet()) {
@@ -108,7 +108,7 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 				JSONObject jsonPhotoObject = jsonArrayPhotoUrls.getJSONObject(i);
 				
 				Log.d("jsonPhotoObject", jsonPhotoObject.toString());
-				String photoUrl = "http://cartwheels.us" + jsonPhotoObject.getString(TAGS_IMAGE_URL);
+				String photoUrl = "https://cartwheels.us" + jsonPhotoObject.getString(TAGS_IMAGE_URL);
 				
 				Log.d("cart list item", photoUrl);
 				items[i] = photoUrl;

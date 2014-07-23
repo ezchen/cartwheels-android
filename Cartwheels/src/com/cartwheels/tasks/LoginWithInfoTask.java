@@ -26,7 +26,7 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		JSONObject json = new JSONObject();
 		
 		Builder uri = new Builder();
-		uri.scheme("http").authority("cartwheels.us").appendPath(innerJsonObjKey + "s")
+		uri.scheme("https").authority("cartwheels.us").appendPath(innerJsonObjKey + "s")
 			.appendPath("data");
 		
 		if (info != null) {

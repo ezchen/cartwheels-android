@@ -38,7 +38,7 @@ public class WriteReviewTask extends AsyncTask<String, Void, Boolean> {
 		
 		try {
 			Builder uri = new Builder();
-			uri.scheme("http").authority("cartwheels.us").appendPath("carts")
+			uri.scheme("https").authority("cartwheels.us").appendPath("carts")
 				.appendPath(id).appendPath("reviews");
 			
 			for (String key : objectValues.keySet()) {

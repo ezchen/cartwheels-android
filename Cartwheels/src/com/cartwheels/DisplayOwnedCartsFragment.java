@@ -76,7 +76,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 		path[0] = "owners";
 		path[1] = "data";
 		
-		UpdateOwnedCartTask asyncTask = new UpdateOwnedCartTask("http", "cartwheels.us", path);
+		UpdateOwnedCartTask asyncTask = new UpdateOwnedCartTask("https", "cartwheels.us", path);
 		DefaultTaskFragment<UpdateOwnedCartTask, DisplayOwnedCartsFragment, ArrayList<String>> fragment = 
 				new DefaultTaskFragment<UpdateOwnedCartTask, DisplayOwnedCartsFragment, ArrayList<String>>(12) {
 			@Override
@@ -121,7 +121,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 			path[0] = "carts";
 			path[1] = "data";
 			
-			GetOwnedCartsInfoTask asyncTask = new GetOwnedCartsInfoTask("http", "cartwheels.us", path, cartId);
+			GetOwnedCartsInfoTask asyncTask = new GetOwnedCartsInfoTask("https", "cartwheels.us", path, cartId);
 			
 			
 			SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
@@ -193,7 +193,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
         		asyncTask.setFragment(taskFragment);
         		
         		taskFragment.show(getFragmentManager(), "updateCartLocation");
-        		taskFragment.execute("http://cartwheels.us/carts/" + item.cartId);
+        		taskFragment.execute("https://cartwheels.us/carts/" + item.cartId);
     		}
 		} else if (resultCode == 21 && requestCode == Activity.RESULT_OK) {
 			if (data.getBooleanExtra("result", false)) {
@@ -232,7 +232,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
         		asyncTask.setFragment(taskFragment);
         		
         		taskFragment.show(getFragmentManager(), "updateCartLocation");
-        		taskFragment.execute("http://cartwheels.us/carts/" + item.cartId);
+        		taskFragment.execute("https://cartwheels.us/carts/" + item.cartId);
     		}
 		} else if (resultCode == 31 && requestCode == Activity.RESULT_OK) {
 			if (data.getBooleanExtra("result", false)) {
@@ -294,7 +294,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 		String auth_token = preferences.getString("AuthToken", "");
 		
 		String cartId = focusedItem.cartId;
-		String url = "http://cartwheels.us/carts/" + cartId + "/menu/items";
+		String url = "https://cartwheels.us/carts/" + cartId + "/menu/items";
 		
 		String encodedImage = null;
 		
