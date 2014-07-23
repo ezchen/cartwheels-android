@@ -1,11 +1,14 @@
 package com.cartwheels.tasks;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.net.Uri.Builder;
@@ -59,7 +62,11 @@ public class WriteReviewTask extends AsyncTask<String, Void, Boolean> {
 			success = json.getBoolean("success");
 			Log.d("jsonObject", json + "");
 			Log.d("success", success + "");
-		} catch (Exception e) {
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		

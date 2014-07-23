@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cartwheels"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.0.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -40,17 +40,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.cartwheels.PlaceHolderActivity"
-            android:logo="@drawable/cw_logo_no_text_white"
-            android:label="@string/title_activity_place_holder"
-            android:parentActivityName="com.cartwheels.MainActivity"
-            android:configChanges="orientation"
-   			android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cartwheels.MainActivity" />
         </activity>
         <activity
             android:name="com.cartwheels.SearchActivity"
@@ -116,22 +105,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cartwheels.MainActivity" />
         </activity>
-        <activity
-            android:name="com.cartwheels.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
-            android:parentActivityName="com.cartwheels.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cartwheels.MainActivity" />
-        </activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBz60dO6igMgI8BxuxrR2OzPRrXys0OtZE" />
+            android:value="AIzaSyBMUYNgy8CYbDDDOwX6oeRVFJYfFWeF_44" />
 
     </application>
 

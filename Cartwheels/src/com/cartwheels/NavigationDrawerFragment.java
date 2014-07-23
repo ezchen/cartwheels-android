@@ -97,21 +97,6 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
         
-        /* Create the custom navigation drawer with icons */
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
-        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_search,
-        		getString(R.string.title_section2));
-        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_cart,
-        		getString(R.string.title_section5));
-        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_logout,
-        		"Logout");
-        
-        mDrawerListView.setAdapter(new DrawerItemCustomAdapter(
-                getActivity(),
-                R.layout.listview_item_row,
-                drawerItem
-                ));
-        
         /* Add the profile picture to navigation drawer and the user name */
         ViewGroup header = (ViewGroup) inflater.inflate(
         		R.layout.navigation_drawer_header,
@@ -140,6 +125,23 @@ public class NavigationDrawerFragment extends Fragment {
         	isCartOwner.setText(userType);
         }
         mDrawerListView.addHeaderView(header, null, false);
+        
+        /* Create the custom navigation drawer with icons */
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
+        drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_search,
+        		getString(R.string.title_section2));
+        drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_cart,
+        		getString(R.string.title_section5));
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_logout,
+        		"Logout");
+        
+        mDrawerListView.setAdapter(new DrawerItemCustomAdapter(
+                getActivity(),
+                R.layout.listview_item_row,
+                drawerItem
+                ));
+        
+
         return mDrawerListView;
     }
 

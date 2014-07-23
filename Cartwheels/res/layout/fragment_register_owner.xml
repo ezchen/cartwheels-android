@@ -77,7 +77,6 @@
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/userPasswordConfirmation"
-            android:onClick="register"
             android:background="@drawable/buttonstate"
             android:text="@string/register" />
 </RelativeLayout>

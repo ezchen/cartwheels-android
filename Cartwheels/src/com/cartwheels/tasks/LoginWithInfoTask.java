@@ -30,10 +30,10 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 			.appendPath("data");
 		
 		if (info != null) {
-		String auth_token = info.get("auth_token");
+			String auth_token = info.get("auth_token");
 		
 		if (auth_token != null && auth_token.length() > 0) {
-		info.put("userType", innerJsonObjKey);
+			info.put("userType", innerJsonObjKey);
 		
 		String email = innerObjectValues.get("email");
 		Log.d("email LoginWIthInfoTask", email);
@@ -42,7 +42,7 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		uri.appendQueryParameter("auth_token", info.get("auth_token"));
 		uri.appendQueryParameter("offset", "0");
 		uri.appendQueryParameter("limit", "20");
-		uri.appendQueryParameter("owner[email]", innerObjectValues.get("email"));
+		uri.appendQueryParameter(innerJsonObjKey + "[email]", innerObjectValues.get("email"));
 		
 		HttpGet get = new HttpGet(uri.build().toString());
 		

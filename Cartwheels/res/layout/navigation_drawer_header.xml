@@ -19,7 +19,7 @@
         android:textStyle="normal"
         android:fontFamily="sans-serif"
         android:layout_centerHorizontal="true"
-        android:text="Ben Attal" />
+        android:text="Username" />
     
     <TextView 
         android:id="@+id/cartOwner"

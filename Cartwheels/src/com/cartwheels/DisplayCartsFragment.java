@@ -36,7 +36,7 @@ public class DisplayCartsFragment extends Fragment
 														SearchListener, OnScrollListener {
 
 	private ListView displayCarts;
-	private ObjectCartListItem[] items;
+	//private ObjectCartListItem[] items;
 	
 	private ArrayList<ObjectCartListItem> arrayListItems;
 	private SwingBottomInAnimationAdapter swingBottomInAnimationAdapter;
@@ -132,11 +132,11 @@ public class DisplayCartsFragment extends Fragment
 		
 		// Restore the list
 		if (savedInstanceState != null) {
-			items = (ObjectCartListItem[]) savedInstanceState.getParcelableArray("ObjectCartListItems");
+			Parcelable[] parcelableItems = savedInstanceState.getParcelableArray("ObjectCartListItems");
 			
 			arrayListItems = savedInstanceState.getParcelableArrayList("ObjectCartArrayListItems");
 			
-			if (items == null)
+			if (arrayListItems == null)
 				return;
 			// recreate the list
 			adapter = new CartListItemAdapter(R.layout.listview_cart_row, getActivity(), arrayListItems);
@@ -167,14 +167,14 @@ public class DisplayCartsFragment extends Fragment
 	}
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putParcelableArray("ObjectCartListItems", (Parcelable[]) items);
+		super.onSaveInstanceState(outState);
 		outState.putInt("offset", offset);
 		outState.putInt("limit", limit);
 		outState.putString("lastTextQuery", lastTextQuery);
 		outState.putString("lastLocationQuery", lastLocationQuery);
 		outState.putParcelableArrayList("ObjectCartArrayListItems", arrayListItems);
 		outState.putBoolean("moreResults", moreResults);
-		super.onSaveInstanceState(outState);
+
 	}
 	
 	@Override
@@ -186,7 +186,6 @@ public class DisplayCartsFragment extends Fragment
 	}
 	
 	public void buildList(ObjectCartListItem[] items) {
-		this.items = items;
 		
 		if (items == null) {
 			Toast.makeText(getActivity(), "no results", Toast.LENGTH_SHORT).show();

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
@@ -31,7 +32,9 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	private GridView cartPhotos;
 	private String[] imageUrls;
 	
-	private SwipeRefreshLayout swipeLayout;
+	private MultiSwipeRefreshLayout swipeLayout;
+	
+	private View emptyView;
 	
 	int offset;
 	int limit;
@@ -70,20 +73,31 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 									Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_display_cart_photos, container, false);
-		cartPhotos = (GridView) view.findViewById(R.id.photos);
+		cartPhotos = (GridView) view.findViewById(android.R.id.list);
+		emptyView = view.findViewById(android.R.id.empty);
+        
+		cartPhotos.setOnItemClickListener(this);
+		
+		load();
+		
 
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeLayout.setEnabled(true);
+        swipeLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+
+		return cartPhotos;
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		
+		cartPhotos.setEmptyView(emptyView);
+		
+		swipeLayout.setSwipeableChildren(android.R.id.list, android.R.id.empty);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
                 android.R.color.holo_green_light, 
                 android.R.color.holo_orange_light, 
                 android.R.color.holo_red_light);
-        
-		cartPhotos.setOnItemClickListener(this);
-		
-		load();
-		return cartPhotos;
 	}
 	
 	private void load() {

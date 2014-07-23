@@ -169,7 +169,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			}
 		} else if (requestCode == 4 && resultCode == Activity.RESULT_OK) {
 			if (data != null) {
-				if (data.getBooleanExtra("result", false)) {
+				if (data.getBooleanExtra("success", false)) {
 					Toast.makeText(getActivity(), "Review Uploaded", Toast.LENGTH_SHORT).show();
 				} else {
 					SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
@@ -197,7 +197,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				}
 			}
 		} else if (requestCode == 10 && resultCode == Activity.RESULT_OK) {
-			if (data.getBooleanExtra("success", false)) {
+			if (data.getBooleanExtra("result", false)) {
 				Toast.makeText(getActivity(), "Cart Claimed", Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(getActivity(), "Wrong Permit Number. Stop Stealing", Toast.LENGTH_SHORT).show();

@@ -35,3 +35,7 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+
+-libraryjars /libs/picasso-2.3.2.jar
+-dontwarn com.parse.**
+-dontwarn com.squareup.picasso.**
