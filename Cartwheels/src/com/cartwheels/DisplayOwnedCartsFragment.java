@@ -76,7 +76,8 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 		path[0] = "owners";
 		path[1] = "data";
 		
-		UpdateOwnedCartTask asyncTask = new UpdateOwnedCartTask("https", "cartwheels.us", path);
+		UpdateOwnedCartTask asyncTask = new UpdateOwnedCartTask("https", "cartwheels.us", path,
+												getActivity().getApplicationContext());
 		DefaultTaskFragment<UpdateOwnedCartTask, DisplayOwnedCartsFragment, ArrayList<String>> fragment = 
 				new DefaultTaskFragment<UpdateOwnedCartTask, DisplayOwnedCartsFragment, ArrayList<String>>(12) {
 			@Override
@@ -121,7 +122,8 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 			path[0] = "carts";
 			path[1] = "data";
 			
-			GetOwnedCartsInfoTask asyncTask = new GetOwnedCartsInfoTask("https", "cartwheels.us", path, cartId);
+			GetOwnedCartsInfoTask asyncTask = new GetOwnedCartsInfoTask("https", "cartwheels.us", path, cartId,
+													getActivity().getApplicationContext());
 			
 			
 			SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
@@ -162,7 +164,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
     		DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean> taskFragment =
     				new DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean>(21);
     		
-    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask();
+    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask(getActivity().getApplicationContext());
     		asyncTask.put("email", email);
     		asyncTask.put("auth_token", auth_token);
     		
@@ -210,7 +212,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
     		DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean> taskFragment =
     				new DefaultTaskFragment<DefaultPutJsonAsyncTask, Fragment, Boolean>(31);
     		
-    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask();
+    		DefaultPutJsonAsyncTask asyncTask = new DefaultPutJsonAsyncTask(getActivity().getApplicationContext());
     		asyncTask.put("email", email);
     		asyncTask.put("auth_token", auth_token);
     		
@@ -306,7 +308,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 			encodedImage = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
 		}
 		
-		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask();
+		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask(getActivity().getApplicationContext());
 		DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean> fragment =
 				new DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean>(41);
 		
