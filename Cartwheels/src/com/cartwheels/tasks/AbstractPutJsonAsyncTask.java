@@ -10,6 +10,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.cartwheels.TrustedHttpClient;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -33,7 +35,7 @@ protected HashMap<String, String> objectValues;
 	@Override
 	public Results doInBackground(String... urls) {
 		Results results = null;
-		DefaultHttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new TrustedHttpClient(context);
 		String url = urls[0];
 		HttpPut put = setUpPut(url);
 		JSONObject holder = new JSONObject();

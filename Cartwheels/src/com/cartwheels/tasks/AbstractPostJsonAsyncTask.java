@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cartwheels.R;
+import com.cartwheels.TrustedHttpClient;
 
 public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
@@ -41,7 +42,7 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 	@Override
 	public Results doInBackground(String... urls) {
 		Results results = null;
-		DefaultHttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new TrustedHttpClient(context);
 		String url = urls[0];
 		HttpPost post = setUpPost(url);
 		JSONObject holder = new JSONObject();

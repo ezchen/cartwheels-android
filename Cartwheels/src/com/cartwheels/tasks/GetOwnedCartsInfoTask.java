@@ -14,6 +14,7 @@ import android.net.Uri.Builder;
 import android.util.Log;
 
 import com.cartwheels.ObjectCartListItem;
+import com.cartwheels.TrustedHttpClient;
 
 public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<ObjectCartListItem>> {
 
@@ -29,7 +30,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 		ArrayList<ObjectCartListItem> items = new ArrayList<ObjectCartListItem>();
 		
 		for (String id : cartId) {
-			DefaultHttpClient client = new DefaultHttpClient();
+			DefaultHttpClient client = new TrustedHttpClient(context);
 			
 			String response = null;
 			JSONObject json = new JSONObject();

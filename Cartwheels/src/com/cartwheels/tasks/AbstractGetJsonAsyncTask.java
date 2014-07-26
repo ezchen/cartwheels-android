@@ -18,6 +18,7 @@ import android.content.Context;
 import android.net.Uri.Builder;
 
 import com.cartwheels.R;
+import com.cartwheels.TrustedHttpClient;
 
 public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
@@ -40,7 +41,7 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 	@Override
 	public Results doInBackground(String... urls) {
 		Results results = null;
-		DefaultHttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new TrustedHttpClient(context);
 		
 		String response = null;
 		JSONObject json = new JSONObject();
