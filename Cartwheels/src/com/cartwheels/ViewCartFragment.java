@@ -328,7 +328,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		DefaultTaskFragment<UploadPhotoTask, ViewCartFragment, Boolean> fragment =
 				new DefaultTaskFragment<UploadPhotoTask, ViewCartFragment, Boolean>(6);
 		
-		UploadPhotoTask asyncTask = new UploadPhotoTask();
+		UploadPhotoTask asyncTask = new UploadPhotoTask(getActivity().getApplicationContext());
 		
 		// set up query parameters
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
@@ -365,7 +365,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		DefaultTaskFragment<CheckinTask, ViewCartFragment, Boolean> fragment =
 				new DefaultTaskFragment<CheckinTask, ViewCartFragment, Boolean>(7);
 		
-		CheckinTask asyncTask = new CheckinTask();
+		CheckinTask asyncTask = new CheckinTask(getActivity().getApplicationContext());
 		
 		// set up query parameters
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
@@ -417,7 +417,8 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		path[1] = cartId;
 		path[2] = "claim";
 		
-		DefaultGetJsonAsyncTask asyncTask = new DefaultGetJsonAsyncTask("https", "cartwheels.us", path);
+		DefaultGetJsonAsyncTask asyncTask = new DefaultGetJsonAsyncTask("https", "cartwheels.us", path,
+														getActivity().getApplicationContext());
 		
 		asyncTask.put("email", email);
 		asyncTask.put("auth_token", auth_token);
@@ -451,7 +452,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			encodedImage = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
 		}
 		
-		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask();
+		DefaultPostJsonAsyncTask asyncTask = new DefaultPostJsonAsyncTask(getActivity().getApplicationContext());
 		DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean> fragment =
 				new DefaultTaskFragment<DefaultPostJsonAsyncTask, ViewCartFragment, Boolean>(41);
 		
@@ -539,7 +540,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 	}
 	
 	protected void writeReview(float rating, String text) {
-		WriteReviewTask asyncTask = new WriteReviewTask();
+		WriteReviewTask asyncTask = new WriteReviewTask(getActivity().getApplicationContext());
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		String email = preferences.getString("email", "");
 		String auth_token = preferences.getString("AuthToken", "");
