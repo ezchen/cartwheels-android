@@ -46,20 +46,6 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 		String response = null;
 		JSONObject json = new JSONObject();
 		
-		InputStream inputStream = context.getResources().openRawResource(R.raw.cartwheels_keystore);
-		try {
-			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(inputStream, "capass".toCharArray());
-		} catch (KeyStoreException e) {
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		try {
 			Builder uri = appendParameters();
 			

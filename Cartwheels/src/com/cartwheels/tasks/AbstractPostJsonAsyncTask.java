@@ -51,21 +51,6 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 		String response = null;
 		JSONObject json = new JSONObject();
 		
-		InputStream inputStream = context.getResources().openRawResource(R.raw.cartwheels_keystore);
-		try {
-			KeyStore keyStore = KeyStore.getInstance("BKS");
-			keyStore.load(inputStream, "capass".toCharArray());
-		} catch (KeyStoreException e) {
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			if (e != null)
-				e.printStackTrace();
-		}
-		
 		try {
 			for (String key : objectValues.keySet()) {
 				if (key.length() > 0) {
