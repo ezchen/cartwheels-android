@@ -80,7 +80,7 @@ public abstract class AbstractRegisterFragment extends Fragment
 		editor.putString("email", email);
 		editor.commit();
 		// basic fields that both users and owners have
-		RegisterTask asyncTask = new RegisterTask();
+		RegisterTask asyncTask = new RegisterTask(getActivity().getApplicationContext());
 		
 		asyncTask.setInnerKey(innerKey);
 		asyncTask.putInner("email", email);
