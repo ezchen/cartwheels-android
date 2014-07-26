@@ -104,7 +104,7 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 		ObjectCartListItem item = getArguments().getParcelable("ObjectCartListItem");
 		
 		String cartId = item.cartId;
-		PhotoUrlTask photoUrlTask = new PhotoUrlTask();
+		PhotoUrlTask photoUrlTask = new PhotoUrlTask(getActivity().getApplicationContext());
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		
 		Log.d("cartId", cartId);
