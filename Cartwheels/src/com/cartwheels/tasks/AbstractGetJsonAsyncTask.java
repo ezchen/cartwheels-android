@@ -1,16 +1,23 @@
 package com.cartwheels.tasks;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
-import android.os.AsyncTask;
+
+import com.cartwheels.R;
 
 public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
@@ -19,7 +26,8 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 	protected String authority;
 	protected String[] path;
 
-	public AbstractGetJsonAsyncTask(String scheme, String authority, String[] path) {
+	public AbstractGetJsonAsyncTask(String scheme, String authority, String[] path, Context context) {
+		super(context);
 		objectValues = new HashMap<String, String>();
 		this.scheme = scheme;
 		this.authority = authority;
@@ -36,6 +44,20 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 		
 		String response = null;
 		JSONObject json = new JSONObject();
+		
+		InputStream inputStream = context.getResources().openRawResource(R.raw.cartwheels_keystore);
+		try {
+			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(inputStream, "capass".toCharArray());
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			Builder uri = appendParameters();

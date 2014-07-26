@@ -2,13 +2,14 @@ package com.cartwheels.tasks;
 
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 public class DefaultDeleteAsyncTask extends
 		AbstractDeleteJsonAsyncTask<Boolean> {
 
-	public DefaultDeleteAsyncTask(String scheme, String authority, String[] path) {
-		super(scheme, authority, path);
+	public DefaultDeleteAsyncTask(String scheme, String authority, String[] path, Context context) {
+		super(scheme, authority, path, context);
 	}
 
 	@Override

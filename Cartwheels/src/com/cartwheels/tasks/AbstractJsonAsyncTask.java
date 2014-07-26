@@ -2,12 +2,17 @@ package com.cartwheels.tasks;
 
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 public abstract class AbstractJsonAsyncTask<Results> extends AsyncTask<String, Void, Results> {
 
-	DefaultTaskFragment fragment;
+	protected DefaultTaskFragment fragment;
+	protected final Context context;
 	
+	public AbstractJsonAsyncTask(Context context) {
+		this.context = context;
+	}
 	@SuppressWarnings("rawtypes")
 	public void setFragment(DefaultTaskFragment fragment) {
 		this.fragment = fragment;
@@ -21,4 +26,6 @@ public abstract class AbstractJsonAsyncTask<Results> extends AsyncTask<String, V
 	}
 	
 	protected abstract Results getResult(JSONObject json);
+	
+	
 }

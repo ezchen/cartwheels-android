@@ -3,6 +3,10 @@
 
     <string name="app_name">Cartwheels</string>
 
+    <!-- Urls-->
+    <string name="scheme">https</string>
+    <string name="authority">cartwheels.us</string>
+    
     <!-- Login/Register -->
     <string name="user_email">Email Address</string>
     <string name="user_password">Password</string>

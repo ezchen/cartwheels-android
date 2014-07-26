@@ -65,6 +65,8 @@ public class LoginFragment extends Fragment implements OnClickListener {
 	    editor.commit();
 	    
 	    LoginWithInfoTask asyncTask = new LoginWithInfoTask();
+	 
+	    asyncTask.setContext(getActivity());
 	    
 	    LoginWithInfoTaskFragment fragment = new LoginWithInfoTaskFragment(8);
 	    

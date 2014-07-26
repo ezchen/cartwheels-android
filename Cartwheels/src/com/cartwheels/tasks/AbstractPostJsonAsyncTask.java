@@ -1,5 +1,11 @@
 package com.cartwheels.tasks;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.HashMap;
 
 import org.apache.http.client.ResponseHandler;
@@ -10,8 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
+import android.content.Context;
 import android.util.Log;
+
+import com.cartwheels.R;
 
 public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
@@ -21,7 +29,8 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 
 	protected String innerJsonObjKey;
 
-	public AbstractPostJsonAsyncTask() {
+	public AbstractPostJsonAsyncTask(Context context) {
+		super(context);
 		objectValues = new HashMap<String, String>();
 		innerObjectValues = new HashMap<String, String>();
 	}
@@ -40,6 +49,21 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 		
 		String response = null;
 		JSONObject json = new JSONObject();
+		
+		InputStream inputStream = context.getResources().openRawResource(R.raw.cartwheels_keystore);
+		try {
+			KeyStore keyStore = KeyStore.getInstance("BKS");
+			keyStore.load(inputStream, "capass".toCharArray());
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			if (e != null)
+				e.printStackTrace();
+		}
 		
 		try {
 			for (String key : objectValues.keySet()) {

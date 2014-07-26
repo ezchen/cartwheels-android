@@ -10,10 +10,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
 import android.util.Log;
 
 public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String, String>> {
+
+	public LoginWithInfoTask(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public HashMap<String, String> doInBackground(String... urls) {

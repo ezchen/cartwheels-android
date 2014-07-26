@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import com.cartwheels.FoodMenuItem;
 
 public class GetMenuItemsAsyncTask extends AbstractGetJsonAsyncTask<ArrayList<FoodMenuItem>> {
@@ -32,8 +34,8 @@ public class GetMenuItemsAsyncTask extends AbstractGetJsonAsyncTask<ArrayList<Fo
 	private final static String TAGS_DESCRIPTION = "description";
 	private final static String TAGS_NAME="name";
 	
-	public GetMenuItemsAsyncTask(String scheme, String authority, String[] path) {
-		super(scheme, authority, path);
+	public GetMenuItemsAsyncTask(String scheme, String authority, String[] path, Context context) {
+		super(scheme, authority, path, context);
 	}
 
 	@Override

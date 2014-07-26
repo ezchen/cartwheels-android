@@ -3,7 +3,6 @@ package com.cartwheels.tasks;
 import java.util.HashMap;
 
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -11,6 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 public abstract class AbstractPutJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
@@ -21,7 +21,8 @@ protected HashMap<String, String> objectValues;
 
 	protected String innerJsonObjKey;
 
-	public AbstractPutJsonAsyncTask() {
+	public AbstractPutJsonAsyncTask(Context context) {
+		super(context);
 		objectValues = new HashMap<String, String>();
 		innerObjectValues = new HashMap<String, String>();
 	}

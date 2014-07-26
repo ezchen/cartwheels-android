@@ -3,7 +3,14 @@ package com.cartwheels.tasks;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 public class CheckinTask extends AbstractPostJsonAsyncTask<Boolean> {
+	public CheckinTask(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+
 	protected Boolean getResult(JSONObject json) {
 		try {
 			return json.getBoolean("success");

@@ -3,11 +3,13 @@ package com.cartwheels.tasks;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 public class DefaultGetJsonAsyncTask extends AbstractGetJsonAsyncTask<Boolean> {
 
 	public DefaultGetJsonAsyncTask(String scheme, String authority,
-			String[] path) {
-		super(scheme, authority, path);
+			String[] path, Context context) {
+		super(scheme, authority, path, context);
 	}
 
 	@Override

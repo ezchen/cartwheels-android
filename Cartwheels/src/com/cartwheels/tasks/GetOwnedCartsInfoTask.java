@@ -9,6 +9,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
 import android.util.Log;
 
@@ -18,8 +19,8 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 
 	private ArrayList<String> cartId;
 	
-	public GetOwnedCartsInfoTask(String scheme, String authority, String[] path, ArrayList<String> cartId) {
-		super(scheme, authority, path);
+	public GetOwnedCartsInfoTask(String scheme, String authority, String[] path, ArrayList<String> cartId, Context context) {
+		super(scheme, authority, path, context);
 		this.cartId = cartId;
 	}
 

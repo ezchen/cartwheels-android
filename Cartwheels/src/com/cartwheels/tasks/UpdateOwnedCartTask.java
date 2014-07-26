@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.util.Log;
 
 public class UpdateOwnedCartTask extends AbstractGetJsonAsyncTask<ArrayList<String>> {
 
-	public UpdateOwnedCartTask(String scheme, String authority, String[] path) {
-		super(scheme, authority, path);
+	public UpdateOwnedCartTask(String scheme, String authority, String[] path, Context context) {
+		super(scheme, authority, path, context);
 	}
 
 	@Override

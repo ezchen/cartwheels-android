@@ -8,6 +8,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
 
 public abstract class AbstractDeleteJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
@@ -18,7 +19,8 @@ public abstract class AbstractDeleteJsonAsyncTask<Results> extends AbstractJsonA
 	
 	protected HashMap<String, String> objectValues;
 	
-	public AbstractDeleteJsonAsyncTask(String scheme, String authority, String[] path) {
+	public AbstractDeleteJsonAsyncTask(String scheme, String authority, String[] path, Context context) {
+		super(context);
 		this.scheme = scheme;
 		this.authority = authority;
 		this.path = path;
