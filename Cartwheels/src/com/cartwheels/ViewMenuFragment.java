@@ -58,7 +58,7 @@ public class ViewMenuFragment extends ListFragment {
 		path[0] = "menu_items";
 		path[1] = "data";
 		
-		GetMenuItemsAsyncTask getMenuTask = new GetMenuItemsAsyncTask(scheme, authority, path);
+		GetMenuItemsAsyncTask getMenuTask = new GetMenuItemsAsyncTask(scheme, authority, path, getActivity().getApplicationContext());
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		
 		String email = preferences.getString("email", "");
