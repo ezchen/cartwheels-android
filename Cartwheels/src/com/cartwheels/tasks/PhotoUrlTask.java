@@ -11,9 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.cartwheels.TrustedHttpClient;
 
 public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 	
@@ -35,7 +38,9 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 	
 	private GetPhotosTaskFragment fragment;
 	
-	public PhotoUrlTask() {
+	protected final Context context;
+	public PhotoUrlTask(Context context) {
+		this.context = context;
 		objectValues = new HashMap<String, String>();
 	}
 
@@ -46,7 +51,7 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 	
 	@Override
 	protected String[] doInBackground(String... urls) {
-        DefaultHttpClient client = new DefaultHttpClient();
+        DefaultHttpClient client = new TrustedHttpClient(context);
         
         String response = null;
         JSONObject json = new JSONObject();

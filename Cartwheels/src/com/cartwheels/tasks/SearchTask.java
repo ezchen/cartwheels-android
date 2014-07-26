@@ -1,11 +1,7 @@
 package com.cartwheels.tasks;
 
-import java.io.InputStream;
 import java.util.HashMap;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -14,16 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.net.Uri.Builder;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.LruCache;
 
 import com.cartwheels.ObjectCartListItem;
-import com.squareup.picasso.Picasso;
 
 public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]> 
 									implements myAsyncTask {
@@ -51,7 +43,10 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 
 	private HashMap<String, String> objectValues;
 	
-	public SearchTask() {
+	protected Context context;
+	
+	public SearchTask(Context context) {
+		this.context = context;
 		objectValues = new HashMap<String, String>();
 	}
 	

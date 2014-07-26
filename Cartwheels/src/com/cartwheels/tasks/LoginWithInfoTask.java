@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.cartwheels.TrustedHttpClient;
+
 import android.content.Context;
 import android.net.Uri.Builder;
 import android.util.Log;
@@ -26,7 +28,7 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		HashMap<String, String> info = super.doInBackground(urls);
 		
 		// Separate http request to get the user info as well
-		DefaultHttpClient client = new DefaultHttpClient();
+		DefaultHttpClient client = new TrustedHttpClient(context);
 		
 		String response = null;
 		JSONObject json = new JSONObject();

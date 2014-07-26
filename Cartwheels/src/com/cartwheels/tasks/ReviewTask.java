@@ -11,11 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.net.Uri.Builder;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.cartwheels.ReviewItem;
+import com.cartwheels.TrustedHttpClient;
 
 public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 
@@ -24,6 +26,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 	
 	private int progress;
 	private ReviewTaskFragment fragment;
+	
+	protected Context context;
 	
 	public static String TAGS_DATA = "data";
 	public static String TAGS_USER = "user";
@@ -34,7 +38,8 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 	private static final String TAGS_UPDATED_AT = "updated_at";
 	private static final String TAGS_CREATED_AT = "created_at";
 	
-	public ReviewTask() {
+	public ReviewTask(Context context) {
+		this.context = context;
 		objectValues = new HashMap<String, String>();
 	}
 	
@@ -45,7 +50,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 	
 	@Override
 	protected ReviewItem[] doInBackground(String... urls) {
-        DefaultHttpClient client = new DefaultHttpClient();
+        DefaultHttpClient client = new TrustedHttpClient(context);
         
         String response = null;
         JSONObject json = new JSONObject();
