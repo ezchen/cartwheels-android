@@ -106,7 +106,8 @@ public class LoginActivity extends Activity {
 		String email = preferences.getString("email", "");
 		String auth_token = preferences.getString("AuthToken", "");
 		
-		DefaultDeleteAsyncTask asyncTask = new DefaultDeleteAsyncTask("https", "cartwheels.us", path);
+		DefaultDeleteAsyncTask asyncTask = new DefaultDeleteAsyncTask("https", "cartwheels.us", path,
+													getApplicationContext());
 		asyncTask.put("email", email);
 		asyncTask.put("auth_token", auth_token);
 		
