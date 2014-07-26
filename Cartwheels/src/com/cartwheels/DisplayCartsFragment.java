@@ -254,7 +254,7 @@ public class DisplayCartsFragment extends Fragment
 	};
 
 	public void getMoreCarts() {
-		SearchTask searchTask = new SearchTask();
+		SearchTask searchTask = new SearchTask(getActivity().getApplicationContext());
 		
 		searchTask.put("tq", lastTextQuery);
 		searchTask.put("lq", lastLocationQuery);
@@ -268,7 +268,7 @@ public class DisplayCartsFragment extends Fragment
 	@Override
 	public void search(String textQueryData, String locationQueryData) {
 		if (getActivity() != null) {
-			SearchTask searchTask = new SearchTask();
+			SearchTask searchTask = new SearchTask(getActivity().getApplicationContext());
 			// put in tq, lq, email, auth_token,
 			
 			boolean useLocation = locationQueryData.equals("Current Location");
