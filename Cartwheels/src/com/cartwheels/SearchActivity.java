@@ -101,7 +101,7 @@ public class SearchActivity extends LocationActivity
 	
 	//@Override
 	public void search(String textQueryData, String locationQueryData) {
-		SearchTask searchTask = new SearchTask();
+		SearchTask searchTask = new SearchTask(getApplicationContext());
 		
 		// put in tq, lq, email, auth_token,
 		searchTask.put("tq", textQueryData);
