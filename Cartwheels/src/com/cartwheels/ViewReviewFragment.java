@@ -72,7 +72,7 @@ public class ViewReviewFragment extends Fragment
 		item = getArguments().getParcelable("ObjectCartListItem");
 		
 		String cartId = item.cartId;
-		ReviewTask reviewTask = new ReviewTask();
+		ReviewTask reviewTask = new ReviewTask(getActivity().getApplicationContext());
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		
 		String email = preferences.getString("email", "");
@@ -156,7 +156,7 @@ public class ViewReviewFragment extends Fragment
 	
 	private void load() {
 		String cartId = item.cartId;
-		ReviewTask reviewTask = new ReviewTask();
+		ReviewTask reviewTask = new ReviewTask(getActivity().getApplicationContext());
 		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 		
 		String email = preferences.getString("email", "");
