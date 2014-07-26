@@ -82,7 +82,7 @@ public class WriteReviewFragment extends Fragment
 			EditText editText = (EditText) getView().findViewById(R.id.writeReviewText);
 			String text = editText.getText().toString();
 			
-			WriteReviewTask asyncTask = new WriteReviewTask();
+			WriteReviewTask asyncTask = new WriteReviewTask(getActivity().getApplicationContext());
 			SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
 			String email = preferences.getString("email", "");
 			String auth_token = preferences.getString("AuthToken", "");
