@@ -12,9 +12,10 @@ import com.squareup.picasso.Picasso;
 
 public class ViewCartPhotosAdapter extends BaseAdapter {
 
-	Context context;
-	int count;
-	String[] imageUrls;
+	private Context context;
+	private int count;
+	private String[] imageUrls;
+	private Picasso picasso;
 	
 	public ViewCartPhotosAdapter(Context context, String[] imageUrls) {
 		this.context = context;
@@ -35,7 +36,11 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 		} else {
 			imageView = (ImageView) convertView;
 		}
-		Picasso.with(context).load(imageUrl).into(imageView);
+		
+		if (picasso == null) {
+			picasso = buildPicasso();
+		}
+		picasso.load(imageUrl).centerCrop().into(imageView);
 		
 		return imageView;
 	}
@@ -55,5 +60,8 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	
+	private Picasso buildPicasso() {
+		TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
+		return builder.buildDefault();
+	}
 }

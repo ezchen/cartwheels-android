@@ -78,10 +78,10 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 		ImageView cartPicture = (ImageView) listItem.findViewById(R.id.cartPicture);
 
 		if (picasso != null) {
-			picasso.load(item.bitmapUrl).transform(new RoundedTransform(10, 3)).into(cartPicture);
+			picasso.load(item.bitmapUrl).centerCrop().transform(new RoundedTransform(10, 3)).into(cartPicture);
 		} else {
 			picasso = buildPicasso();
-			picasso.load(item.bitmapUrl).transform(new RoundedTransform(10, 3)).into(cartPicture);
+			picasso.load(item.bitmapUrl).centerCrop().transform(new RoundedTransform(10, 3)).into(cartPicture);
 		}
 		
 		RatingBar ratingBar = (RatingBar) listItem.findViewById(R.id.cartRating);
