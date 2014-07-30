@@ -22,6 +22,7 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		ExpandableListItemAdapter<ObjectCartListItem> implements OnClickListener {
 
 	private final Context context;
+	private Picasso picasso;
 	
 	public DisplayOwnedCartsExpandableAdapter(Context context, int layoutResId,
 			int titleParentResId, int contentParentResId,
@@ -44,7 +45,12 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		TextView cartName = (TextView) view.findViewById(R.id.ownedCartName);
 		
 		ObjectCartListItem item = getItem(position);
-		Picasso.with(context).load(item.bitmapUrl).into(cartPicture);
+		
+		if (picasso == null) {
+			TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
+			picasso = builder.buildDefault();
+		}
+		picasso.load(item.bitmapUrl).centerCrop().into(cartPicture);
 		cartName.setText(item.cartName);
 		
 		return view;

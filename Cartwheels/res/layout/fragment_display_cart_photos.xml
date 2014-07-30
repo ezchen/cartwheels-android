@@ -10,15 +10,6 @@
     <FrameLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-	<GridView
-	    android:id="@android:id/list"
-	    android:layout_width="match_parent"
-	    android:columnWidth="10dp"
-	    android:stretchMode="columnWidth"
-	    android:numColumns="3"
-	    android:verticalSpacing="10dp"
-	    android:padding="20dp"
-	    android:layout_height="match_parent"/>
 	
 	<TextView
         android:id="@android:id/empty"
@@ -26,5 +17,16 @@
         android:layout_height="wrap_content"
         android:text="No Content"
         android:layout_gravity="center"/>
+
+	<GridView
+	    android:id="@android:id/list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:columnWidth="10dp"
+	    android:numColumns="3"
+	    android:padding="20dp"
+	    android:stretchMode="columnWidth"
+	    android:verticalSpacing="10dp" />
+
 	</FrameLayout>
 </com.cartwheels.MultiSwipeRefreshLayout>
