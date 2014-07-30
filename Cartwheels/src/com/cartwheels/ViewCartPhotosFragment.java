@@ -22,6 +22,8 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.cartwheels.adapters.ViewCartPhotosAdapter;
+import com.cartwheels.custom_views.MultiSwipeRefreshLayout;
 import com.cartwheels.tasks.GetPhotosTaskFragment;
 import com.cartwheels.tasks.PhotoUrlTask;
 
@@ -83,13 +85,6 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 
         swipeLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
-		return cartPhotos;
-	}
-	
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		
 		cartPhotos.setEmptyView(emptyView);
 		
 		swipeLayout.setSwipeableChildren(android.R.id.list, android.R.id.empty);
@@ -98,6 +93,8 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
                 android.R.color.holo_green_light, 
                 android.R.color.holo_orange_light, 
                 android.R.color.holo_red_light);
+        
+		return view;
 	}
 	
 	private void load() {
@@ -146,6 +143,7 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 		Resources resources = getResources();
 		int fragmentId = 3;
 		
+		swipeLayout.setRefreshing(false);
 		if (requestCode == fragmentId && resultCode == Activity.RESULT_OK) {
 			imageUrls = data.getStringArrayExtra("ImageUrls");
 			buildList(imageUrls);
@@ -185,10 +183,6 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	
 	@Override
 	public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 5000);
+        load();
 	}
 }

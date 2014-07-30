@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cartwheels.custom_views.ReviewItemAdapter;
 import com.cartwheels.tasks.ReviewTask;
 import com.cartwheels.tasks.ReviewTaskFragment;
 

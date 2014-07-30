@@ -1,4 +1,4 @@
-package com.cartwheels;
+package com.cartwheels.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.cartwheels.TrustedPicassoBuilder;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartPhotosAdapter extends BaseAdapter {

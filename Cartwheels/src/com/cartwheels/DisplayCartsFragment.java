@@ -24,6 +24,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.cartwheels.adapters.CartListItemAdapter;
 import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.custom_views.SearchView.SearchListener;
 import com.cartwheels.tasks.SearchTask;

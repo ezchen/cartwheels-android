@@ -1,4 +1,8 @@
-package com.cartwheels;
+package com.cartwheels.custom_views;
+
+import com.cartwheels.R;
+import com.cartwheels.ReviewItem;
+import com.cartwheels.R.id;
 
 import android.app.Activity;
 import android.content.Context;

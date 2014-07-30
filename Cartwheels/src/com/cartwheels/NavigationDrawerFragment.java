@@ -1,5 +1,7 @@
 package com.cartwheels;
 
+import com.cartwheels.adapters.DrawerItemCustomAdapter;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;

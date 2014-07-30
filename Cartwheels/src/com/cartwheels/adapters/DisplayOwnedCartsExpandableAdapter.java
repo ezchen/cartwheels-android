@@ -1,4 +1,4 @@
-package com.cartwheels;
+package com.cartwheels.adapters;
 
 import java.util.List;
 
@@ -15,6 +15,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.cartwheels.ObjectCartListItem;
+import com.cartwheels.R;
+import com.cartwheels.TrustedPicassoBuilder;
+import com.cartwheels.R.drawable;
+import com.cartwheels.R.id;
+import com.cartwheels.R.layout;
 import com.nhaarman.listviewanimations.itemmanipulation.ExpandableListItemAdapter;
 import com.squareup.picasso.Picasso;
 

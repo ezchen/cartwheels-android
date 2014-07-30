@@ -1,4 +1,4 @@
-package com.cartwheels;
+package com.cartwheels.adapters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +25,13 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.cartwheels.ObjectCartListItem;
+import com.cartwheels.R;
+import com.cartwheels.RoundedTransform;
+import com.cartwheels.TrustedPicassoBuilder;
+import com.cartwheels.R.id;
+import com.cartwheels.R.layout;
+import com.cartwheels.R.raw;
 import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;

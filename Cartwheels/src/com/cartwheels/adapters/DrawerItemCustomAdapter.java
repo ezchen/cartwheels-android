@@ -1,5 +1,9 @@
-package com.cartwheels;
+package com.cartwheels.adapters;
 
+
+import com.cartwheels.ObjectDrawerItem;
+import com.cartwheels.R;
+import com.cartwheels.R.id;
 
 import android.app.Activity;
 import android.content.Context;

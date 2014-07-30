@@ -1,7 +1,11 @@
-package com.cartwheels;
+package com.cartwheels.adapters;
 
 import java.util.ArrayList;
 
+import com.cartwheels.FoodMenuItem;
+import com.cartwheels.R;
+import com.cartwheels.TrustedPicassoBuilder;
+import com.cartwheels.R.id;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;

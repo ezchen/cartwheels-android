@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cartwheels.adapters.MenuItemAdapter;
 import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.GetMenuItemsAsyncTask;
 import com.cartwheels.tasks.MenuItemTaskFragment;
