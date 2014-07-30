@@ -50,6 +50,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 	private static final int REQUEST_IMAGE_CAPTURE_MENU = 1;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
+	private Picasso picasso;
 	
 	private AlertDialog alert;
 	private Bitmap dialogBitmap;
@@ -98,7 +99,12 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				item = arguments.getParcelable("ObjectCartListItem");
 			
 			if (item != null) {
-				Picasso.with(getActivity()).load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
+				
+				if (picasso == null) {
+					TrustedPicassoBuilder builder = new TrustedPicassoBuilder(getActivity().getApplicationContext());
+					picasso = builder.buildDefault();
+				}
+				picasso.load(item.bitmapUrl).centerCrop().transform(new RoundedTransform(20, 3)).into(cartPicture);
 			
 				map.setImageBitmap(mapBitmap);
 				String lat = item.lat;
