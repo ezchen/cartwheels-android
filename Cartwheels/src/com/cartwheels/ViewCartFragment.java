@@ -104,7 +104,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				String lat = item.lat;
 				String lon = item.lon;
 				
-				String url = "https://maps.googleapis.com/maps/api/staticmap?" 
+				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
 							+ "center=" + lat + "," 
 							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
 				Picasso.with(getActivity()).load(url).into(map);
@@ -125,7 +125,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 				String lat = item.lat;
 				String lon = item.lon;
 				
-				String url = "https://maps.googleapis.com/maps/api/staticmap?" 
+				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
 							+ "center=" + lat + "," 
 							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
 				Picasso.with(getActivity()).load(url).into(map);

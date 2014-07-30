@@ -26,8 +26,7 @@
         android:id="@+id/cartName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="25"
-        android:ellipsize="marquee"
+        android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
         android:textSize="18sp"
@@ -46,7 +45,7 @@
         android:layout_toRightOf="@id/cartPicture"
         android:layout_below="@id/cartName"/>
     
-    <!-- Cart Zipcode -->
+    <!-- Cart Address -->
     <TextView
         android:id="@+id/cartZipcode"
         android:layout_width="wrap_content"
@@ -57,5 +56,14 @@
         android:paddingLeft="10dp"
         android:text="@string/zipcode" />
 
- 
+ 	<TextView
+ 	    android:id="@+id/cartDescription"
+ 	    android:layout_width="fill_parent"
+ 	    android:layout_height="wrap_content"
+ 	    android:textSize="12sp"
+ 	    android:textColor="@android:color/tertiary_text_light"
+ 	    android:layout_below="@id/cartZipcode"
+ 	    android:layout_toRightOf="@id/cartPicture"
+ 	    android:paddingLeft="10dp"
+ 	    android:text="No Description Available" />
 </RelativeLayout>

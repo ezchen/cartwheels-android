@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.cartwheels.ObjectCartListItem;
+import com.cartwheels.TrustedHttpClient;
 
 public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]> 
 									implements myAsyncTask {
@@ -57,7 +58,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	
 	@Override
 	protected ObjectCartListItem[] doInBackground(String... urls) {
-        DefaultHttpClient client = new DefaultHttpClient();
+        DefaultHttpClient client = new TrustedHttpClient(context);
         
         String response = null;
         JSONObject json = new JSONObject();
@@ -142,6 +143,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				String lon = innerJson.getString(TAGS_LON);
 				String cartId = innerJson.getString(TAGS_ID);
 				String address = innerJson.getString(TAGS_ADDRESS);
+				String description = innerJson.getString("description");
 				
 				int rating;
 				if (!innerJson.isNull(TAGS_RATING)) {
@@ -166,6 +168,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 				cartListItem.cartId = cartId;
 				cartListItem.rating = rating;
 				cartListItem.address = address;
+				cartListItem.description = description;
 				
 				Log.d("cart list item", cartListItem.toString());
 				items[i] = cartListItem;
@@ -181,5 +184,17 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 			Log.e("Exception", e.toString());
 		}
 		return items;
+	}
+	
+	// helper method to deal with exceptions and null pointer exceptions
+	private String getString(JSONObject json, String key, String defaultValue) {
+		String str = null;
+		
+		if (json.has(key)) {
+			
+		} else {
+			str = defaultValue;
+		}
+		return str;
 	}
 }
