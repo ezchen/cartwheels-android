@@ -106,13 +106,7 @@ public class CartListItemAdapter extends ArrayAdapter<ObjectCartListItem> {
 	}
 	
 	private Picasso buildPicasso() {
-		Picasso.Builder builder = new Picasso.Builder(context);
-		
-		// Create the OkHttpClient to accept the keystore
-		OkHttpClient client = createOkHttpClient();
-		OkHttpDownloader downloader = new OkHttpDownloader(client);
-		builder.downloader(downloader);
-		
+		TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
 		return builder.build();
 	}
 
