@@ -40,7 +40,7 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 		if (picasso == null) {
 			picasso = buildPicasso();
 		}
-		picasso.load(imageUrl).centerCrop().into(imageView);
+		picasso.load(imageUrl).into(imageView);
 		
 		return imageView;
 	}

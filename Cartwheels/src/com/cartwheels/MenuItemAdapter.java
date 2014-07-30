@@ -47,7 +47,7 @@ public class MenuItemAdapter extends ArrayAdapter<FoodMenuItem> {
 		if (picasso == null) {
 			picasso = buildPicasso();	
 		}
-		picasso.load(imageUrl).centerCrop().into(menuImageView);
+		picasso.load(imageUrl).into(menuImageView);
 
 		menuItemNameView.setText(name);
 		menuItemPriceView.setText(price);

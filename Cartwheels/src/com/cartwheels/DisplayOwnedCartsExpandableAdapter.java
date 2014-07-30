@@ -50,7 +50,7 @@ public class DisplayOwnedCartsExpandableAdapter extends
 			TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
 			picasso = builder.buildDefault();
 		}
-		picasso.load(item.bitmapUrl).centerCrop().into(cartPicture);
+		picasso.load(item.bitmapUrl).into(cartPicture);
 		cartName.setText(item.cartName);
 		
 		return view;
