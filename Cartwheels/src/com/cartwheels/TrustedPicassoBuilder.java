@@ -15,6 +15,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.OkHttpDownloader;
@@ -69,6 +70,7 @@ public class TrustedPicassoBuilder extends Builder {
 	private KeyStore readKeyStore() {
 	    KeyStore ks = null;
 		try {
+			Log.d("Keystore Type", KeyStore.getDefaultType());
 			ks = KeyStore.getInstance(KeyStore.getDefaultType());
 			InputStream in = context.getResources().openRawResource(R.raw.cartwheels_keystore);
 			try {

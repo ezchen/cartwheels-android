@@ -153,9 +153,11 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 	
 	private void buildList(String[] imageUrls) {
 		
-		ViewCartPhotosAdapter adapter = new ViewCartPhotosAdapter(getActivity(), imageUrls);
-		
-		cartPhotos.setAdapter(adapter);
+		if (imageUrls != null && imageUrls.length != 0) {
+			ViewCartPhotosAdapter adapter = new ViewCartPhotosAdapter(getActivity(), imageUrls);
+			
+			cartPhotos.setAdapter(adapter);
+		}
 	}
 	
 	@Override

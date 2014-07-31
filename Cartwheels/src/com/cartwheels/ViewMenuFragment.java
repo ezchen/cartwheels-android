@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cartwheels.adapters.MenuItemAdapter;
+import com.cartwheels.custom_views.ListFragmentSwipeRefresh;
 import com.cartwheels.tasks.GetMenuItemsAsyncTask;
 import com.cartwheels.tasks.MenuItemTaskFragment;
 
@@ -28,7 +29,7 @@ public class ViewMenuFragment extends ListFragment implements OnRefreshListener 
 	private MenuItemAdapter adapter;
 	private boolean loading;
 	
-	private SwipeRefreshLayout swipeLayout;
+	private ListFragmentSwipeRefresh swipeLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class ViewMenuFragment extends ListFragment implements OnRefreshListener 
 				Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-		swipeLayout = new SwipeRefreshLayout(getActivity());
+		swipeLayout = new ListFragmentSwipeRefresh(getActivity().getApplicationContext());
 		swipeLayout.setLayoutParams(
 				new ViewGroup.LayoutParams(
 						ViewGroup.LayoutParams.MATCH_PARENT, 
@@ -54,6 +55,12 @@ public class ViewMenuFragment extends ListFragment implements OnRefreshListener 
                 android.R.color.holo_orange_light, 
                 android.R.color.holo_red_light);
 		return swipeLayout;
+	}
+	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		swipeLayout.setListView(getListView());
 	}
 	
 	public static ViewMenuFragment newInstance(Bundle arguments) {
@@ -99,11 +106,12 @@ public class ViewMenuFragment extends ListFragment implements OnRefreshListener 
 		super.onActivityResult(requestCode, resultCode, data);
 		swipeLayout.setRefreshing(false);
 		if (requestCode == 40 && resultCode == Activity.RESULT_OK) {
-			ArrayList<FoodMenuItem> items = data.getParcelableArrayListExtra("result");
-			this.items = items;
+			items = data.getParcelableArrayListExtra("result");
 			
-			adapter = new MenuItemAdapter(getActivity(), R.layout.listview_menu_items, items);
-			setListAdapter(adapter);
+			if (items != null && items.size() != 0) {
+				adapter = new MenuItemAdapter(getActivity(), R.layout.listview_menu_items, items);
+				setListAdapter(adapter);
+			}
 			loading = false;
 		}
 	}
