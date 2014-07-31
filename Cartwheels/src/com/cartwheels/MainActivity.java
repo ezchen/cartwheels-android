@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -23,7 +22,6 @@ import com.cartwheels.DisplayCartsFragment.TaskCallbacks;
 import com.cartwheels.custom_views.SearchView;
 import com.cartwheels.tasks.SearchTask;
 import com.cartwheels.tasks.SearchTaskFragment;
-import com.savagelook.android.UrlJsonAsyncTask;
 
 public class MainActivity extends LocationActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,

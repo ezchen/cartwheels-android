@@ -140,13 +140,6 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 		
 		super.onPostExecute(items);
 	}
-
-	/*
-	private String[] buildList(JSONObject json) {
-		String[] string;
-		
-		return string;
-	}*/
 	
 	public void put(String key, String value) {
 		objectValues.put(key, value);

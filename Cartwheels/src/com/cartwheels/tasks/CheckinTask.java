@@ -8,9 +8,9 @@ import android.content.Context;
 public class CheckinTask extends AbstractPostJsonAsyncTask<Boolean> {
 	public CheckinTask(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
-
+	
+	@Override
 	protected Boolean getResult(JSONObject json) {
 		try {
 			return json.getBoolean("success");

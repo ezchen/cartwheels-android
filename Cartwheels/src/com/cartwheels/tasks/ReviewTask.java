@@ -120,47 +120,6 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 		objectValues.put(key, value);
 	}
 	
-	public static JSONObject getUserJSON(String userId, HashMap<String, String> objectValues) {
-		DefaultHttpClient client = new DefaultHttpClient();
-        
-        String response = null;
-        JSONObject json = new JSONObject();
-        
-		try {
-			Builder uri = new Builder();
-			uri.scheme("https").authority("cartwheels.us").appendPath("users")
-				.appendPath("data");
-			
-			for (String key : objectValues.keySet()) {
-				// if value is 0, do not append to query parameter
-				if (objectValues.get(key).length() > 0) {
-					Log.d(key, objectValues.get(key));
-					uri.appendQueryParameter(key, objectValues.get(key));
-				}
-			}
-			
-			uri.appendQueryParameter("user[id]", userId + "");
-			
-			HttpGet get = new HttpGet(uri.toString());
-			// default return values
-			json.put("success", false);
-			
-			get.setHeader("Accept", "application/json");
-			get.setHeader("Content-Type", "application/json");
-			
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			response = client.execute(get, responseHandler);
-			
-			json = new JSONObject(response);
-			
-			Log.d("doInBackground ReviewTask", json.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return json;
-	}
-	
 	public ReviewItem[] buildList(JSONObject json, HashMap<String, String> objectValues) {
 		ReviewItem[] items = null;
 		

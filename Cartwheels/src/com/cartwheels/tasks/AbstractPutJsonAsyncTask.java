@@ -33,7 +33,7 @@ protected HashMap<String, String> objectValues;
 	public void onPreExecute() {}
 	
 	@Override
-	public Results doInBackground(String... urls) {
+	protected Results doInBackground(String... urls) {
 		Results results = null;
 		DefaultHttpClient client = new TrustedHttpClient(context);
 		String url = urls[0];

@@ -36,10 +36,10 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 	}
 	
 	@Override
-	public void onPreExecute() {}
+	protected void onPreExecute() {}
 	
 	@Override
-	public Results doInBackground(String... urls) {
+	protected Results doInBackground(String... urls) {
 		Results results = null;
 		DefaultHttpClient client = new TrustedHttpClient(context);
 		

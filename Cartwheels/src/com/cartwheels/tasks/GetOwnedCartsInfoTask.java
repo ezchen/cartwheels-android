@@ -29,6 +29,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 	public ArrayList<ObjectCartListItem> doInBackground(String... urls) {
 		ArrayList<ObjectCartListItem> items = new ArrayList<ObjectCartListItem>();
 		
+		// Create a separate task for each individual cart and access its information
 		for (String id : cartId) {
 			DefaultHttpClient client = new TrustedHttpClient(context);
 			
@@ -88,6 +89,7 @@ public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<Ob
 		return items;
 	}
 	
+	// This method is useless because we need to make multiple network calls
 	@Override
 	protected ArrayList<ObjectCartListItem> getResult(JSONObject json) {
 		return null;

@@ -7,6 +7,8 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,17 +17,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cartwheels.adapters.MenuItemAdapter;
-import com.cartwheels.tasks.DefaultTaskFragment;
 import com.cartwheels.tasks.GetMenuItemsAsyncTask;
 import com.cartwheels.tasks.MenuItemTaskFragment;
 
-public class ViewMenuFragment extends ListFragment {
+public class ViewMenuFragment extends ListFragment implements OnRefreshListener {
 
 	private ObjectCartListItem item;
 	private ArrayList<FoodMenuItem> items;
 	
 	private MenuItemAdapter adapter;
 	private boolean loading;
+	
+	private SwipeRefreshLayout swipeLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,8 +42,20 @@ public class ViewMenuFragment extends ListFragment {
 				Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		
-		return view;
+		swipeLayout = new SwipeRefreshLayout(getActivity());
+		swipeLayout.setLayoutParams(
+				new ViewGroup.LayoutParams(
+						ViewGroup.LayoutParams.MATCH_PARENT, 
+						ViewGroup.LayoutParams.MATCH_PARENT));
+		swipeLayout.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+		swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
+                android.R.color.holo_green_light, 
+                android.R.color.holo_orange_light, 
+                android.R.color.holo_red_light);
+		return swipeLayout;
 	}
+	
 	public static ViewMenuFragment newInstance(Bundle arguments) {
 		ViewMenuFragment fragment = new ViewMenuFragment();
 		fragment.setArguments(arguments);
@@ -82,7 +97,7 @@ public class ViewMenuFragment extends ListFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+		swipeLayout.setRefreshing(false);
 		if (requestCode == 40 && resultCode == Activity.RESULT_OK) {
 			ArrayList<FoodMenuItem> items = data.getParcelableArrayListExtra("result");
 			this.items = items;
@@ -110,5 +125,10 @@ public class ViewMenuFragment extends ListFragment {
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	}
+
+	@Override
+	public void onRefresh() {
+		load();
 	}
 }

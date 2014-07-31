@@ -1,31 +1,17 @@
 package com.cartwheels;
 
-import java.io.IOException;
-
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri.Builder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.cartwheels.tasks.DefaultDeleteAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
-import com.savagelook.android.UrlJsonAsyncTask;
 
 public class LoginActivity extends Activity {
 

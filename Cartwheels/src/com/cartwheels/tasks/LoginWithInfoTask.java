@@ -25,9 +25,11 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 
 	@Override
 	public HashMap<String, String> doInBackground(String... urls) {
+		
+		// First call to get simple user information
 		HashMap<String, String> info = super.doInBackground(urls);
 		
-		// Separate http request to get the user info as well
+		// Separate http request to get more info about the user
 		DefaultHttpClient client = new TrustedHttpClient(context);
 		
 		String response = null;
@@ -73,17 +75,6 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 			
 			info.put("name", name);
 			info.put("createdAt", createdAt);
-			
-			// take two carts to show as a preview on the home page later
-			//JSONArray jsonCarts = innerJson.getJSONArray("carts");
-			
-			/*
-			for (int i = 0; i < jsonCarts.length(); i++) {
-				String cartId = jsonCarts.getJSONObject(i).getString("id");
-				info.put("cartId" + i, cartId);
-			}*/
-			
-			//Log.d("doInBackground LoginWithInfoTask", jsonCarts.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,6 +83,12 @@ public class LoginWithInfoTask extends AbstractPostJsonAsyncTask<HashMap<String,
 		return info;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.cartwheels.tasks.AbstractPostJsonAsyncTask#getResult(org.json.JSONObject)
+	 * 
+	 * returns a hashmap so the method doInBackground() can use it and append more information about the user to it
+	 */
 	@Override
 	protected HashMap<String, String> getResult(JSONObject json) {
 		HashMap<String, String> info = new HashMap<String, String>();
