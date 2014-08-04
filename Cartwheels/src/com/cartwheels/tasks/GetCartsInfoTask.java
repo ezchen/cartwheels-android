@@ -16,11 +16,11 @@ import android.util.Log;
 import com.cartwheels.ObjectCartListItem;
 import com.cartwheels.TrustedHttpClient;
 
-public class GetOwnedCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<ObjectCartListItem>> {
+public class GetCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<ObjectCartListItem>> {
 
 	private ArrayList<String> cartId;
 	
-	public GetOwnedCartsInfoTask(String scheme, String authority, String[] path, ArrayList<String> cartId, Context context) {
+	public GetCartsInfoTask(String scheme, String authority, String[] path, ArrayList<String> cartId, Context context) {
 		super(scheme, authority, path, context);
 		this.cartId = cartId;
 	}

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 
@@ -46,6 +47,8 @@ public class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
         if (mSwipeableChildren != null && mSwipeableChildren.length > 0) {
             // Iterate through the scrollable children and check if any of them can not scroll up
             for (View view : mSwipeableChildren) {
+            	Log.d("canChildScrollUp", "view is: " + view);
+            	Log.d("canChildScrollUp", "view is: " + view.isShown());
                 if (view != null && view.isShown() && !canViewScrollUp(view)) {
                     // If the view is shown, and can not scroll upwards, return false and start the
                     // gesture.
@@ -64,6 +67,7 @@ public class MultiSwipeRefreshLayout extends SwipeRefreshLayout {
     private static boolean canViewScrollUp(View view) {
         if (android.os.Build.VERSION.SDK_INT >= 14) {
             // For ICS and above we can call canScrollVertically() to determine this
+        	Log.d("canViewScrollUp", "" + ViewCompat.canScrollVertically(view, -1));
             return ViewCompat.canScrollVertically(view, -1);
         } else {
             if (view instanceof AbsListView) {

@@ -16,6 +16,8 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -24,8 +26,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -39,12 +41,16 @@ import com.cartwheels.tasks.CheckinTask;
 import com.cartwheels.tasks.DefaultGetJsonAsyncTask;
 import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
+import com.cartwheels.tasks.GetCartsInfoTask;
 import com.cartwheels.tasks.UploadPhotoTask;
 import com.cartwheels.tasks.WriteReviewTask;
 import com.cartwheels.tasks.WriteReviewTaskFragment;
 import com.squareup.picasso.Picasso;
 
-public class ViewCartFragment extends Fragment implements OnItemClickListener, OnClickListener {
+public class ViewCartFragment extends Fragment implements 
+										OnItemClickListener,
+										OnClickListener,
+										OnRefreshListener {
 
 	private static final int REQUEST_IMAGE_CAPTURE = 0;
 	private static final int REQUEST_IMAGE_CAPTURE_MENU = 1;
@@ -54,6 +60,7 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 	
 	private AlertDialog alert;
 	private Bitmap dialogBitmap;
+	private SwipeRefreshLayout swipeLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,65 +90,30 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_view_cart, container, false);
-		
-		TextView cartName = (TextView) rootView.findViewById(R.id.viewCart_Name);
-		RatingBar rating = (RatingBar) rootView.findViewById(R.id.viewCart_CartRating);
-		TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
-		ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
+
 		ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
-		
 		map.setOnClickListener(this);
+		
+		swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+		swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
+                android.R.color.holo_green_light, 
+                android.R.color.holo_orange_light, 
+                android.R.color.holo_red_light);
 		
 		if (savedInstanceState == null) {
 			Bundle arguments = getArguments();
-			
-			if (arguments != null)
+			if (arguments != null) {
 				item = arguments.getParcelable("ObjectCartListItem");
-			
-			if (item != null) {
-				
-				if (picasso == null) {
-					TrustedPicassoBuilder builder = new TrustedPicassoBuilder(getActivity().getApplicationContext());
-					picasso = builder.buildDefault();
-				}
-				picasso.load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
-			
-				map.setImageBitmap(mapBitmap);
-				String lat = item.lat;
-				String lon = item.lon;
-				
-				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
-							+ "center=" + lat + "," 
-							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
-				Picasso.with(getActivity()).load(url).into(map);
-			
-				cartName.setText(item.cartName);
-				zipcode.setText(item.address);
-				rating.setRating(item.rating);
 			}
-			
-			//Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
 		} else {
 			// restore the fragment's state
 			// CartItem
 			if (savedInstanceState.containsKey("CartItem")) {
 				item = (ObjectCartListItem) savedInstanceState.get("CartItem");
-				Picasso.with(getActivity()).load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
-				
-				String lat = item.lat;
-				String lon = item.lon;
-				
-				String url = "http://maps.googleapis.com/maps/api/staticmap?" 
-							+ "center=" + lat + "," 
-							+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
-				Picasso.with(getActivity()).load(url).into(map);
-				Picasso.with(getActivity()).load(url).into(map);
 			}
-			
-			cartName.setText(item.cartName);
-			rating.setRating(item.rating);
-			zipcode.setText(item.address);
 		}
+		updateInfo(rootView);
 		setupOptions(rootView);
 		return rootView;
 	}
@@ -208,9 +180,49 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 			} else {
 				Toast.makeText(getActivity(), "Wrong Permit Number. Stop Stealing", Toast.LENGTH_SHORT).show();
 			}
+		} else if (requestCode == 13 && resultCode == Activity.RESULT_OK) {
+			swipeLayout.setRefreshing(false);
+			if (data != null) {
+				ArrayList<ObjectCartListItem> items = data.getParcelableArrayListExtra("ObjectCartListItems");
+				
+				if (items.size() == 1) {
+					item = items.get(0);
+					updateInfo(getView());
+				}
+			}
 		}
 	}
 	
+	private void updateInfo(View rootView) {
+		if (item == null)
+			return;
+		
+		if (rootView != null) {
+			TextView cartName = (TextView) rootView.findViewById(R.id.viewCart_Name);
+			RatingBar rating = (RatingBar) rootView.findViewById(R.id.viewCart_CartRating);
+			TextView zipcode = (TextView) rootView.findViewById(R.id.viewCart_Zipcode);
+			ImageView cartPicture = (ImageView) rootView.findViewById(R.id.viewCart_CartPicture);
+			ImageView map = (ImageView) rootView.findViewById(R.id.viewCart_Map);
+			
+			cartName.setText(item.cartName);
+			rating.setRating(item.rating);
+			zipcode.setText(item.address);
+			if (picasso == null) {
+				TrustedPicassoBuilder builder = new TrustedPicassoBuilder(getActivity().getApplicationContext());
+				picasso = builder.buildDefault();
+			}
+			picasso.load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
+			
+			String lat = item.lat;
+			String lon = item.lon;
+			
+			String url = "http://maps.googleapis.com/maps/api/staticmap?" 
+						+ "center=" + lat + "," 
+						+ lon + "&zoom=18&size=640x250&scale=2&maptype=roadmap&markers=" + lat + "," + lon;
+			Picasso.with(getActivity()).load(url).into(map);
+		}
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		if (!(activity instanceof LocationActivity)) {
@@ -588,5 +600,45 @@ public class ViewCartFragment extends Fragment implements OnItemClickListener, O
 		} else if (id == R.id.menuItemImage) {
 			takePicture(REQUEST_IMAGE_CAPTURE_MENU);
 		}
+	}
+	
+	private void load() {
+		String[] path = new String[2];
+		path[0] = "carts";
+		path[1] = "data";
+		
+		ArrayList<String> cartId = new ArrayList<String>();
+		cartId.add(item.cartId);
+		GetCartsInfoTask asyncTask = new GetCartsInfoTask("https", "cartwheels.us", path, cartId,
+												getActivity().getApplicationContext());
+		
+		SharedPreferences preferences = getActivity().getSharedPreferences("CurrentUser", Activity.MODE_PRIVATE);
+		String email = preferences.getString("email", "");
+		String auth_token = preferences.getString("AuthToken", "");
+		asyncTask.put("email", email);
+		asyncTask.put("auth_token", auth_token);
+		asyncTask.put("offset", "0");
+		asyncTask.put("limit", "1");
+		
+		DefaultTaskFragment<GetCartsInfoTask, ViewCartFragment, ArrayList<ObjectCartListItem>> fragment =
+				new DefaultTaskFragment<GetCartsInfoTask, ViewCartFragment, ArrayList<ObjectCartListItem>>(13) {
+			@Override
+			protected Intent getIntent(ArrayList<ObjectCartListItem> items) {
+				Intent intent = new Intent();
+				intent.putParcelableArrayListExtra("ObjectCartListItems", items);
+				return intent;
+			}
+		};
+		
+		fragment.setTask(asyncTask);
+		asyncTask.setFragment(fragment);
+		fragment.setTargetFragment(this, 13);
+		fragment.show(getFragmentManager(), "Refresh");
+		fragment.execute();
+	}
+
+	@Override
+	public void onRefresh() {
+		load();
 	}
 }

@@ -1,85 +1,90 @@
-<ScrollView
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="false"
-    android:clickable="false"
-    tools:context="com.cartwheels.ViewCartFragment" >
-<RelativeLayout 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusable="false"
-    android:clickable="false"
-    android:focusableInTouchMode="true"
-    android:padding="5dp">
-    <TextView
-        android:id="@+id/viewCart_Name"
-        android:textSize="15sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:padding="3dp"
-        android:text="CartName"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <RatingBar
-        android:id="@+id/viewCart_CartRating"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_marginLeft="0dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/viewCart_Name"/>
-    
-
-    <TextView 
-        android:id="@+id/viewCart_Zipcode"
-        android:textSize="12sp"
-        android:padding="3dp"
-        android:layout_below="@id/viewCart_CartRating"
-        android:layout_alignParentLeft="true"
-        android:text="Address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:id="@+id/viewCart_CartPicture"
-        android:padding="2dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="175dp"
-        android:layout_height="115dp"
-       	android:scaleType="centerCrop" />
-    
-    <View
-        android:id="@+id/viewCart_Divider1"
-        android:layout_below="@id/viewCart_CartPicture"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:padding="3dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray"/>
-    
-    <ImageView 
-        android:id="@+id/viewCart_Map"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:layout_below="@id/viewCart_Divider1"/>
-
-    <ListView 
-        android:id="@+id/viewCart_Options"
-        android:layout_below="@id/viewCart_Map"
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"/>
-</RelativeLayout>
-
-</ScrollView>
+    android:layout_height="match_parent" >
+	<ScrollView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:focusable="false"
+	    android:clickable="false"
+	    tools:context="com.cartwheels.ViewCartFragment" >
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:focusable="false"
+	    android:clickable="false"
+	    android:focusableInTouchMode="true"
+	    android:padding="5dp">
+	    <TextView
+	        android:id="@+id/viewCart_Name"
+	        android:textSize="15sp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:padding="3dp"
+	        android:text="CartName"
+	        android:textStyle="bold"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />
+	
+	    <RatingBar
+	        android:id="@+id/viewCart_CartRating"
+	        style="?android:attr/ratingBarStyleSmall"
+	        android:layout_marginLeft="0dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@id/viewCart_Name"/>
+	    
+	
+	    <TextView 
+	        android:id="@+id/viewCart_Zipcode"
+	        android:textSize="12sp"
+	        android:padding="3dp"
+	        android:layout_below="@id/viewCart_CartRating"
+	        android:layout_alignParentLeft="true"
+	        android:text="Address"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"/>
+	
+	    <ImageView
+	        android:id="@+id/viewCart_CartPicture"
+	        android:padding="2dp"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_width="175dp"
+	        android:layout_height="115dp"
+	       	android:scaleType="centerCrop" />
+	    
+	    <View
+	        android:id="@+id/viewCart_Divider1"
+	        android:layout_below="@id/viewCart_CartPicture"
+	        android:layout_width="match_parent"
+	        android:layout_height="1px"
+	        android:padding="3dp"
+	        android:layout_marginTop="5dp"
+	        android:background="@android:color/darker_gray"/>
+	    
+	    <ImageView 
+	        android:id="@+id/viewCart_Map"
+	        android:clickable="true"
+	        android:focusable="true"
+	        android:padding="5dp"
+	        android:layout_marginTop="5dp"
+	        android:layout_centerInParent="true"
+	        android:scaleType="centerCrop"
+	        android:layout_width="match_parent"
+	        android:layout_height="125dp"
+	        android:layout_below="@id/viewCart_Divider1"/>
+	
+	    <ListView 
+	        android:id="@+id/viewCart_Options"
+	        android:layout_below="@id/viewCart_Map"
+	        android:padding="5dp"
+	        android:layout_width="match_parent"
+	        android:layout_height="350dp"/>
+	</RelativeLayout>
+	
+	</ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

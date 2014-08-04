@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,24 +34,27 @@ import com.cartwheels.adapters.DisplayOwnedCartsExpandableAdapter;
 import com.cartwheels.tasks.DefaultPostJsonAsyncTask;
 import com.cartwheels.tasks.DefaultPutJsonAsyncTask;
 import com.cartwheels.tasks.DefaultTaskFragment;
-import com.cartwheels.tasks.GetOwnedCartsInfoTask;
+import com.cartwheels.tasks.GetCartsInfoTask;
 import com.cartwheels.tasks.UpdateOwnedCartTask;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
-public class DisplayOwnedCartsFragment extends ListFragment implements OnClickListener {
+public class DisplayOwnedCartsFragment extends ListFragment implements OnClickListener,
+															OnRefreshListener {
 
-	ArrayList<ObjectCartListItem> items;
+	private ArrayList<ObjectCartListItem> items;
 	
-	int updatePosition;
-	String updateName;
-	String updatePermit;
-	String updateDescription;
-	AlertDialog alert;
+	private int updatePosition;
+	private String updateName;
+	private String updatePermit;
+	private String updateDescription;
+	private AlertDialog alert;
 	private Bitmap dialogBitmap;
 	private ObjectCartListItem focusedItem;
 	
-	DisplayOwnedCartsExpandableAdapter adapter;
-	SwingBottomInAnimationAdapter swingBottomInAnimation;
+	private DisplayOwnedCartsExpandableAdapter adapter;
+	private SwingBottomInAnimationAdapter swingBottomInAnimation;
+	
+	private SwipeRefreshLayout swipeLayout;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,15 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_display_owned_carts, container, false);
+		
+		// SwipeRefreshLayout
+		swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+		swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright, 
+                android.R.color.holo_green_light, 
+                android.R.color.holo_orange_light, 
+                android.R.color.holo_red_light);
+		
 		updateUserInfo();
 		return view;
 	}
@@ -123,7 +137,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 			path[0] = "carts";
 			path[1] = "data";
 			
-			GetOwnedCartsInfoTask asyncTask = new GetOwnedCartsInfoTask("https", "cartwheels.us", path, cartId,
+			GetCartsInfoTask asyncTask = new GetCartsInfoTask("https", "cartwheels.us", path, cartId,
 													getActivity().getApplicationContext());
 			
 			
@@ -135,8 +149,8 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 			asyncTask.put("offset", "0");
 			asyncTask.put("limit", "1");
 			
-			DefaultTaskFragment<GetOwnedCartsInfoTask, DisplayOwnedCartsFragment, ArrayList<ObjectCartListItem>> fragment =
-					new DefaultTaskFragment<GetOwnedCartsInfoTask, DisplayOwnedCartsFragment, ArrayList<ObjectCartListItem>>(13) {
+			DefaultTaskFragment<GetCartsInfoTask, DisplayOwnedCartsFragment, ArrayList<ObjectCartListItem>> fragment =
+					new DefaultTaskFragment<GetCartsInfoTask, DisplayOwnedCartsFragment, ArrayList<ObjectCartListItem>>(13) {
 				@Override
 				protected Intent getIntent(ArrayList<ObjectCartListItem> items) {
 					Intent intent = new Intent();
@@ -156,6 +170,7 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 				ArrayList<ObjectCartListItem> items = data.getParcelableArrayListExtra("ObjectCartListItems");
 				
 				buildList(items);
+				swipeLayout.setRefreshing(false);
 			}
 		} else if (resultCode == 20 && requestCode == Activity.RESULT_OK) {
 	    	
@@ -172,7 +187,6 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
     		int position = data.getIntExtra("position", -1);
     		
     		if (position >= 0 && position < items.size()) {
-    			Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
     			ObjectCartListItem item = items.get(position);
     			
     			Location location = ((LocationActivity)getActivity()).getLastLocation();
@@ -366,5 +380,10 @@ public class DisplayOwnedCartsFragment extends ListFragment implements OnClickLi
 	    	return true;
 	    }
 	    return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onRefresh() {
+		updateUserInfo();
 	}
 }
