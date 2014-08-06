@@ -33,9 +33,7 @@
         <activity
             android:name="com.cartwheels.MainActivity"
             android:logo="@drawable/cw_logo_no_text_white"
-            android:label="@string/app_name"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,8 +43,6 @@
             android:name="com.cartwheels.SearchActivity"
             android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_search"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:parentActivityName="com.cartwheels.MainActivity" >
             <intent-filter>
@@ -63,24 +59,18 @@
         <activity
             android:name="com.cartwheels.LoginActivity"
             android:logo="@drawable/cw_logo_no_text_white"
-            android:label="@string/title_activity_login"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait" >
+            android:label="@string/title_activity_login" >
         </activity>
         <activity
             android:name="com.cartwheels.RegisterActivity"
             android:logo="@drawable/cw_logo_no_text_white"
-            android:label="@string/title_activity_register"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait" >
+            android:label="@string/title_activity_register" >
         </activity>
         <activity
             android:name="com.cartwheels.ViewCartActivity"
             android:logo="@drawable/cw_logo_no_text_white"
             android:label="@string/title_activity_view_cart"
             android:launchMode="singleTop"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
             android:parentActivityName="com.cartwheels.SearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -90,16 +80,12 @@
             android:name="com.cartwheels.MarkerActivity"
             android:logo="@drawable/cw_logo_no_text_white"
             android:label="View Carts"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
             android:parentActivityName="com.cartwheels.SearchActivity" >
         </activity>
         <activity
             android:name="com.cartwheels.DisplayOwnedCartsActivity"
             android:logo="@drawable/cw_logo_no_text_white"
             android:label="Owned Carts"
-            android:configChanges="orientation"
-    		android:screenOrientation="portrait"
             android:parentActivityName="com.cartwheels.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

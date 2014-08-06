@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -29,16 +30,24 @@ public class DisplayOwnedCartsActivity extends LocationActivity
     private void handleIntent(Intent intent) {
 
     	Fragment fragment = getFragmentManager().findFragmentById(R.id.displayOwnedCartsFragment);
+    	
+    	Resources resources = getResources();
+    	
+    	// Strings in tasks.xml
+    	String startFragmentActionTag = resources.getString(R.string.start_fragment);
+    	String editCartActionTag = resources.getString(R.string.start_fragment_editCart);
+    	String updateMenuActionTag = resources.getString(R.string.start_fragment_updateMenu);
+    	String viewCartActionTag = resources.getString(R.string.start_fragment_viewCart);
     	// update location
     	if (fragment != null) {
     		
-    		if (intent.getAction().equals("start.fragment.action")) {
+    		if (intent.getAction().equals(startFragmentActionTag)) {
     			fragment.onActivityResult(20, RESULT_OK, intent);
-    		} else if (intent.getAction().equals("start.fragment.editCart")) {
+    		} else if (intent.getAction().equals(editCartActionTag)) {
     			fragment.onActivityResult(30, RESULT_OK, intent);
-    		} else if (intent.getAction().equals("start.fragment.updateMenu")) {
+    		} else if (intent.getAction().equals(updateMenuActionTag)) {
     			fragment.onActivityResult(50, RESULT_OK, intent);
-    		} else if (intent.getAction().equals("start.fragment.viewCart")) {
+    		} else if (intent.getAction().equals(viewCartActionTag)) {
     			ObjectCartListItem item = intent.getParcelableExtra("ObjectCartListItem");
     			Intent data = new Intent(DisplayOwnedCartsActivity.this, ViewCartActivity.class);
     			data.putExtra("ObjectCartListItem", item);

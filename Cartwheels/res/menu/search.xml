@@ -8,4 +8,11 @@
         android:title="Map"
         android:visible="true"
         android:titleCondensed="Map"/>
+    
+    <item
+        android:id="@+id/upload_cart"
+        android:showAsAction="never"
+        android:title="Upload New Cart"
+        android:visible="true"
+        android:titleCondensed="Upload Cart"/>
 </menu>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +31,9 @@ public abstract class AbstractRegisterFragment extends Fragment
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 9 && resultCode == Activity.RESULT_OK) {
+		Resources resources = getResources();
+		int registerRequestCode = resources.getInteger(R.integer.register_task_fragment);
+		if (requestCode == registerRequestCode && resultCode == Activity.RESULT_OK) {
 			if (data != null && data.hasExtra("result")) {
 				if (data.getStringExtra("result") != null && data.getStringExtra("result").length() > 0) {
 					Toast.makeText(getActivity(), "Register Successful", Toast.LENGTH_SHORT).show();
@@ -92,14 +95,17 @@ public abstract class AbstractRegisterFragment extends Fragment
 			asyncTask.putInner("zip_code", zipcode);
 		}
 		
+		Resources resources = getResources();
+		int registerRequestCode = resources.getInteger(R.integer.register_task_fragment);
+		String registerRequestTag = resources.getString(R.string.register_task_fragment_string);
 		DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String> fragment =
-				new DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String>(9);
+				new DefaultTaskFragment<RegisterTask, AbstractRegisterFragment, String>(registerRequestCode);
 		
 		fragment.setTask(asyncTask);
 		asyncTask.setFragment(fragment);
 		
-		fragment.setTargetFragment(this, 9);
-		fragment.show(getFragmentManager(), "registerFragment");
+		fragment.setTargetFragment(this, registerRequestCode);
+		fragment.show(getFragmentManager(), registerRequestTag);
 		
 		execute(fragment);
 	}

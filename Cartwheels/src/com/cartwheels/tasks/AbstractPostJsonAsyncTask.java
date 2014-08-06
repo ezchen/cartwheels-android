@@ -1,13 +1,9 @@
 package com.cartwheels.tasks;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
 
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -19,7 +15,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-import com.cartwheels.R;
 import com.cartwheels.TrustedHttpClient;
 
 public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
@@ -80,13 +75,19 @@ public abstract class AbstractPostJsonAsyncTask<Results> extends AbstractJsonAsy
 			ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			response = client.execute(post, responseHandler);
 			
+
+			
 			json = new JSONObject(response);
 			results = getResult(json);
 		} catch (JSONException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
+		} catch (HttpResponseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		Log.d("response", response + "");
 		return results;
 	}
 	

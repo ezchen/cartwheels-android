@@ -8,4 +8,13 @@
     
     <integer name="review_task_fragment">2</integer>
     <string name="review_task_fragment_string">reviewTask</string>
+    
+    <integer name="register_task_fragment">9</integer>
+    <string name="register_task_fragment_string">registerFragment</string>
+    
+    <!-- Values for broadcast recievers -->
+    <string name="start_fragment">start.fragment.action</string>
+    <string name="start_fragment_editCart">start.fragment.editCart</string>
+    <string name="start_fragment_updateMenu">start.fragment.updateMenu</string>
+    <string name="start_fragment_viewCart">start.fragment.updateMenu</string>
 </resources>

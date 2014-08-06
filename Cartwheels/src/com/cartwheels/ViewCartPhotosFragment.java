@@ -3,12 +3,11 @@ package com.cartwheels;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
@@ -125,9 +123,12 @@ public class ViewCartPhotosFragment extends Fragment implements OnItemClickListe
 		String fragmentTag = resources.getString(R.string.review_task_fragment_string);
 		fragment.setTargetFragment(this, fragmentId);
 		
-		
-		fragment.show(getFragmentManager(), "PhotoUrlTask");
+		cartPhotos.setVisibility(View.GONE);
 		fragment.execute();
+		
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.add(R.id.fragment_container, fragment);
+		ft.commit();
 	}
 
 	public static ViewCartPhotosFragment newInstance(Bundle arguments) {

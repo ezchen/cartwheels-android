@@ -8,9 +8,16 @@
     tools:context="com.cartwheels.ViewCartPhotosFragment">
     
     <FrameLayout 
+        android:id="@+id/test_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+     <LinearLayout
+	    android:orientation="vertical"
+	    android:id="@+id/fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"/>
     <ScrollView
         android:id="@android:id/empty"
         android:layout_width="match_parent"

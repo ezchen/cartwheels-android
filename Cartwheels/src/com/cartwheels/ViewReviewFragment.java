@@ -1,7 +1,9 @@
 package com.cartwheels;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
-import com.cartwheels.custom_views.ReviewItemAdapter;
+import com.cartwheels.adapters.ReviewItemAdapter;
 import com.cartwheels.tasks.ReviewTask;
 import com.cartwheels.tasks.ReviewTaskFragment;
 
@@ -35,6 +36,8 @@ public class ViewReviewFragment extends ListFragment
 	private int offset;
 	private int limit;
 	private SwipeRefreshLayout swipeLayout;
+	
+	private View view;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -69,7 +72,7 @@ public class ViewReviewFragment extends ListFragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 						Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
+		view = super.onCreateView(inflater, container, savedInstanceState);
 		
 		item = getArguments().getParcelable("ObjectCartListItem");
 		
@@ -157,7 +160,7 @@ public class ViewReviewFragment extends ListFragment
 		ReviewTaskFragment fragment = new ReviewTaskFragment();
 		fragment.setTask(reviewTask);
 		reviewTask.setFragment(fragment);
-		fragment.setShowsDialog(false);
+		//fragment.setShowsDialog(false);
 		
 		Resources resources = getResources();
 		int fragmentId = resources.getInteger(R.integer.review_task_fragment);

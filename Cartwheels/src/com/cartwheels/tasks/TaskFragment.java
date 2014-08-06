@@ -21,20 +21,21 @@ public abstract class TaskFragment extends DialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setRetainInstance(true);
+		setShowsDialog(false);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 								Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_task, container);
+		View view = inflater.inflate(R.layout.fragment_task, container, false);
 		
 		progressBar = (ProgressBar) view.findViewById(R.id.progressTaskFragment);
+		
+		if (getDialog() != null) {
 		getDialog().setCanceledOnTouchOutside(false);
 		getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+		}
 		return view;
 	}
 	

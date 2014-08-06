@@ -1,4 +1,4 @@
-package com.cartwheels.custom_views;
+package com.cartwheels.adapters;
 
 import com.cartwheels.R;
 import com.cartwheels.ReviewItem;

@@ -67,9 +67,14 @@ public class SearchTaskFragment extends DialogFragment {
 		}
 		
 		if (getTargetFragment() != null) {
+			
+			try {
 			getTargetFragment().
 				onActivityResult(getResources().
 						getInteger(R.integer.search_task_fragment), Activity.RESULT_CANCELED, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -103,7 +108,13 @@ public class SearchTaskFragment extends DialogFragment {
 			
 			Intent intent = new Intent();
 			intent.putExtra("ObjectCartListItems", items);
-			getTargetFragment().onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, intent);
+			
+			try {
+				getTargetFragment()
+					.onActivityResult(getResources().getInteger(R.integer.search_task_fragment), Activity.RESULT_OK, intent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -27,5 +27,7 @@ public abstract class AbstractJsonAsyncTask<Results> extends AsyncTask<String, V
 	
 	protected abstract Results getResult(JSONObject json);
 	
-	
+	public interface AsyncTaskCallbacks {
+		public void onTaskFinished();
+	}
 }

@@ -175,6 +175,9 @@ public class MainActivity extends LocationActivity
 				Intent intent = new Intent(MainActivity.this, MarkerActivity.class);
 				startActivity(intent);
 			}
+		} else if (id == R.id.upload_cart) {
+			if (fragment != null)
+				fragment.onOptionsItemSelected(item);
 		}
 		return super.onOptionsItemSelected(item);
 	}
