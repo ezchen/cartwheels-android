@@ -1,11 +1,5 @@
 package com.cartwheels.tasks;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.HashMap;
 
 import org.apache.http.client.ResponseHandler;
@@ -16,9 +10,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.net.Uri.Builder;
-
-import com.cartwheels.R;
-import com.cartwheels.TrustedHttpClient;
 
 public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyncTask<Results> {
 	
@@ -41,7 +32,7 @@ public abstract class AbstractGetJsonAsyncTask<Results> extends AbstractJsonAsyn
 	@Override
 	protected Results doInBackground(String... urls) {
 		Results results = null;
-		DefaultHttpClient client = new TrustedHttpClient(context);
+		DefaultHttpClient client = new DefaultHttpClient();
 		
 		String response = null;
 		JSONObject json = new JSONObject();

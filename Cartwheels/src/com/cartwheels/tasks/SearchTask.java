@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.cartwheels.ObjectCartListItem;
-import com.cartwheels.TrustedHttpClient;
 
 public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]> 
 									implements myAsyncTask {
@@ -58,7 +57,7 @@ public class SearchTask extends AsyncTask<String, Void, ObjectCartListItem[]>
 	
 	@Override
 	protected ObjectCartListItem[] doInBackground(String... urls) {
-        DefaultHttpClient client = new TrustedHttpClient(context);
+        DefaultHttpClient client = new DefaultHttpClient();
         
         String response = null;
         JSONObject json = new JSONObject();

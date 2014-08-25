@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.cartwheels.ObjectCartListItem;
 import com.cartwheels.R;
-import com.cartwheels.TrustedPicassoBuilder;
 import com.cartwheels.R.drawable;
 import com.cartwheels.R.id;
 import com.cartwheels.R.layout;
@@ -28,7 +27,6 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		ExpandableListItemAdapter<ObjectCartListItem> implements OnClickListener {
 
 	private final Context context;
-	private Picasso picasso;
 	
 	public DisplayOwnedCartsExpandableAdapter(Context context, int layoutResId,
 			int titleParentResId, int contentParentResId,
@@ -52,11 +50,7 @@ public class DisplayOwnedCartsExpandableAdapter extends
 		
 		ObjectCartListItem item = getItem(position);
 		
-		if (picasso == null) {
-			TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
-			picasso = builder.buildDefault();
-		}
-		picasso.load(item.bitmapUrl).into(cartPicture);
+		Picasso.with(context).load(item.bitmapUrl).into(cartPicture);
 		cartName.setText(item.cartName);
 		
 		return view;

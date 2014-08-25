@@ -14,7 +14,6 @@ import android.net.Uri.Builder;
 import android.util.Log;
 
 import com.cartwheels.ObjectCartListItem;
-import com.cartwheels.TrustedHttpClient;
 
 public class GetCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<ObjectCartListItem>> {
 
@@ -31,7 +30,7 @@ public class GetCartsInfoTask extends AbstractGetJsonAsyncTask<ArrayList<ObjectC
 		
 		// Create a separate task for each individual cart and access its information
 		for (String id : cartId) {
-			DefaultHttpClient client = new TrustedHttpClient(context);
+			DefaultHttpClient client = new DefaultHttpClient();
 			
 			String response = null;
 			JSONObject json = new JSONObject();

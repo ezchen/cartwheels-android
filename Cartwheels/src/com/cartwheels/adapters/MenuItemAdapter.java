@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.cartwheels.FoodMenuItem;
 import com.cartwheels.R;
-import com.cartwheels.TrustedPicassoBuilder;
 import com.cartwheels.R.id;
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +20,6 @@ public class MenuItemAdapter extends ArrayAdapter<FoodMenuItem> {
 	private int layoutResourceId;
 	private Context context;
 	private ArrayList<FoodMenuItem> items;
-	private Picasso picasso;
 	
 	public MenuItemAdapter(Context context, int layoutResourceId, ArrayList<FoodMenuItem> items) {
 		super(context, layoutResourceId, items);
@@ -47,20 +45,12 @@ public class MenuItemAdapter extends ArrayAdapter<FoodMenuItem> {
 		String name = item.getName();
 		String price = "" + item.getPrice();
 		String description = item.getDescription();
-		
-		if (picasso == null) {
-			picasso = buildPicasso();	
-		}
-		picasso.load(imageUrl).into(menuImageView);
 
+		Picasso.with(context).load(imageUrl).into(menuImageView);
+		
 		menuItemNameView.setText(name);
 		menuItemPriceView.setText(price);
 		menuItemDescriptionView.setText("");
 		return listItem;
-	}
-	
-	private Picasso buildPicasso() {
-		TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
-		return builder.buildDefault();
 	}
 }

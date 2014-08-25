@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.cartwheels.TrustedPicassoBuilder;
 import com.squareup.picasso.Picasso;
 
 public class ViewCartPhotosAdapter extends BaseAdapter {
@@ -16,7 +15,6 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 	private Context context;
 	private int count;
 	private String[] imageUrls;
-	private Picasso picasso;
 	
 	public ViewCartPhotosAdapter(Context context, String[] imageUrls) {
 		this.context = context;
@@ -38,10 +36,7 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 			imageView = (ImageView) convertView;
 		}
 		
-		if (picasso == null) {
-			picasso = buildPicasso();
-		}
-		picasso.load(imageUrl).into(imageView);
+		Picasso.with(context).load(imageUrl).into(imageView);
 		
 		return imageView;
 	}
@@ -59,10 +54,5 @@ public class ViewCartPhotosAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return 0;
-	}
-
-	private Picasso buildPicasso() {
-		TrustedPicassoBuilder builder = new TrustedPicassoBuilder(context);
-		return builder.buildDefault();
 	}
 }

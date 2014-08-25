@@ -56,7 +56,6 @@ public class ViewCartFragment extends Fragment implements
 	private static final int REQUEST_IMAGE_CAPTURE_MENU = 1;
 	private ObjectCartListItem item;
 	private Bitmap mapBitmap;
-	private Picasso picasso;
 	
 	private AlertDialog alert;
 	private Bitmap dialogBitmap;
@@ -207,11 +206,7 @@ public class ViewCartFragment extends Fragment implements
 			cartName.setText(item.cartName);
 			rating.setRating(item.rating);
 			zipcode.setText(item.address);
-			if (picasso == null) {
-				TrustedPicassoBuilder builder = new TrustedPicassoBuilder(getActivity().getApplicationContext());
-				picasso = builder.buildDefault();
-			}
-			picasso.load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
+			Picasso.with(getActivity()).load(item.bitmapUrl).transform(new RoundedTransform(20, 3)).into(cartPicture);
 			
 			String lat = item.lat;
 			String lon = item.lon;

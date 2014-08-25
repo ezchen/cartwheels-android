@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.cartwheels.ReviewItem;
-import com.cartwheels.TrustedHttpClient;
 
 public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 
@@ -50,7 +49,7 @@ public class ReviewTask extends AsyncTask<String, Void, ReviewItem[]> {
 	
 	@Override
 	protected ReviewItem[] doInBackground(String... urls) {
-        DefaultHttpClient client = new TrustedHttpClient(context);
+        DefaultHttpClient client = new DefaultHttpClient();
         
         String response = null;
         JSONObject json = new JSONObject();

@@ -16,8 +16,6 @@ import android.net.Uri.Builder;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.cartwheels.TrustedHttpClient;
-
 public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 	
 	private final static String TAGS_DATA = "data";
@@ -51,7 +49,7 @@ public class PhotoUrlTask extends AsyncTask<String, Void, String[]> {
 	
 	@Override
 	protected String[] doInBackground(String... urls) {
-        DefaultHttpClient client = new TrustedHttpClient(context);
+        DefaultHttpClient client = new DefaultHttpClient();
         
         String response = null;
         JSONObject json = new JSONObject();

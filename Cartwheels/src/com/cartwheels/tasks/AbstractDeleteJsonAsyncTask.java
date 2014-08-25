@@ -8,8 +8,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
-import com.cartwheels.TrustedHttpClient;
-
 import android.content.Context;
 import android.net.Uri.Builder;
 
@@ -31,7 +29,7 @@ public abstract class AbstractDeleteJsonAsyncTask<Results> extends AbstractJsonA
 
 	@Override
 	protected Results doInBackground(String... arg0) {
-		DefaultHttpClient client = new TrustedHttpClient(context);
+		DefaultHttpClient client = new DefaultHttpClient();
 		String response = null;
 		JSONObject json = new JSONObject();
 		

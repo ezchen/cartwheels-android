@@ -11,8 +11,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.cartwheels.TrustedHttpClient;
-
 import android.content.Context;
 import android.net.Uri.Builder;
 import android.os.AsyncTask;
@@ -37,7 +35,7 @@ public class WriteReviewTask extends AsyncTask<String, Void, Boolean> {
 	
 	@Override
 	protected Boolean doInBackground(String... arg0) {
-		DefaultHttpClient client = new TrustedHttpClient(context);
+		DefaultHttpClient client = new DefaultHttpClient();
 		boolean success = false;
 		String response = null;
 		JSONObject json = new JSONObject();
